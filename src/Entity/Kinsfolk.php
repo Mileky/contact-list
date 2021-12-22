@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Entity;
 
-use DD\ContactList\Infrastructure\InvalidDataStructureException;
+use DD\ContactList\Exception;
 
 /**
  * Родственник
@@ -156,7 +156,7 @@ final class Kinsfolk extends Recipient
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new invalidDataStructureException($errMsg);
+            throw new Exception\InvalidDataStructureException($errMsg);
         }
         return new Kinsfolk(
             $data['id_recipient'],

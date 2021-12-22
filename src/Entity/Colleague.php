@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Entity;
 
-use DD\ContactList\Infrastructure\InvalidDataStructureException;
+use DD\ContactList\Exception;
 
 /**
  * Коллега
@@ -156,7 +156,7 @@ final class Colleague extends Recipient
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new invalidDataStructureException($errMsg);
+            throw new Exception\InvalidDataStructureException($errMsg);
         }
         return new Colleague(
             $data['id_recipient'],

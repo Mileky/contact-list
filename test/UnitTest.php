@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../src/Infrastructure/app.function.php';
 require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
 
+use DD\ContactList\Infrastructure\App;
 use DD\ContactList\Infrastructure\Autoloader;
 
 spl_autoload_register(
@@ -15,7 +16,6 @@ spl_autoload_register(
 use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 
-use function DD\ContactList\Infrastructure\app;
 
 /** Вычисляет расскхождение массивов с доп проверкой индекса. Поддержка многомерных массивов
  * @param array $a1
@@ -59,10 +59,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование поиска получателя по id',
                 'in' => [
-                    $handlers,
-                    '/recipient?id_recipient=1',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/recipient?id_recipient=1',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['loggerType'] = 'echoLogger';
                         return AppConfig::createFromArray($config);
@@ -83,10 +83,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование поиска получателя по full_name',
                 'in' => [
-                    $handlers,
-                    '/recipient?full_name=Осипов Геннадий Иванович',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['loggerType'] = 'echoLogger';
                         return AppConfig::createFromArray($config);
@@ -107,10 +107,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday',
                 'in' => [
-                    $handlers,
-                    '/recipient?full_name=Осипов Геннадий Иванович',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
                         return AppConfig::createFromArray($config);
@@ -127,10 +127,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректными данными конфига приложения',
                 'in' => [
-                    $handlers,
-                    '/recipient?id_recipient=1',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/recipient?id_recipient=1',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         return 'Ops!';
                     }
                 ],
@@ -145,10 +145,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с получателями',
                 'in' => [
-                    $handlers,
-                    '/recipient?id_recipient=1',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/recipient?id_recipient=1',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
                         return AppConfig::createFromArray($config);
@@ -165,10 +165,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с клиентами',
                 'in' => [
-                    $handlers,
-                    '/customers?id_recipient=7',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/customers?id_recipient=7',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.customer.json';
                         return AppConfig::createFromArray($config);
@@ -185,10 +185,10 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
                 'in' => [
-                    $handlers,
-                    '/customers?full_name=Калинин Пётр Александрович',
-                    $loggerFactory,
-                    static function () {
+                    'handlers' => $handlers,
+                    'uri' => '/customers?full_name=Калинин Пётр Александрович',
+                    'loggerFactory' => $loggerFactory,
+                    'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
                         return AppConfig::createFromArray($config);
@@ -215,7 +215,12 @@ class UnitTest
         foreach (static::testDataProvider() as $testItem) {
             echo "-----{$testItem['testName']}-----\n";
             //Arrange и Act
-            $appResult = app(...$testItem['in']);
+            $appResult = (new App(
+                $testItem['in']['handlers'],
+                $testItem['in']['loggerFactory'],
+                $testItem['in']['appConfigFactory'],
+
+            ))->dispatch($testItem['in']['uri']);
 
             //Assert
             if ($appResult['httpCode'] === $testItem['out']['httpCode']) {

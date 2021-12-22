@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure;
 
-use Exception;
+use DD\ContactList\Exception;
 
 /**
  *  Конфиг приложения
@@ -40,7 +40,37 @@ class AppConfig
      * Тип логера
      * @var string
      */
-    private string $loggerType = 'nullLogger';
+    private string $loggerType;
+
+    /**
+     * Сокрытие сообщений о ошибках
+     * @var bool
+     */
+    private bool $hideErrorMessage;
+
+    /**
+     * Возвращает флаг, указывающий что ужно скрывать сообщения о ошибках
+     *
+     * @return bool
+     */
+    public function isHideErrorMessage(): bool
+    {
+        return $this->hideErrorMessage;
+    }
+
+    /**
+     * Устанавливает фалг что нужно скрывать сообщения о ошибках
+     *
+     * @param bool $hideErrorMessage
+     *
+     * @return AppConfig
+     */
+    private function setHideErrorMessage(bool $hideErrorMessage): AppConfig
+    {
+        $this->hideErrorMessage = $hideErrorMessage;
+        return $this;
+    }
+
 
     /**
      * Возвращает тип логера
@@ -81,7 +111,6 @@ class AppConfig
      * @param string $pathToLogFile - путь до файла с логами
      *
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToLogFile(string $pathToLogFile): AppConfig
     {
@@ -106,7 +135,6 @@ class AppConfig
      * @param string $pathToRecipients - путь до файла с получателями
      *
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToRecipients(string $pathToRecipients): AppConfig
     {
@@ -131,7 +159,6 @@ class AppConfig
      * @param string $pathToKinsfolk - путь до файла с родственниками
      *
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToKinsfolk(string $pathToKinsfolk): AppConfig
     {
@@ -156,7 +183,6 @@ class AppConfig
      * @param string $pathToCustomers - путь до файла с клиентами
      *
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToCustomers(string $pathToCustomers): AppConfig
     {
@@ -181,7 +207,6 @@ class AppConfig
      * @param string $pathToColleagues - путь до файла с коллегами
      *
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToColleagues(string $pathToColleagues): AppConfig
     {
@@ -196,12 +221,12 @@ class AppConfig
      * @param string $path
      *
      * @return void
-     * @throws Exception
+     * @throws Exception\RuntimeException
      */
     private function validateFilePath(string $path): void
     {
         if (false === file_exists($path)) {
-            throw new Exception('Некорректный путь до файла с данными');
+            throw new Exception\RuntimeException('Некорректный путь до файла с данными');
         }
     }
 
@@ -218,6 +243,7 @@ class AppConfig
      * @uses AppConfig::setPathToLogFile()
      * @uses AppConfig::setPathToRecipients()
      * @uses AppConfig::setLoggerType()
+     * @uses AppConfig::setHideErrorMessage()
      */
     public static function createFromArray(array $config): self
     {

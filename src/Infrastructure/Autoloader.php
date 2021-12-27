@@ -28,6 +28,7 @@ final class Autoloader
      * Получает имя файла, в котором расположен заданный класс
      *
      * @param string $className
+     *
      * @return string|null
      */
     private function classNameToPath(string $className): ?string
@@ -49,13 +50,13 @@ final class Autoloader
      * Логика автозагрузки файлов
      *
      * @param string $className
+     *
      * @return void
      */
-    public function __invoke(string $className):void
+    public function __invoke(string $className): void
     {
         $pathToFile = $this->classNameToPath($className);
-        if ($pathToFile !== null && file_exists($pathToFile) && is_dir($pathToFile) === false)
-        {
+        if ($pathToFile !== null && file_exists($pathToFile) && is_dir($pathToFile) === false) {
             require_once $pathToFile;
         }
     }

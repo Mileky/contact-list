@@ -3,6 +3,9 @@
 namespace DD\ContactList\Infrastructure;
 
 use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Http\HttpResponse;
+use DD\ContactList\Infrastructure\Http\ServerRequest;
+use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -45,8 +48,8 @@ final class App
     private ?AppConfig $appConfig = null;
 
     /**
-     * @param array $handler - обработчики запросов
-     * @param callable $loggerFactory - фабрика создания логгеров
+     * @param array $handler             - обработчики запросов
+     * @param callable $loggerFactory    - фабрика создания логгеров
      * @param callable $appConfigFactory - фабрика создания конфига приложения
      */
     public function __construct(array $handler, callable $loggerFactory, callable $appConfigFactory)
@@ -77,7 +80,6 @@ final class App
     private function getAppConfig(): AppConfig
     {
         if (null === $this->appConfig) {
-
             try {
                 $appConfig = call_user_func($this->appConfigFactory);
             } catch (Throwable $e) {
@@ -110,23 +112,13 @@ final class App
     }
 
     /**
-     * Извлекает параметры из URL
+     * Обработчик запроса
      *
-     * @param string $requestUri - данные запроса URI
+     * @param ServerRequest $serverRequest - объект серверного http запроса
      *
-     * @return array - параметры запроса
+     * @return HttpResponse - http ответ
      */
-    private function extractQueryParams(string $requestUri): array
-    {
-        $query = parse_url($requestUri, PHP_URL_QUERY);
-        $requestParams = [];
-        parse_str($query, $requestParams);
-
-        return $requestParams;
-    }
-
-
-    public function dispatch(string $requestUri): array
+    public function dispatch(ServerRequest $serverRequest): HttpResponse
     {
         $appConfig = null;
         try {
@@ -134,33 +126,26 @@ final class App
 
             $logger = $this->getLogger();
 
-            $urlPath = parse_url($requestUri, PHP_URL_PATH);
+            $urlPath = $serverRequest->getUri()->getPath();
 
-            $logger->log('URL request received: ' . $requestUri);
+            $logger->log('URL request received: ' . $urlPath);
 
             if (array_key_exists($urlPath, $this->handlers)) {
-                $requestParams = $this->extractQueryParams($requestUri);
-                $result = call_user_func($this->handlers[$urlPath], $requestParams, $logger, $appConfig);
+                $httpResponse = call_user_func($this->handlers[$urlPath], $serverRequest, $logger, $appConfig);
             } else {
-                $result = [
-                    'httpCode' => 404,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'unsupported request'
-                    ]
-                ];
+                $httpResponse = ServerResponseFactory::createJsonResponse(
+                    404,
+                    ['status' => 'fail', 'message' => 'unsupported request']
+                );
             }
-
         } catch (Exception\InvalidDataStructureException $e) {
-            $result = [
-                'httpCode' => 503,
-                'result' => [
-                    'status' => 'fail',
-                    'message' => $e->getMessage()
-                ]
-            ];
+            $httpResponse = ServerResponseFactory::createJsonResponse(
+                503,
+                ['status' => 'fail', 'message' => $e->getMessage()]
+            );
         } catch (Throwable $e) {
-            $errMsg = ($appConfig instanceof AppConfig && !$appConfig->isHideErrorMessage()) || $e instanceof Exception\ErrorCreateAppConfigException
+            $errMsg = ($appConfig instanceof AppConfig && !$appConfig->isHideErrorMessage(
+                )) || $e instanceof Exception\ErrorCreateAppConfigException
                 ? $e->getMessage()
                 : 'system error';
 
@@ -169,15 +154,12 @@ final class App
             } catch (Throwable $e1) {
             }
 
-            $result = [
-                'httpCode' => 500,
-                'result' => [
-                    'status' => 'fail',
-                    'message' => $errMsg
-                ]
-            ];
+            $httpResponse = ServerResponseFactory::createJsonResponse(
+                500,
+                ['status' => 'fail', 'message' => $errMsg]
+            );
         }
 
-        return $result;
+        return $httpResponse;
     }
 }

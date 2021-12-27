@@ -16,15 +16,16 @@ spl_autoload_register(
 
 use DD\ContactList\Infrastructure\AppConfig;
 
-use function DD\ContactList\Infrastructure\app;
+use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
+
 use function DD\ContactList\Infrastructure\render;
 
-$resultApp = (new App(
+$httpResponse = (new App(
     include __DIR__ . '/../config/request.handlers.php',
     'DD\ContactList\Infrastructure\Logger\Factory::create',
     static function () {
         return AppConfig::createFromArray(include __DIR__ . '/../config/dev/config.php');
     }
-))->dispatch($_SERVER['REQUEST_URI']);
+))->dispatch(ServerRequestFactory::createFromGlobals($_SERVER));
 
-render($resultApp['result'], $resultApp['httpCode']);
+render($httpResponse);

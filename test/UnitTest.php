@@ -9,40 +9,16 @@ use DD\ContactList\Infrastructure\Autoloader;
 spl_autoload_register(
     new Autoloader([
         '\\DD\\ContactList\\' => __DIR__ . '/../src/',
-        '\\DD\\ContactListTest\\' => __DIR__ . '/../tests/',
+        '\\DD\\ContactListTest\\' => __DIR__ . '/../test/',
     ])
 );
 
 use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
-
-
-/** Вычисляет расскхождение массивов с доп проверкой индекса. Поддержка многомерных массивов
- * @param array $a1
- * @param array $a2
- * @return array
- */
-function array_diff_assoc_recursive(array $a1, array $a2): array
-{
-    $result = [];
-    foreach ($a1 as $k1 => $v1) {
-        if (false === array_key_exists($k1, $a2)) {
-            $result[$k1] = $v1;
-            continue;
-        }
-        if (is_iterable($v1) && is_iterable($a2[$k1])) {
-            $resultCheck = array_diff_assoc_recursive($v1, $a2[$k1]);
-            if (count($resultCheck) > 0) {
-                $result[$k1] = $resultCheck;
-            }
-            continue;
-        }
-        if ($v1 !== $a2[$k1]) {
-            $result[$k1] = $v1;
-        }
-    }
-    return $result;
-}
+use DD\ContactList\Infrastructure\Uri\Uri;
+use DD\ContactListTest\TestUtils;
+use DD\ContactList\Infrastructure\Logger;
 
 /**
  *  Тестирование приложения
@@ -53,7 +29,7 @@ class UnitTest
     {
         $handlers = include __DIR__ . '/../config/request.handlers.php';
         $loggerFactory = static function (): LoggerInterface {
-            return new DD\ContactList\Infrastructure\Logger\NullLogger\Logger();
+            return new Logger\NullLogger\Logger();
         };
         return [
             [
@@ -138,7 +114,7 @@ class UnitTest
                     'httpCode' => 500,
                     'result' => [
                         'status' => 'fail',
-                        'message' => 'incorrect application config'
+                        'message' => 'Incorrect application config'
                     ]
                 ]
             ],
@@ -209,41 +185,55 @@ class UnitTest
      * Запускает тест
      *
      * @return void
+     * @throws JsonException
      */
     public static function runTest(): void
     {
         foreach (static::testDataProvider() as $testItem) {
             echo "-----{$testItem['testName']}-----\n";
+
+            $httpRequest = new ServerRequest(
+                'GET',
+                '1.1',
+                $testItem['in']['uri'],
+                Uri::createFromString($testItem['in']['uri']),
+                ['Content-Type' => 'application/json'],
+                null
+            );
+
             //Arrange и Act
-            $appResult = (new App(
+            $httpResponse = (new App(
                 $testItem['in']['handlers'],
                 $testItem['in']['loggerFactory'],
                 $testItem['in']['appConfigFactory'],
 
-            ))->dispatch($testItem['in']['uri']);
+            ))->dispatch($httpRequest);
 
             //Assert
-            if ($appResult['httpCode'] === $testItem['out']['httpCode']) {
+            if ($httpResponse->getStatusCode() === $testItem['out']['httpCode']) {
                 echo "    OK --- код ответа\n";
             } else {
-                echo "    FAIL - код ответа. Ожидалось: {$testItem['out']['httpCode']}. Актуальное значение: {$appResult['httpCode']}\n";
+                echo "    FAIL - код ответа. Ожидалось: {$testItem['out']['httpCode']}. Актуальное значение: {$httpResponse->getStatusCode()}\n";
             }
-            $actualResult = json_decode(json_encode($appResult['result']), true);
-            $unnecessaryElements = array_diff_assoc_recursive($actualResult, $testItem['out']['result']);
-            $missingElements = array_diff_assoc_recursive($testItem['out']['result'], $actualResult);
+            $actualResult = json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
+
+            //Лишние элементы
+            $unnecessaryElements = TestUtils::arrayDiffAssocRecursive($actualResult, $testItem['out']['result']);
+            //Недостающие элементы
+            $missingElements = TestUtils::arrayDiffAssocRecursive($testItem['out']['result'], $actualResult);
 
             $errMsg = '';
 
             if (count($unnecessaryElements) > 0) {
                 $errMsg .= sprintf(
                     "         Есть лишние элементы %s\n",
-                    json_encode($unnecessaryElements, JSON_UNESCAPED_UNICODE)
+                    json_encode($unnecessaryElements, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
                 );
             }
             if (count($missingElements) > 0) {
                 $errMsg .= sprintf(
                     "         Есть лишние недостающие элементы %s\n",
-                    json_encode($missingElements, JSON_UNESCAPED_UNICODE)
+                    json_encode($missingElements, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
                 );
             }
 

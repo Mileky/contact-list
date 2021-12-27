@@ -4,6 +4,9 @@ namespace DD\ContactList\Controller;
 
 use DD\ContactList\Entity\Recipient;
 use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Infrastructure\Http\HttpResponse;
+use DD\ContactList\Infrastructure\Http\ServerRequest;
+use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 
 use function DD\ContactList\Infrastructure\loadData;
@@ -12,12 +15,13 @@ use function DD\ContactList\Infrastructure\paramTypeValidation;
 /**
  * Функция поиска знакомых по id или full_name
  *
- * @param array $request          - параметры которые передаёт пользователь
+ * @param ServerRequest $httpRequest
  * @param LoggerInterface $logger - параметр инкапсулирующий логгирование
+ * @param AppConfig $appConfig
  *
- * @return array - возвращает результат поиска по знакомым
+ * @return HttpResponse - возвращает результат поиска по знакомым
  */
-return static function (array $request, LoggerInterface $logger, AppConfig $appConfig): array {
+return static function (ServerRequest $httpRequest, LoggerInterface $logger, AppConfig $appConfig): HttpResponse {
     $recipients = loadData($appConfig->getPathToRecipients());
     $logger->log('dispatch "recipient" url');
 
@@ -28,17 +32,19 @@ return static function (array $request, LoggerInterface $logger, AppConfig $appC
         'profession' => 'incorrect profession'
     ];
 
-    if (null === ($result = paramTypeValidation($paramValidations, $request))) {
+    $requestParams = $httpRequest->getQueryParams();
+
+    if (null === ($result = paramTypeValidation($paramValidations, $requestParams))) {
         $foundRecipients = [];
         foreach ($recipients as $recipient) {
-            if (array_key_exists('id_recipient', $request)) {
-                $recipientMeetSearchCriteria = $request['id_recipient'] === (string)$recipient['id_recipient'];
-            } elseif (array_key_exists('full_name', $request)) {
-                $recipientMeetSearchCriteria = $request['full_name'] === $recipient['full_name'];
-            } elseif (array_key_exists('birthday', $request)) {
-                $recipientMeetSearchCriteria = $request['birthday'] === $recipient['birthday'];
-            } elseif (array_key_exists('profession', $request)) {
-                $recipientMeetSearchCriteria = $request['profession'] === $recipient['profession'];
+            if (array_key_exists('id_recipient', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['id_recipient'] === (string)$recipient['id_recipient'];
+            } elseif (array_key_exists('full_name', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['full_name'] === $recipient['full_name'];
+            } elseif (array_key_exists('birthday', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['birthday'] === $recipient['birthday'];
+            } elseif (array_key_exists('profession', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['profession'] === $recipient['profession'];
             } else {
                 $recipientMeetSearchCriteria = true;
             }
@@ -47,10 +53,10 @@ return static function (array $request, LoggerInterface $logger, AppConfig $appC
             }
         }
         $logger->log('found recipients not category: ' . count($foundRecipients));
-        return [
+        $result = [
             'httpCode' => 200,
             'result' => $foundRecipients
         ];
     }
-    return $result;
+    return ServerResponseFactory::createJsonResponse($result['httpCode'], $result['result']);
 };

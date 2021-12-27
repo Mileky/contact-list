@@ -1,4 +1,5 @@
 <?php
+
 namespace DD\ContactList\Infrastructure\Logger\EchoLogger;
 
 require_once __DIR__ . '/../LoggerInterface.php';

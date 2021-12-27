@@ -2,8 +2,11 @@
 
 namespace DD\ContactList\Infrastructure;
 
+use DD\ContactList\Exception\InvalidDataStructureException;
+use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use Exception;
+use JsonException;
 use Throwable;
 use UnexpectedValueException;
 
@@ -13,24 +16,28 @@ use UnexpectedValueException;
  * @param string $sourceName - имя файла
  *
  * @return array - содержимое json файла
+ * @throws JsonException
  */
 function loadData(string $sourceName): array
 {
     $content = file_get_contents($sourceName);
-    return json_decode($content, true);
+    return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 }
 
 /**
  * Функция вывода данных
  *
- * @param array $data   - данные, которые хотим отобразить
- * @param int $httpCode - http code
+ * @param HttpResponse $response
+ *
+ * @return void
  */
-function render(array $data, int $httpCode)
+function render(HttpResponse $response):void
 {
-    header('Content-Type: application/json');
-    http_response_code($httpCode);
-    echo json_encode($data);
+    foreach ($response->getHeaders() as $headerName => $headerValue) {
+        header("$headerName: $headerValue");
+    }
+    http_response_code($response->getStatusCode());
+    echo $response->getBody();
     exit();
 }
 
@@ -103,7 +110,7 @@ function app(array $handler, string $requestUri, callable $loggerFactory, callab
             ];
             $logger->log($result['result']['message']);
         }
-    } catch (invalidDataStructureException $e) {
+    } catch (InvalidDataStructureException $e) {
         $result = [
             'httpCode' => 503,
             'result' => [

@@ -1,7 +1,21 @@
 <?php
 
+use DD\ContactList\Controller;
+use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Infrastructure\Http\ServerRequest;
+use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+
 return [
-    '/recipient' => include __DIR__ . '/../src/Controller/findRecipient.handler.php',
-    '/customers' => include __DIR__ . '/../src/Controller/findCustomers.handler.php',
-    '/category' => include __DIR__ . '/../src/Controller/findContactOnCategory.handler.php'
+    '/recipients' => static function (ServerRequest $serverRequest, LoggerInterface $logger, AppConfig $appConfig) {
+        return (new Controller\FindRecipient($logger, $appConfig))($serverRequest);
+    },
+    '/customers' => static function (ServerRequest $serverRequest, LoggerInterface $logger, AppConfig $appConfig) {
+        return (new Controller\FindCustomers($logger, $appConfig))($serverRequest);
+    },
+    '/colleagues' => static function (ServerRequest $serverRequest, LoggerInterface $logger, AppConfig $appConfig) {
+        return (new Controller\FindColleagues($logger, $appConfig))($serverRequest);
+    },
+    '/kinsfolk' => static function (ServerRequest $serverRequest, LoggerInterface $logger, AppConfig $appConfig) {
+        return (new Controller\FindKinsfolk($logger, $appConfig))($serverRequest);
+    },
 ];

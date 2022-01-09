@@ -60,7 +60,7 @@ final class Kinsfolk extends Recipient
      *
      * @return string
      */
-    final public function getStatus(): string
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -83,7 +83,7 @@ final class Kinsfolk extends Recipient
      *
      * @return string
      */
-    final public function getRingtone(): string
+    public function getRingtone(): string
     {
         return $this->ringtone;
     }
@@ -95,7 +95,7 @@ final class Kinsfolk extends Recipient
      *
      * @return Kinsfolk
      */
-    final public function setRingtone(string $ringtone): Kinsfolk
+    public function setRingtone(string $ringtone): Kinsfolk
     {
         $this->ringtone = $ringtone;
         return $this;
@@ -106,7 +106,7 @@ final class Kinsfolk extends Recipient
      *
      * @return string
      */
-    final public function getHotkey(): string
+    public function getHotkey(): string
     {
         return $this->hotkey;
     }

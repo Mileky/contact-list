@@ -7,6 +7,7 @@ use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use DD\ContactList\Infrastructure\View\RenderInterface;
 use Throwable;
 use UnexpectedValueException;
 
@@ -48,15 +49,34 @@ final class App
     private ?AppConfig $appConfig = null;
 
     /**
+     * Компонент отвечающий за рендеринг
+     *
+     * @var RenderInterface|null
+     */
+    private ?RenderInterface $render = null;
+
+    /**
+     * Фабрика создания рендера результатов
+     *
+     * @var callable
+     */
+    private $renderFactory;
+
+    /**
      * @param array $handler             - обработчики запросов
      * @param callable $loggerFactory    - фабрика создания логгеров
      * @param callable $appConfigFactory - фабрика создания конфига приложения
      */
-    public function __construct(array $handler, callable $loggerFactory, callable $appConfigFactory)
-    {
+    public function __construct(
+        array $handler,
+        callable $loggerFactory,
+        callable $appConfigFactory,
+        callable $renderFactory
+    ) {
         $this->handlers = $handler;
         $this->loggerFactory = $loggerFactory;
         $this->appConfigFactory = $appConfigFactory;
+        $this->renderFactory = $renderFactory;
         $this->initiateErrorHandling();
     }
 
@@ -93,6 +113,28 @@ final class App
         }
         return $this->appConfig;
     }
+
+    /**
+     * Возвращает рендер
+     *
+     * @return RenderInterface
+     */
+    private function getRender(): RenderInterface
+    {
+        if (null === $this->render) {
+            $renderFactory = $this->renderFactory;
+            $render = $renderFactory();
+
+            if (!$render instanceof RenderInterface) {
+                throw new Exception\UnexpectedValueException('Рендер некорректного типа');
+            }
+
+            $this->render = $render;
+        }
+
+        return $this->render;
+    }
+
 
     /**
      * Возвращает логгер
@@ -132,6 +174,9 @@ final class App
 
             if (array_key_exists($urlPath, $this->handlers)) {
                 $httpResponse = call_user_func($this->handlers[$urlPath], $serverRequest, $logger, $appConfig);
+                if (!$httpResponse instanceof HttpResponse) {
+                    throw new Exception\UnexpectedValueException('Контроллер вернул некорректный результат');
+                }
             } else {
                 $httpResponse = ServerResponseFactory::createJsonResponse(
                     404,
@@ -159,6 +204,8 @@ final class App
                 ['status' => 'fail', 'message' => $errMsg]
             );
         }
+
+        $this->getRender()->render($httpResponse);
 
         return $httpResponse;
     }

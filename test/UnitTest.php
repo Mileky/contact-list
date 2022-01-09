@@ -1,6 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/app.function.php';
 require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
 
 use DD\ContactList\Infrastructure\App;
@@ -17,6 +16,8 @@ use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Uri\Uri;
+use DD\ContactList\Infrastructure\View\NullRender;
+use DD\ContactList\Infrastructure\View\RenderInterface;
 use DD\ContactListTest\TestUtils;
 use DD\ContactList\Infrastructure\Logger;
 
@@ -36,7 +37,7 @@ class UnitTest
                 'testName' => 'Тестирование поиска получателя по id',
                 'in' => [
                     'handlers' => $handlers,
-                    'uri' => '/recipient?id_recipient=1',
+                    'uri' => '/recipients?id_recipient=1',
                     'loggerFactory' => $loggerFactory,
                     'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
@@ -60,7 +61,7 @@ class UnitTest
                 'testName' => 'Тестирование поиска получателя по full_name',
                 'in' => [
                     'handlers' => $handlers,
-                    'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
+                    'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
                     'loggerFactory' => $loggerFactory,
                     'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
@@ -84,7 +85,7 @@ class UnitTest
                 'testName' => 'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday',
                 'in' => [
                     'handlers' => $handlers,
-                    'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
+                    'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
                     'loggerFactory' => $loggerFactory,
                     'appConfigFactory' => static function () {
                         $config = include __DIR__ . '/../config/dev/config.php';
@@ -206,7 +207,9 @@ class UnitTest
                 $testItem['in']['handlers'],
                 $testItem['in']['loggerFactory'],
                 $testItem['in']['appConfigFactory'],
-
+                static function (): RenderInterface {
+                    return new NullRender();
+                }
             ))->dispatch($httpRequest);
 
             //Assert

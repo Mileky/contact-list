@@ -67,7 +67,7 @@ final class Customer extends Recipient
      *
      * @return string
      */
-    final public function getContractNumber(): string
+    public function getContractNumber(): string
     {
         return $this->contractNumber;
     }
@@ -90,7 +90,7 @@ final class Customer extends Recipient
      *
      * @return int
      */
-    final public function getAverageTransactionAmount(): int
+    public function getAverageTransactionAmount(): int
     {
         return $this->averageTransactionAmount;
     }
@@ -113,7 +113,7 @@ final class Customer extends Recipient
      *
      * @return string
      */
-    final public function getDiscount(): string
+    public function getDiscount(): string
     {
         return $this->discount;
     }
@@ -136,7 +136,7 @@ final class Customer extends Recipient
      *
      * @return string
      */
-    final public function getTimeToCall(): string
+    public function getTimeToCall(): string
     {
         return $this->timeToCall;
     }

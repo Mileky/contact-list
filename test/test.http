@@ -1,5 +1,5 @@
 ### Тестирование поиска даты рождения и профессии знакомых по id
-GET http://localhost:80/recipient?id_recipient=1
+GET http://localhost:80/recipients?id_recipient=1
 
 > {%
    client.test('Тестирование поиска даты рождения и профессии знакомых по id', function () {
@@ -13,7 +13,7 @@ GET http://localhost:80/recipient?id_recipient=1
  %}
 
 ### Тестирование поиска даты рождения и профессии знакомых по полному имени
-GET http://localhost:80/recipient?full_name=Осипов Геннадий Иванович
+GET http://localhost:80/recipients?full_name=Осипов Геннадий Иванович
 
 > {%
    client.test('Тестирование поиска даты рождения и профессии знакомых по полному имени', function () {
@@ -44,7 +44,7 @@ GET http://localhost:80/customers?full_name=Калинин Пётр Алекса
  %}
 
 ### Тестирование поиска контактов по категориям(клиенты)
-GET http://localhost:80/category?category=customers
+GET http://localhost:80/customers
 
 > {%
    client.test('Тестирование поиска контактов по категориям(клиенты)', function () {
@@ -55,7 +55,7 @@ GET http://localhost:80/category?category=customers
  %}
 
 ### Тестирование поиска контактов по категориям(получатели)
-GET http://localhost:80/category?category=recipients
+GET http://localhost:80/recipients
 
 > {%
    client.test('Тестирование поиска контактов по категориям(получатели)', function () {
@@ -66,7 +66,7 @@ GET http://localhost:80/category?category=recipients
  %}
 
 ### Тестирование поиска контактов по категориям(коллеги)
-GET http://localhost:80/category?category=colleagues
+GET http://localhost:80/colleagues
 
 > {%
    client.test('Тестирование поиска контактов по категориям(коллеги)', function () {
@@ -77,7 +77,7 @@ GET http://localhost:80/category?category=colleagues
  %}
 
 ### Тестирование поиска контактов по категориям(родня)
-GET http://localhost:80/category?category=kinsfolk
+GET http://localhost:80/kinsfolk
 
 > {%
    client.test('Тестирование поиска контактов по категориям(родня)', function () {
@@ -139,7 +139,7 @@ GET http://localhost:80/hhh?param=ru
 
 
 ### Тестирование ситуации, когда передали некорректное id получателя в поиске по знакомым
-GET http://localhost:80/recipient?id_recipient[]=1
+GET http://localhost:80/recipients?id_recipient[]=1
 
 > {%
      client.test("Тестирование ситуации, когда передали некорректное id получателя в поиске по знакомым", function () {
@@ -151,7 +151,7 @@ GET http://localhost:80/recipient?id_recipient[]=1
  %}
 
 ### Тестирование ситуации, когда передали некорректное full_name получателя в поиске по знакомым
-GET http://localhost:80/recipient?full_name[]=Осипов Геннадий Иванович
+GET http://localhost:80/recipients?full_name[]=Осипов Геннадий Иванович
 
 > {%
      client.test("Тестирование ситуации, когда передали некорректное full_name получателя в поиске по знакомым", function () {
@@ -161,33 +161,6 @@ GET http://localhost:80/recipient?full_name[]=Осипов Геннадий Ив
             client.assert(response.body['message'] === "incorrect full_name", "Некорректное сообщение");
      })
  %}
-
-
-
-### Тестирование ситуация, когда передали некорректные даанные по категории
-GET http://localhost:80/category?category=privet
-
-> {%
-     client.test("Тестирование ситуация, когда передали некорректные даанные по категории", function () {
-            client.assert(response.status === 500, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
-            client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-            client.assert(response.body['status'] === "fail", "Некорректный статус");
-            client.assert(response.body['message'] === "dispatch category nothing", "Некорректное сообщение");
-     })
- %}
-
-### Тестирование ситуации, когда передали пустую категорию
-GET http://localhost:80/category
-
-> {%
-     client.test("Тестирование ситуация, когда передали некорректные даанные по категории", function () {
-            client.assert(response.status === 500, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
-            client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-            client.assert(response.body['status'] === "fail", "Некорректный статус");
-            client.assert(response.body['message'] === "empty category", "Некорректное сообщение");
-     })
- %}
-
 
 ### Тестирование поиска клиента по дисконту
 GET http://localhost:80/customers?time_to_call=С 9:00 до 13:00 в будни

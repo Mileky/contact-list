@@ -60,7 +60,7 @@ final class Colleague extends Recipient
      *
      * @return string
      */
-    final public function getDepartment(): string
+    public function getDepartment(): string
     {
         return $this->department;
     }
@@ -83,7 +83,7 @@ final class Colleague extends Recipient
      *
      * @return string
      */
-    final public function getPosition(): string
+    public function getPosition(): string
     {
         return $this->position;
     }
@@ -106,7 +106,7 @@ final class Colleague extends Recipient
      *
      * @return string
      */
-    final public function getRoomNumber(): string
+    public function getRoomNumber(): string
     {
         return $this->roomNumber;
     }

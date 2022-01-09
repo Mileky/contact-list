@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../../src/Infrastructure/Autoloader.php';
 use DD\ContactList\Infrastructure\Autoloader;
 use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
 use DD\ContactListTest\TestUtils;
+use JsonException;
 
 spl_autoload_register(
     new Autoloader([
@@ -24,6 +25,7 @@ final class ServerRequestFactoryTest
      * Тестирование создания серверного запроса
      *
      * @return void
+     * @throws JsonException
      */
     public static function createFromGlobals(): void
     {
@@ -98,13 +100,13 @@ final class ServerRequestFactoryTest
         if (count($unnecessaryQueryParams) > 0) {
             $errMsg .= sprintf(
                 "         Есть лишние элементы %s\n",
-                json_encode($unnecessaryQueryParams, JSON_UNESCAPED_UNICODE)
+                json_encode($unnecessaryQueryParams, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
             );
         }
         if (count($missingQueryParams) > 0) {
             $errMsg .= sprintf(
                 "         Есть лишние недостающие элементы %s\n",
-                json_encode($missingQueryParams, JSON_UNESCAPED_UNICODE)
+                json_encode($missingQueryParams, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
             );
         }
 

@@ -179,31 +179,6 @@ final class App
         });
     }
 
-//    /**
-//     * Создает контроллер
-//     *
-//     * @param string $urlPath
-//     *
-//     * @return callable
-//     */
-//    private function getController(string $urlPath): callable
-//    {
-//        $handlers = $this->getHandlers();
-//        if (is_callable($handlers[$urlPath])) {
-//            $controller = $handlers[$urlPath];
-//        } elseif (is_string($handlers[$urlPath]) && is_subclass_of(
-//                $handlers[$urlPath],
-//                ControllerInterface::class,
-//                true
-//            )) {
-//            $controller = $this->getContainer()->get($handlers[$urlPath]);
-//        } else {
-//            throw new Exception\RuntimeException("Для url '$urlPath' зарегестрирован некорректный обработчик");
-//        }
-//
-//        return $controller;
-//    }
-
     /**
      * Обработчик запроса
      *

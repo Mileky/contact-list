@@ -12,7 +12,10 @@ use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Validator\Assert;
 use JsonException;
 
-final class FindColleagues implements ControllerInterface
+/**
+ * Контроллер для работы с Коллегами
+ */
+class GetColleaguesCollectionController implements ControllerInterface
 {
     /**
      * Путь до файла с коллегами
@@ -39,6 +42,30 @@ final class FindColleagues implements ControllerInterface
     }
 
     /**
+     * Определяет http код
+     *
+     * @param array $foundColleagues
+     *
+     * @return int
+     */
+    protected function buildHttpCode(array $foundColleagues): int
+    {
+        return 200;
+    }
+
+    /**
+     * Подготавливает данные для ответа
+     *
+     * @param array $foundColleagues
+     *
+     * @return array
+     */
+    protected function buildResult(array $foundColleagues)
+    {
+        return $foundColleagues;
+    }
+
+    /**
      * Валидирует параметры запроса
      *
      * @param ServerRequest $serverRequest - объект серверного запроса
@@ -57,9 +84,9 @@ final class FindColleagues implements ControllerInterface
             'room_number' => 'incorrect room_number',
         ];
 
-        $queryParams = $serverRequest->getQueryParams();
+        $params = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
 
-        return Assert::arrayElementsIsString($paramValidations, $queryParams);
+        return Assert::arrayElementsIsString($paramValidations, $params);
     }
 
     /**
@@ -73,22 +100,22 @@ final class FindColleagues implements ControllerInterface
     private function searchColleaguesInData(array $colleagues, ServerRequest $serverRequest): array
     {
         $foundColleagues = [];
-        $requestParams = $serverRequest->getQueryParams();
+        $searchCriteria = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
         foreach ($colleagues as $colleague) {
-            if (array_key_exists('id_recipient', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['id_recipient'] === $colleague['id_recipient'];
-            } elseif (array_key_exists('full_name', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['full_name'] === $colleague['full_name'];
-            } elseif (array_key_exists('birthday', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['birthday'] === $colleague['birthday'];
-            } elseif (array_key_exists('profession', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['profession'] === $colleague['profession'];
-            } elseif (array_key_exists('department', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['department'] === $colleague['department'];
-            } elseif (array_key_exists('position', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['position'] === $colleague['position'];
-            } elseif (array_key_exists('room_number', $requestParams)) {
-                $colleaguesMeetSearchCriteria = $requestParams['room_number'] === $colleague['room_number'];
+            if (array_key_exists('id_recipient', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['id_recipient'] === $colleague['id_recipient'];
+            } elseif (array_key_exists('full_name', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['full_name'] === $colleague['full_name'];
+            } elseif (array_key_exists('birthday', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['birthday'] === $colleague['birthday'];
+            } elseif (array_key_exists('profession', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['profession'] === $colleague['profession'];
+            } elseif (array_key_exists('department', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['department'] === $colleague['department'];
+            } elseif (array_key_exists('position', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['position'] === $colleague['position'];
+            } elseif (array_key_exists('room_number', $searchCriteria)) {
+                $colleaguesMeetSearchCriteria = $searchCriteria['room_number'] === $colleague['room_number'];
             } else {
                 $colleaguesMeetSearchCriteria = true;
             }
@@ -115,23 +142,24 @@ final class FindColleagues implements ControllerInterface
     /**
      * обработка запроса поиска Коллег
      *
-     * @param ServerRequest $serverRequest
+     * @param ServerRequest $serverServerRequest
      *
      * @return HttpResponse
      * @throws JsonException
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse
+    public function __invoke(ServerRequest $serverServerRequest): HttpResponse
     {
         $this->logger->log('dispatch "colleagues" url');
 
 
-        $resultOfParamValidation = $this->validateQueryParams($serverRequest);
+        $resultOfParamValidation = $this->validateQueryParams($serverServerRequest);
 
 
         if (null === $resultOfParamValidation) {
             $colleagues = $this->loadData();
-            $httpCode = 200;
-            $result = $this->searchColleaguesInData($colleagues, $serverRequest);
+            $foundColleagues = $this->searchColleaguesInData($colleagues, $serverServerRequest);
+            $httpCode = $this->buildHttpCode($foundColleagues);
+            $result = $this->buildResult($foundColleagues);
         } else {
             $httpCode = 500;
             $result = [

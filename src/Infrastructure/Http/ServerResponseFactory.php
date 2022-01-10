@@ -25,11 +25,11 @@ class ServerResponseFactory
      * Создает http ответ с данными
      *
      * @param int $code
-     * @param array $data
+     * @param $data
      *
      * @return HttpResponse
      */
-    public static function createJsonResponse(int $code, array $data): HttpResponse
+    public static function createJsonResponse(int $code, $data): HttpResponse
     {
         try {
             $body = json_encode($data, JSON_THROW_ON_ERROR);

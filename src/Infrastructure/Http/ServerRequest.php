@@ -15,6 +15,37 @@ class ServerRequest extends HttpRequest
     private ?array $queryParams = null;
 
     /**
+     * Атрибуты серверного запроса
+     *
+     * @var array
+     */
+    private array $attributes = [];
+
+    /**
+     * Возвращает атрибуты серверного запроса
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Устанавливает атрибуты
+     *
+     * @param array $attributes
+     *
+     * @return ServerRequest
+     */
+    public function setAttributes(array $attributes): ServerRequest
+    {
+        $this->attributes = $attributes;
+        return $this;
+    }
+
+
+    /**
      * Возвращает параметры запроса
      *
      * @return array

@@ -3,7 +3,6 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Entity\Kinsfolk;
-//use DD\ContactList\Entity\Recipient;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
@@ -13,7 +12,10 @@ use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Validator\Assert;
 use JsonException;
 
-final class FindKinsfolk implements ControllerInterface
+/**
+ * Контроллер для работы с Родственниками
+ */
+class GetKinsfolkCollectionController implements ControllerInterface
 {
 
     /**
@@ -60,9 +62,33 @@ final class FindKinsfolk implements ControllerInterface
             'hotkey' => 'incorrect hotkey'
         ];
 
-        $queryParams = $serverRequest->getQueryParams();
+        $params = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
 
-        return Assert::arrayElementsIsString($paramValidations, $queryParams);
+        return Assert::arrayElementsIsString($paramValidations, $params);
+    }
+
+    /**
+     * Определяет http код
+     *
+     * @param array $foundKinsfolk
+     *
+     * @return int
+     */
+    protected function buildHttpCode(array $foundKinsfolk): int
+    {
+        return 200;
+    }
+
+    /**
+     * Подготавливает данные для ответа
+     *
+     * @param array $foundKinsfolk
+     *
+     * @return array
+     */
+    protected function buildResult(array $foundKinsfolk)
+    {
+        return $foundKinsfolk;
     }
 
     /**
@@ -76,22 +102,22 @@ final class FindKinsfolk implements ControllerInterface
     private function searchKinsfolkInData(array $kinsfolk, ServerRequest $serverRequest): array
     {
         $foundKinsfolk = [];
-        $requestParams = $serverRequest->getQueryParams();
+        $searchCriteria = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
         foreach ($kinsfolk as $relative) {
-            if (array_key_exists('id_recipient', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['id_recipient'] === (string)$relative['id_recipient'];
-            } elseif (array_key_exists('full_name', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['full_name'] === $relative['full_name'];
-            } elseif (array_key_exists('birthday', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['birthday'] === $relative['birthday'];
-            } elseif (array_key_exists('profession', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['profession'] === $relative['profession'];
-            } elseif (array_key_exists('status', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['status'] === $relative['status'];
-            } elseif (array_key_exists('ringtone', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['ringtone'] === $relative['ringtone'];
-            } elseif (array_key_exists('hotkey', $requestParams)) {
-                $kinsfolkMeetSearchCriteria = $requestParams['hotkey'] === $relative['hotkey'];
+            if (array_key_exists('id_recipient', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['id_recipient'] === (string)$relative['id_recipient'];
+            } elseif (array_key_exists('full_name', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['full_name'] === $relative['full_name'];
+            } elseif (array_key_exists('birthday', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['birthday'] === $relative['birthday'];
+            } elseif (array_key_exists('profession', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['profession'] === $relative['profession'];
+            } elseif (array_key_exists('status', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['status'] === $relative['status'];
+            } elseif (array_key_exists('ringtone', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['ringtone'] === $relative['ringtone'];
+            } elseif (array_key_exists('hotkey', $searchCriteria)) {
+                $kinsfolkMeetSearchCriteria = $searchCriteria['hotkey'] === $relative['hotkey'];
             } else {
                 $kinsfolkMeetSearchCriteria = true;
             }
@@ -118,23 +144,24 @@ final class FindKinsfolk implements ControllerInterface
     /**
      * обработка запроса поиска Родственников
      *
-     * @param ServerRequest $serverRequest
+     * @param ServerRequest $serverServerRequest
      *
      * @return HttpResponse
      * @throws JsonException
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse
+    public function __invoke(ServerRequest $serverServerRequest): HttpResponse
     {
         $this->logger->log('dispatch "kinsfolk" url');
 
 
-        $resultOfParamValidation = $this->validateQueryParams($serverRequest);
+        $resultOfParamValidation = $this->validateQueryParams($serverServerRequest);
 
 
         if (null === $resultOfParamValidation) {
             $kinsfolk = $this->loadData();
-            $httpCode = 200;
-            $result = $this->searchKinsfolkInData($kinsfolk, $serverRequest);
+            $foundKinsfolk = $this->searchKinsfolkInData($kinsfolk, $serverServerRequest);
+            $httpCode = $this->buildHttpCode($foundKinsfolk);
+            $result = $this->buildResult($foundKinsfolk);
         } else {
             $httpCode = 500;
             $result = [

@@ -12,9 +12,12 @@ use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Validator\Assert;
 use JsonException;
 
-
-final class FindRecipient implements ControllerInterface
+/**
+ * Контроллер для работы с Знакомыми
+ */
+class GetRecipientsCollectionController implements ControllerInterface
 {
+
     /**
      * Путь до файла с Знакомыми
      *
@@ -62,6 +65,31 @@ final class FindRecipient implements ControllerInterface
     }
 
     /**
+     * Определяет http код
+     *
+     * @param array $foundRecipients
+     *
+     * @return int
+     */
+    protected function buildHttpCode(array $foundRecipients): int
+    {
+        return 200;
+    }
+
+    /**
+     * Подготавливает данные для ответа
+     *
+     * @param array $foundRecipients
+     *
+     * @return array
+     */
+    protected function buildResult(array $foundRecipients)
+    {
+        return $foundRecipients;
+    }
+
+
+    /**
      * Логика поиска Знакомых
      *
      * @param array $recipients
@@ -72,16 +100,16 @@ final class FindRecipient implements ControllerInterface
     private function searchRecipientInData(array $recipients, ServerRequest $serverRequest): array
     {
         $foundRecipients = [];
-        $requestParams = $serverRequest->getQueryParams();
+        $searchCriteria = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
         foreach ($recipients as $recipient) {
-            if (array_key_exists('id_recipient', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['id_recipient'] === (string)$recipient['id_recipient'];
-            } elseif (array_key_exists('full_name', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['full_name'] === $recipient['full_name'];
-            } elseif (array_key_exists('birthday', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['birthday'] === $recipient['birthday'];
-            } elseif (array_key_exists('profession', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['profession'] === $recipient['profession'];
+            if (array_key_exists('id_recipient', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['id_recipient'] === (string)$recipient['id_recipient'];
+            } elseif (array_key_exists('full_name', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['full_name'] === $recipient['full_name'];
+            } elseif (array_key_exists('birthday', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['birthday'] === $recipient['birthday'];
+            } elseif (array_key_exists('profession', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['profession'] === $recipient['profession'];
             } else {
                 $recipientMeetSearchCriteria = true;
             }
@@ -117,14 +145,13 @@ final class FindRecipient implements ControllerInterface
     {
         $this->logger->log('dispatch "recipient" url');
 
-
         $resultOfParamValidation = $this->validateQueryParams($serverRequest);
-
 
         if (null === $resultOfParamValidation) {
             $recipients = $this->loadData();
-            $httpCode = 200;
-            $result = $this->searchRecipientInData($recipients, $serverRequest);
+            $foundRecipients = $this->searchRecipientInData($recipients, $serverRequest);
+            $httpCode = $this->buildHttpCode($foundRecipients);
+            $result = $this->buildResult($foundRecipients);
         } else {
             $httpCode = 500;
             $result = [

@@ -13,10 +13,10 @@ interface ControllerInterface
     /**
      * Обработка http запроса
      *
-     * @param ServerRequest $serverRequest
+     * @param ServerRequest $serverServerRequest
      *
      * @return HttpResponse
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse;
+    public function __invoke(ServerRequest $serverServerRequest): HttpResponse;
 
 }

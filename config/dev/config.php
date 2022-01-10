@@ -4,7 +4,7 @@ return [
     /**
      *  Путь до файла с данными о получателях
      */
-    '$pathToRecipients' => __DIR__ . '/../../data/recipient.json',
+    'pathToRecipients' => __DIR__ . '/../../data/recipient.json',
     /**
      *  Путь до файла с данными о клиентах
      */

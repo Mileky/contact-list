@@ -13,6 +13,7 @@ spl_autoload_register(
 );
 
 use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Uri\Uri;
@@ -32,18 +33,20 @@ class UnitTest
         $loggerFactory = static function (): LoggerInterface {
             return new Logger\NullLogger\Logger();
         };
+        $diConfig = require __DIR__ . '/../config/dev/di.php';
+        $diConfig['services'][LoggerInterface::class] = [
+            'class' => DD\ContactList\Infrastructure\Logger\NullLogger\Logger::class
+        ];
+        $diConfig['services'][RenderInterface::class] = [
+            'class' => NullRender::class
+        ];
+
         return [
             [
                 'testName' => 'Тестирование поиска получателя по id',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipients?id_recipient=1',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['loggerType'] = 'echoLogger';
-                        return AppConfig::createFromArray($config);
-                    }
+                    'diConfig' => $diConfig
                 ],
                 'out' => [
                     'httpCode' => 200,
@@ -60,14 +63,8 @@ class UnitTest
             [
                 'testName' => 'Тестирование поиска получателя по full_name',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['loggerType'] = 'echoLogger';
-                        return AppConfig::createFromArray($config);
-                    }
+                    'diConfig' => $diConfig
                 ],
                 'out' => [
                     'httpCode' => 200,
@@ -84,14 +81,15 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
-                        return AppConfig::createFromArray($config);
-                    }
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })(
+                        $diConfig
+                    )
                 ],
                 'out' => [
                     'httpCode' => 503,
@@ -104,32 +102,36 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректными данными конфига приложения',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipient?id_recipient=1',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
-                        return 'Ops!';
-                    }
+                    'diConfig' => (static function ($diConfig) {
+                        $diConfig['factories'][AppConfig::class] = static function () {
+                            return 'Oops';
+                        };
+                        return $diConfig;
+                    })(
+                        $diConfig
+                    )
                 ],
                 'out' => [
                     'httpCode' => 500,
                     'result' => [
                         'status' => 'fail',
-                        'message' => 'Incorrect application config'
+                        'message' => 'system error'
                     ]
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с получателями',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipient?id_recipient=1',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
-                        return AppConfig::createFromArray($config);
-                    }
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })(
+                        $diConfig
+                    )
                 ],
                 'out' => [
                     'httpCode' => 500,
@@ -142,14 +144,15 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с клиентами',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/customers?id_recipient=7',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.customer.json';
-                        return AppConfig::createFromArray($config);
-                    }
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })(
+                        $diConfig
+                    )
                 ],
                 'out' => [
                     'httpCode' => 500,
@@ -162,14 +165,16 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
                 'in' => [
-                    'handlers' => $handlers,
+
                     'uri' => '/customers?full_name=Калинин Пётр Александрович',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function () {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
-                        return AppConfig::createFromArray($config);
-                    }
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })(
+                        $diConfig
+                    )
                 ],
                 'out' => [
                     'httpCode' => 503,
@@ -203,12 +208,23 @@ class UnitTest
             );
 
             //Arrange и Act
+            $diConfig = $testItem['in']['diConfig'];
+
             $httpResponse = (new App(
-                $testItem['in']['handlers'],
-                $testItem['in']['loggerFactory'],
-                $testItem['in']['appConfigFactory'],
-                static function (): RenderInterface {
-                    return new NullRender();
+                static function (Container $di): array {
+                    return $di->get('handlers');
+                },
+                static function (Container $di): LoggerInterface {
+                    return $di->get(LoggerInterface::class);
+                },
+                static function (Container $di): AppConfig {
+                    return $di->get(AppConfig::class);
+                },
+                static function (Container $di): RenderInterface {
+                    return $di->get(RenderInterface::class);
+                },
+                static function () use ($diConfig): Container {
+                    return Container::createFromArray($diConfig);
                 }
             ))->dispatch($httpRequest);
 
@@ -241,7 +257,7 @@ class UnitTest
             }
 
             if ('' === $errMsg) {
-                echo "    ОК - данные ответа валидны\n";
+                echo "    ОК --- данные ответа валидны\n";
             } else {
                 echo "    FAIL - данные ответа валидны\n" . $errMsg;
             }

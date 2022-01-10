@@ -6,6 +6,8 @@ use DD\ContactList\Entity\Customer;
 use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DataLoader\JsonDataLoader;
+use DD\ContactList\Infrastructure\DI\ContainerInterface;
+use DD\ContactList\Infrastructure\DI\ServiceLocator;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
@@ -35,13 +37,14 @@ final class FindCustomers implements ControllerInterface
     private AppConfig $appConfig;
 
     /**
-     * @param LoggerInterface $logger
      * @param AppConfig $appConfig
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger, AppConfig $appConfig)
+    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->appConfig = $appConfig;
+
     }
 
 

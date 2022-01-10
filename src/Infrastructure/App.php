@@ -3,29 +3,23 @@
 namespace DD\ContactList\Infrastructure;
 
 use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Controller\ControllerInterface;
+use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\View\RenderInterface;
 use Throwable;
-use UnexpectedValueException;
 
 final class App
 {
     /**
      * Обработчик запросов
      *
-     * @var array
+     * @var array|null
      */
-    private array $handlers;
-
-    /**
-     * Фабрика создания логгеров
-     *
-     * @var callable
-     */
-    private $loggerFactory;
+    private ?array $handlers = null;
 
     /**
      * Компонент отвечающий за логирование
@@ -33,13 +27,6 @@ final class App
      * @var LoggerInterface|null
      */
     private ?LoggerInterface $logger = null;
-
-    /**
-     * Фабрика создания конфига приложения
-     *
-     * @var callable
-     */
-    private $appConfigFactory;
 
     /**
      * Конфиг приложения
@@ -56,29 +43,131 @@ final class App
     private ?RenderInterface $render = null;
 
     /**
-     * Фабрика создания рендера результатов
+     * Локатор сервисов
+     *
+     * @var ContainerInterface|null
+     */
+    private ?ContainerInterface $container = null;
+
+    /**
+     * Фабрика реализующая логику создания обработчика запросов
+     *
+     * @var callable
+     */
+    private $handlersFactory;
+
+    /**
+     * Фабрика реализующая логику создания логеров
+     *
+     * @var callable
+     */
+    private $loggerFactory;
+
+    /**
+     * Фабрика реализующая логику создания конфига приложения
+     *
+     * @var callable
+     */
+    private $appConfigFactory;
+
+    /**
+     * Фабрика реализующая логику создания рендера
      *
      * @var callable
      */
     private $renderFactory;
 
     /**
-     * @param array $handler             - обработчики запросов
-     * @param callable $loggerFactory    - фабрика создания логгеров
-     * @param callable $appConfigFactory - фабрика создания конфига приложения
+     * Фабрика реализующая логику создания DI контейнера
+     *
+     * @var callable
+     */
+    private $diContainerFactory;
+
+    /**
+     * @param callable $handlersFactory    - Фабрика реализующая логику создания обработчика запросов
+     * @param callable $loggerFactory      - Фабрика реализующая логику создания логеров
+     * @param callable $appConfigFactory   - Фабрика реализующая логику создания конфига приложения
+     * @param callable $renderFactory      - Фабрика реализующая логику создания рендера
+     * @param callable $diContainerFactory - Фабрика реализующая логику создания DI контейнера
      */
     public function __construct(
-        array $handler,
+        callable $handlersFactory,
         callable $loggerFactory,
         callable $appConfigFactory,
-        callable $renderFactory
+        callable $renderFactory,
+        callable $diContainerFactory
     ) {
-        $this->handlers = $handler;
+        $this->handlersFactory = $handlersFactory;
         $this->loggerFactory = $loggerFactory;
         $this->appConfigFactory = $appConfigFactory;
         $this->renderFactory = $renderFactory;
+        $this->diContainerFactory = $diContainerFactory;
+
         $this->initiateErrorHandling();
     }
+
+    /**
+     * Возвращает компонент отвечающий за рендеринг
+     *
+     * @return RenderInterface
+     */
+    private function getRender(): RenderInterface
+    {
+        if (null === $this->render) {
+            $this->render = ($this->renderFactory)($this->getContainer());
+        }
+
+        return $this->render;
+    }
+
+    /**
+     * Возвращает конфиг приложения
+     *
+     * @return array
+     */
+    private function getHandlers(): array
+    {
+        if (null === $this->handlers) {
+            $this->handlers = ($this->handlersFactory)($this->getContainer());
+        }
+
+        return $this->handlers;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    private function getLogger(): LoggerInterface
+    {
+        if (null === $this->logger) {
+            $this->logger = ($this->loggerFactory)($this->getContainer());
+        }
+        return $this->logger;
+    }
+
+    /**
+     * @return AppConfig
+     */
+    private function getAppConfig(): AppConfig
+    {
+        if (null === $this->appConfig) {
+            $this->appConfig = ($this->appConfigFactory)($this->getContainer());
+        }
+        return $this->appConfig;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    private function getContainer(): ContainerInterface
+    {
+        if (null === $this->container) {
+            $this->container = ($this->diContainerFactory)();
+        }
+        return $this->container;
+    }
+
 
     /**
      * Инициализация обработки ошибок
@@ -93,64 +182,28 @@ final class App
     }
 
     /**
-     * Возвращает конфиг приложения
+     * Создает контроллер
      *
-     * @return AppConfig
-     */
-    private function getAppConfig(): AppConfig
-    {
-        if (null === $this->appConfig) {
-            try {
-                $appConfig = call_user_func($this->appConfigFactory);
-            } catch (Throwable $e) {
-                throw new Exception\ErrorCreateAppConfigException($e->getMessage(), $e->getCode(), $e);
-            }
-
-            if (!($appConfig instanceof AppConfig)) {
-                throw new Exception\ErrorCreateAppConfigException('Incorrect application config');
-            }
-            $this->appConfig = $appConfig;
-        }
-        return $this->appConfig;
-    }
-
-    /**
-     * Возвращает рендер
+     * @param string $urlPath
      *
-     * @return RenderInterface
+     * @return callable
      */
-    private function getRender(): RenderInterface
+    private function getController(string $urlPath): callable
     {
-        if (null === $this->render) {
-            $renderFactory = $this->renderFactory;
-            $render = $renderFactory();
-
-            if (!$render instanceof RenderInterface) {
-                throw new Exception\UnexpectedValueException('Рендер некорректного типа');
-            }
-
-            $this->render = $render;
+        $handlers = $this->getHandlers();
+        if (is_callable($handlers[$urlPath])) {
+            $controller = $handlers[$urlPath];
+        } elseif (is_string($handlers[$urlPath]) && is_subclass_of(
+                $handlers[$urlPath],
+                ControllerInterface::class,
+                true
+            )) {
+            $controller = $this->getContainer()->get($handlers[$urlPath]);
+        } else {
+            throw new Exception\RuntimeException("Для url '$urlPath' зарегестрирован некорректный обработчик");
         }
 
-        return $this->render;
-    }
-
-
-    /**
-     * Возвращает логгер
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger(): LoggerInterface
-    {
-        if (null === $this->logger) {
-            $logger = call_user_func($this->loggerFactory, $this->getAppConfig());
-            if (!($logger instanceof LoggerInterface)) {
-                throw new UnexpectedValueException('Incorrect logger');
-            }
-            $this->logger = $logger;
-        }
-        return $this->logger;
+        return $controller;
     }
 
     /**
@@ -160,11 +213,13 @@ final class App
      *
      * @return HttpResponse - http ответ
      */
-    public function dispatch(ServerRequest $serverRequest): HttpResponse
-    {
-        $appConfig = null;
+    public
+    function dispatch(
+        ServerRequest $serverRequest
+    ): HttpResponse {
+        $hasAppConfig = false;
         try {
-            $appConfig = $this->getAppConfig();
+            $hasAppConfig = $this->getAppConfig() instanceof AppConfig;
 
             $logger = $this->getLogger();
 
@@ -172,8 +227,10 @@ final class App
 
             $logger->log('URL request received: ' . $urlPath);
 
-            if (array_key_exists($urlPath, $this->handlers)) {
-                $httpResponse = call_user_func($this->handlers[$urlPath], $serverRequest, $logger, $appConfig);
+            if (array_key_exists($urlPath, $this->getHandlers())) {
+                $controller = $this->getController($urlPath);
+
+                $httpResponse = $controller($serverRequest);
                 if (!$httpResponse instanceof HttpResponse) {
                     throw new Exception\UnexpectedValueException('Контроллер вернул некорректный результат');
                 }
@@ -183,30 +240,66 @@ final class App
                     ['status' => 'fail', 'message' => 'unsupported request']
                 );
             }
+            $this->getRender()->render($httpResponse);
         } catch (Exception\InvalidDataStructureException $e) {
             $httpResponse = ServerResponseFactory::createJsonResponse(
                 503,
                 ['status' => 'fail', 'message' => $e->getMessage()]
             );
+            $this->silentRender($httpResponse);
         } catch (Throwable $e) {
-            $errMsg = ($appConfig instanceof AppConfig && !$appConfig->isHideErrorMessage(
+            $errMsg = ($hasAppConfig && !$this->getAppConfig()->isHideErrorMessage(
                 )) || $e instanceof Exception\ErrorCreateAppConfigException
                 ? $e->getMessage()
                 : 'system error';
 
             try {
-                $this->getLogger()->log($e->getMessage());
+                $this->logger->log($e->getMessage());
             } catch (Throwable $e1) {
             }
+            $this->silentLog($e->getMessage());
 
             $httpResponse = ServerResponseFactory::createJsonResponse(
                 500,
                 ['status' => 'fail', 'message' => $errMsg]
             );
+            $this->silentRender($httpResponse);
         }
-
-        $this->getRender()->render($httpResponse);
 
         return $httpResponse;
     }
+
+    /**
+     * "Тихое" отображение данных - если отправка данных клиенту закончится ошибкой, то это не приводит к прекращению
+     * работы приложения
+     *
+     * @param HttpResponse $httpResponse
+     *
+     * @return void
+     */
+    private function silentRender(HttpResponse $httpResponse): void
+    {
+        try {
+            $this->getRender()->render($httpResponse);
+        }catch (Throwable $e) {
+            $this->silentLog($e->getMessage());
+        }
+    }
+
+    /**
+     * "Тихое" логирование - если запись сообщения в  лог закончится ошибкой, то это не приведет к падению программы
+     *
+     * @param string $msg
+     *
+     * @return void
+     */
+    private function silentLog(string $msg): void
+    {
+        try {
+            $this->getLogger()->log($msg);
+        } catch (Throwable $e) {
+
+        }
+    }
+
 }

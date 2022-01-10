@@ -3,11 +3,8 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Entity\Recipient;
-use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use DD\ContactList\Infrastructure\DI\ContainerInterface;
-use DD\ContactList\Infrastructure\DI\ServiceLocator;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
@@ -19,6 +16,13 @@ use JsonException;
 final class FindRecipient implements ControllerInterface
 {
     /**
+     * Путь до файла с Знакомыми
+     *
+     * @var string
+     */
+    private string $pathToRecipients;
+
+    /**
      * Логгер
      *
      * @var LoggerInterface
@@ -26,20 +30,13 @@ final class FindRecipient implements ControllerInterface
     private LoggerInterface $logger;
 
     /**
-     * Конфиг приложения
-     *
-     * @var AppConfig
-     */
-    private AppConfig $appConfig;
-
-    /**
-     * @param AppConfig $appConfig
      * @param LoggerInterface $logger
+     * @param string $pathToRecipients
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, string $pathToRecipients)
     {
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
+        $this->pathToRecipients = $pathToRecipients;
 
     }
 
@@ -105,7 +102,7 @@ final class FindRecipient implements ControllerInterface
      */
     private function loadData(): array
     {
-        return (new JsonDataLoader())->loadData($this->appConfig->getPathToRecipients());
+        return (new JsonDataLoader())->loadData($this->pathToRecipients);
     }
 
     /**

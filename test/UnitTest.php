@@ -16,6 +16,7 @@ use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\Uri\Uri;
 use DD\ContactList\Infrastructure\View\NullRender;
 use DD\ContactList\Infrastructure\View\RenderInterface;
@@ -211,8 +212,8 @@ class UnitTest
             $diConfig = $testItem['in']['diConfig'];
 
             $httpResponse = (new App(
-                static function (Container $di): array {
-                    return $di->get('handlers');
+                static function (Container $di): RouterInterface {
+                    return $di->get(RouterInterface::class);
                 },
                 static function (Container $di): LoggerInterface {
                     return $di->get(LoggerInterface::class);

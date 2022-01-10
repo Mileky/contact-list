@@ -221,12 +221,12 @@ class AppConfig
      * @param string $path
      *
      * @return void
-     * @throws Exception\RuntimeException
+     * @throws Exception\ErrorCreateAppConfigException
      */
     private function validateFilePath(string $path): void
     {
         if (false === file_exists($path)) {
-            throw new Exception\RuntimeException('Некорректный путь до файла с данными');
+            throw new Exception\ErrorCreateAppConfigException('Некорректный путь до файла с данными');
         }
     }
 

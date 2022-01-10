@@ -3,24 +3,17 @@
 namespace DD\ContactList\Infrastructure;
 
 use DD\ContactList\Exception;
-use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\View\RenderInterface;
 use Throwable;
 
 final class App
 {
-    /**
-     * Обработчик запросов
-     *
-     * @var array|null
-     */
-    private ?array $handlers = null;
-
     /**
      * Компонент отвечающий за логирование
      *
@@ -36,6 +29,13 @@ final class App
     private ?AppConfig $appConfig = null;
 
     /**
+     * Компонент отвечающий за роутинг запросов
+     *
+     * @var RouterInterface|null
+     */
+    private ?RouterInterface $router = null;
+
+    /**
      * Компонент отвечающий за рендеринг
      *
      * @var RenderInterface|null
@@ -48,13 +48,6 @@ final class App
      * @var ContainerInterface|null
      */
     private ?ContainerInterface $container = null;
-
-    /**
-     * Фабрика реализующая логику создания обработчика запросов
-     *
-     * @var callable
-     */
-    private $handlersFactory;
 
     /**
      * Фабрика реализующая логику создания логеров
@@ -85,20 +78,28 @@ final class App
     private $diContainerFactory;
 
     /**
-     * @param callable $handlersFactory    - Фабрика реализующая логику создания обработчика запросов
+     * Фабрика реализующая роутинг запросов
+     *
+     * @var callable
+     */
+    private $routerFactory;
+
+
+    /**
+     * @param callable $routerFactory    - Фабрика реализующая роутинг запросов
      * @param callable $loggerFactory      - Фабрика реализующая логику создания логеров
      * @param callable $appConfigFactory   - Фабрика реализующая логику создания конфига приложения
      * @param callable $renderFactory      - Фабрика реализующая логику создания рендера
      * @param callable $diContainerFactory - Фабрика реализующая логику создания DI контейнера
      */
     public function __construct(
-        callable $handlersFactory,
+        callable $routerFactory,
         callable $loggerFactory,
         callable $appConfigFactory,
         callable $renderFactory,
         callable $diContainerFactory
     ) {
-        $this->handlersFactory = $handlersFactory;
+        $this->routerFactory = $routerFactory;
         $this->loggerFactory = $loggerFactory;
         $this->appConfigFactory = $appConfigFactory;
         $this->renderFactory = $renderFactory;
@@ -122,17 +123,14 @@ final class App
     }
 
     /**
-     * Возвращает конфиг приложения
-     *
-     * @return array
+     * @return RouterInterface
      */
-    private function getHandlers(): array
+    public function getRouter(): RouterInterface
     {
-        if (null === $this->handlers) {
-            $this->handlers = ($this->handlersFactory)($this->getContainer());
+        if (null === $this->router) {
+            $this->router = ($this->routerFactory)($this->getContainer());
         }
-
-        return $this->handlers;
+        return $this->router;
     }
 
     /**
@@ -181,30 +179,30 @@ final class App
         });
     }
 
-    /**
-     * Создает контроллер
-     *
-     * @param string $urlPath
-     *
-     * @return callable
-     */
-    private function getController(string $urlPath): callable
-    {
-        $handlers = $this->getHandlers();
-        if (is_callable($handlers[$urlPath])) {
-            $controller = $handlers[$urlPath];
-        } elseif (is_string($handlers[$urlPath]) && is_subclass_of(
-                $handlers[$urlPath],
-                ControllerInterface::class,
-                true
-            )) {
-            $controller = $this->getContainer()->get($handlers[$urlPath]);
-        } else {
-            throw new Exception\RuntimeException("Для url '$urlPath' зарегестрирован некорректный обработчик");
-        }
-
-        return $controller;
-    }
+//    /**
+//     * Создает контроллер
+//     *
+//     * @param string $urlPath
+//     *
+//     * @return callable
+//     */
+//    private function getController(string $urlPath): callable
+//    {
+//        $handlers = $this->getHandlers();
+//        if (is_callable($handlers[$urlPath])) {
+//            $controller = $handlers[$urlPath];
+//        } elseif (is_string($handlers[$urlPath]) && is_subclass_of(
+//                $handlers[$urlPath],
+//                ControllerInterface::class,
+//                true
+//            )) {
+//            $controller = $this->getContainer()->get($handlers[$urlPath]);
+//        } else {
+//            throw new Exception\RuntimeException("Для url '$urlPath' зарегестрирован некорректный обработчик");
+//        }
+//
+//        return $controller;
+//    }
 
     /**
      * Обработчик запроса
@@ -227,10 +225,11 @@ final class App
 
             $logger->log('URL request received: ' . $urlPath);
 
-            if (array_key_exists($urlPath, $this->getHandlers())) {
-                $controller = $this->getController($urlPath);
+            $dispatcher = $this->getRouter()->getDispatcher($serverRequest);
 
-                $httpResponse = $controller($serverRequest);
+            if (is_callable($dispatcher)) {
+                $httpResponse = $dispatcher($serverRequest);
+
                 if (!$httpResponse instanceof HttpResponse) {
                     throw new Exception\UnexpectedValueException('Контроллер вернул некорректный результат');
                 }
@@ -281,7 +280,7 @@ final class App
     {
         try {
             $this->getRender()->render($httpResponse);
-        }catch (Throwable $e) {
+        } catch (Throwable $e) {
             $this->silentLog($e->getMessage());
         }
     }
@@ -298,7 +297,6 @@ final class App
         try {
             $this->getLogger()->log($msg);
         } catch (Throwable $e) {
-
         }
     }
 

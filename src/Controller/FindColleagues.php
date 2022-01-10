@@ -2,12 +2,9 @@
 
 namespace DD\ContactList\Controller;
 
-use DD\ContactList\Entity\Recipient;
-use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Entity\Colleague;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use DD\ContactList\Infrastructure\DI\ContainerInterface;
-use DD\ContactList\Infrastructure\DI\ServiceLocator;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
@@ -18,6 +15,13 @@ use JsonException;
 final class FindColleagues implements ControllerInterface
 {
     /**
+     * Путь до файла с коллегами
+     *
+     * @var string
+     */
+    private string $pathToColleagues;
+
+    /**
      * Логгер
      *
      * @var LoggerInterface
@@ -25,21 +29,13 @@ final class FindColleagues implements ControllerInterface
     private LoggerInterface $logger;
 
     /**
-     * Конфиг приложения
-     *
-     * @var AppConfig
-     */
-    private AppConfig $appConfig;
-
-    /**
-     * @param AppConfig $appConfig
      * @param LoggerInterface $logger
+     * @param string $pathToColleagues
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, string $pathToColleagues)
     {
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
-
+        $this->pathToColleagues = $pathToColleagues;
     }
 
     /**
@@ -72,7 +68,7 @@ final class FindColleagues implements ControllerInterface
      * @param array $colleagues - массив с данными из файла с Коллегами
      * @param ServerRequest $serverRequest
      *
-     * @return Recipient[]
+     * @return Colleague[]
      */
     private function searchColleaguesInData(array $colleagues, ServerRequest $serverRequest): array
     {
@@ -97,7 +93,7 @@ final class FindColleagues implements ControllerInterface
                 $colleaguesMeetSearchCriteria = true;
             }
             if ($colleaguesMeetSearchCriteria) {
-                $foundColleagues[] = Recipient::createFromArray($colleague);
+                $foundColleagues[] = Colleague::createFromArray($colleague);
             }
         }
         $this->logger->log('found recipients: ' . count($foundColleagues));
@@ -113,7 +109,7 @@ final class FindColleagues implements ControllerInterface
      */
     private function loadData(): array
     {
-        return (new JsonDataLoader())->loadData($this->appConfig->getPathToColleagues());
+        return (new JsonDataLoader())->loadData($this->pathToColleagues);
     }
 
     /**

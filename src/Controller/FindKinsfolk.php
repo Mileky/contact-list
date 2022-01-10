@@ -3,12 +3,9 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Entity\Kinsfolk;
-use DD\ContactList\Entity\Recipient;
-use DD\ContactList\Infrastructure\AppConfig;
+//use DD\ContactList\Entity\Recipient;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use DD\ContactList\Infrastructure\DI\ContainerInterface;
-use DD\ContactList\Infrastructure\DI\ServiceLocator;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
@@ -18,6 +15,14 @@ use JsonException;
 
 final class FindKinsfolk implements ControllerInterface
 {
+
+    /**
+     * Путь до файла с Родственниками
+     *
+     * @var string
+     */
+    private string $pathToKinsfolk;
+
     /**
      * Логгер
      *
@@ -26,20 +31,13 @@ final class FindKinsfolk implements ControllerInterface
     private LoggerInterface $logger;
 
     /**
-     * Конфиг приложения
-     *
-     * @var AppConfig
-     */
-    private AppConfig $appConfig;
-
-    /**
-     * @param AppConfig $appConfig
      * @param LoggerInterface $logger
+     * @param string $pathToKinsfolk
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, string $pathToKinsfolk)
     {
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
+        $this->pathToKinsfolk = $pathToKinsfolk;
 
     }
 
@@ -73,7 +71,7 @@ final class FindKinsfolk implements ControllerInterface
      * @param array $kinsfolk - массив с данными из файла с Родственниками
      * @param ServerRequest $serverRequest
      *
-     * @return Recipient[]
+     * @return Kinsfolk[]
      */
     private function searchKinsfolkInData(array $kinsfolk, ServerRequest $serverRequest): array
     {
@@ -114,7 +112,7 @@ final class FindKinsfolk implements ControllerInterface
      */
     private function loadData(): array
     {
-        return (new JsonDataLoader())->loadData($this->appConfig->getPathToKinsfolk());
+        return (new JsonDataLoader())->loadData($this->pathToKinsfolk);
     }
 
     /**

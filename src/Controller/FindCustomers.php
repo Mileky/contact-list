@@ -3,11 +3,8 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Entity\Customer;
-use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use DD\ContactList\Infrastructure\DI\ContainerInterface;
-use DD\ContactList\Infrastructure\DI\ServiceLocator;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
@@ -23,6 +20,13 @@ use JsonException;
 final class FindCustomers implements ControllerInterface
 {
     /**
+     * Путь до файла с Клиентами
+     *
+     * @var string
+     */
+    private string $pathToCustomers;
+
+    /**
      * Логер
      *
      * @var LoggerInterface
@@ -30,20 +34,13 @@ final class FindCustomers implements ControllerInterface
     private LoggerInterface $logger;
 
     /**
-     * Конфиг приложения
-     *
-     * @var AppConfig
-     */
-    private AppConfig $appConfig;
-
-    /**
-     * @param AppConfig $appConfig
      * @param LoggerInterface $logger
+     * @param string $pathToCustomers
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, string $pathToCustomers)
     {
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
+        $this->pathToCustomers = $pathToCustomers;
 
     }
 
@@ -124,7 +121,7 @@ final class FindCustomers implements ControllerInterface
      */
     private function loadData(): array
     {
-        return (new JsonDataLoader())->loadData($this->appConfig->getPathToCustomers());
+        return (new JsonDataLoader())->loadData($this->pathToCustomers);
     }
 
     /**

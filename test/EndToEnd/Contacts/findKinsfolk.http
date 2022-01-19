@@ -1,0 +1,146 @@
+### Тестирование поиска родственника по id (без GET-параметра)
+GET http://localhost:80/contacts/6
+
+> {%
+   client.test('Тестирование поиска родственника по id (без GET-параметра)', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска даты рождения и профессии родственника по id
+GET http://localhost:80/contacts?id_recipient=6
+
+> {%
+   client.test('Тестирование поиска даты рождения и профессии родственника по id', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска родственника по Ф.И.О
+GET http://localhost:80/contacts?full_name=Дед
+
+> {%
+   client.test('Тестирование поиска родственника по Ф.И.О', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска родственника по дате рождения
+GET http://localhost:80/contacts?birthday=04.06.1945
+
+> {%
+   client.test('Тестирование поиска родственника по дате рождения', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска родственника по профессии
+GET http://localhost:80/contacts?profession=Столяр
+
+> {%
+   client.test('Тестирование поиска родственника по дате рождения', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска родственника по статусу родства
+GET http://localhost:80/contacts?status=Дед
+
+> {%
+   client.test('Тестирование поиска родственника по статусу родства', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска родственника по рингтону
+GET http://localhost:80/contacts?ringtone=Bells
+
+> {%
+   client.test('Тестирование поиска родственника по рингтону', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска родственника по хоткею
+GET http://localhost:80/contacts?hotkey=1
+
+> {%
+   client.test('Тестирование поиска родственника по хоткею', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 6, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Дед", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1945", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Столяр", "профессия не корректна");
+   client.assert(response.body[0]['status'] === "Дед", "статус родства не корректен");
+   client.assert(response.body[0]['ringtone'] === "Bells", "рингтон не корректен");
+   client.assert(response.body[0]['hotkey'] === "1", "хоткей не корректен");
+ });
+ %}
+
+### Тестирование поиска контактов по категориям(родня)
+GET http://localhost:80/contacts?category=kinsfolk
+
+> {%
+   client.test('Тестирование поиска контактов по категориям(родня)', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body.hasOwnProperty('length') && response.body.length === 1, "В ответе есть 1 элемент");
+ });
+ %}

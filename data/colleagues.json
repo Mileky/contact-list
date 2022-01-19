@@ -4,6 +4,7 @@
     "full_name": "Шатов Александр Иванович",
     "birthday": "02.12.1971",
     "profession": "",
+    "messengers": [],
     "department": "Дирекция",
     "position": "Директор",
     "room_number": "405"
@@ -13,6 +14,7 @@
     "full_name": "Наташа",
     "birthday": "10.05.1984",
     "profession": "",
+    "messengers": [],
     "department": "Дирекция",
     "position": "Секретарь",
     "room_number": "404"

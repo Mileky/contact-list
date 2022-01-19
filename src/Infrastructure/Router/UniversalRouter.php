@@ -13,7 +13,7 @@ class UniversalRouter implements RouterInterface
     /**
      * Паттерн определяющий подходящий url
      */
-    private const URL_PATTERN =  '/^\/(?<___RESOURCE_NAME___>[a-zA-Z][a-zA-Z0-9\-]*)(\/(?<___RESOURCE_ID___>[0-9]+))?(\/(?<___SUB_ACTION___>[a-zA-Z][a-zA-Z0-9\-]*))?\/?$/';
+    private const URL_PATTERN = '/^\/(?<___RESOURCE_NAME___>[a-zA-Z][a-zA-Z0-9\-]*)(\/(?<___RESOURCE_ID___>[0-9]+))?(\/(?<___SUB_ACTION___>[a-zA-Z][a-zA-Z0-9\-]*))?\/?$/';
 
     /**
      * Сопоставляет http метод с действием

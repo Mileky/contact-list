@@ -44,7 +44,7 @@ class ServiceManager implements ContainerInterface
      *
      * @return void
      */
-    private function registerFactories(callable ...$factories):void
+    private function registerFactories(callable ...$factories): void
     {
         $this->factories = $factories;
     }

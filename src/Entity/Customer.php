@@ -7,7 +7,7 @@ use DD\ContactList\Exception;
 /**
  * Клиент
  */
-final class Customer extends Recipient
+final class Customer extends AbstractContact
 {
     /**
      * Контактный телефон клиента
@@ -49,12 +49,13 @@ final class Customer extends Recipient
         string $full_name,
         string $birthday,
         string $profession,
+        array $messengers,
         string $contractNumber,
         int $averageTransactionAmount,
         string $discount,
         string $timeToCall
     ) {
-        parent::__construct($id_recipient, $full_name, $birthday, $profession);
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $messengers);
         $this->contractNumber = $contractNumber;
         $this->averageTransactionAmount = $averageTransactionAmount;
         $this->discount = $discount;
@@ -178,6 +179,7 @@ final class Customer extends Recipient
             'full_name',
             'birthday',
             'profession',
+            'messengers',
             'contract_number',
             'average_transaction_amount',
             'discount',
@@ -195,6 +197,7 @@ final class Customer extends Recipient
             $data['full_name'],
             $data['birthday'],
             $data['profession'],
+            $data['messengers'],
             $data['contract_number'],
             $data['average_transaction_amount'],
             $data['discount'],

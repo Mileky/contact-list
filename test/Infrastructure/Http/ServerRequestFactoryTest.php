@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../src/Infrastructure/Autoloader.php';
 
 use DD\ContactList\Infrastructure\Autoloader;
 use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
-use DD\ContactListTest\TestUtils;
+use DD\ContactListTest\UtilsTest;
 use JsonException;
 
 spl_autoload_register(
@@ -91,9 +91,9 @@ final class ServerRequestFactoryTest
         ];
 
         //Лишние элементы
-        $unnecessaryQueryParams = TestUtils::arrayDiffAssocRecursive($actualQueryParams, $expectedQueryParams);
+        $unnecessaryQueryParams = UtilsTest::arrayDiffAssocRecursive($actualQueryParams, $expectedQueryParams);
         //Недостающие элементы
-        $missingQueryParams = TestUtils::arrayDiffAssocRecursive($expectedQueryParams, $actualQueryParams);
+        $missingQueryParams = UtilsTest::arrayDiffAssocRecursive($expectedQueryParams, $actualQueryParams);
 
         $errMsg = '';
 
@@ -111,9 +111,9 @@ final class ServerRequestFactoryTest
         }
 
         if ('' === $errMsg) {
-            echo "    ОК - данные параметров запроса валидны\n";
+            echo "          ОК - данные параметров запроса валидны\n";
         } else {
-            echo "    FAIL - данные параметров запроса невалидны\n" . $errMsg;
+            echo "          FAIL - данные параметров запроса невалидны\n" . $errMsg;
         }
     }
 }

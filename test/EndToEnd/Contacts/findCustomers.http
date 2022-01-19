@@ -1,0 +1,174 @@
+### Тестирование поиска клиента по ID (Без GET-параметра).
+GET http://localhost:80/contacts/7
+
+> {%
+   client.test('Тестирование поиска клиента по ID (Без GET-параметра).', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body['birthday'] === "04.06.1983", "день рождения не корректно");
+   client.assert(response.body['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по ID.
+GET http://localhost:80/contacts?id_recipient=7
+
+> {%
+   client.test('Тестирование поиска клиента по ID.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по Ф.И.О.
+GET http://localhost:80/contacts?full_name=Калинин Пётр Александрович
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по Ф.И.О.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по дате рождения.
+GET http://localhost:80/contacts?birthday=04.06.1983
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по дате рождения.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по профессии.
+GET http://localhost:80/contacts?profession=Фитнес тренер
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по профессии.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по номеру договра.
+GET http://localhost:80/contacts?contract_number=5684
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по номеру договра.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по средней сумме сделки.
+GET http://localhost:80/contacts?average_transaction_amount=2500
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по средней сумме сделки.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по скидке.
+GET http://localhost:80/contacts?discount=5%25
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по скидке.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска клиента по приемлимому времени для звонка.
+GET http://localhost:80/contacts?time_to_call=С 9:00 до 13:00 в будни
+
+> {%
+   client.test('Тестирование поиска времени беспокойства клиента по приемлимому времени для звонка.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Тестирование поиска контактов по категориям(клиенты)
+GET http://localhost:80/contacts?category=customers
+
+> {%
+   client.test('Тестирование поиска контактов по категориям(клиенты)', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body.hasOwnProperty('length') && response.body.length === 3, "В ответе есть 3 элемента");
+ });
+ %}
+
+
+

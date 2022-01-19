@@ -20,7 +20,7 @@ use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\Uri\Uri;
 use DD\ContactList\Infrastructure\View\NullRender;
 use DD\ContactList\Infrastructure\View\RenderInterface;
-use DD\ContactListTest\TestUtils;
+use DD\ContactListTest\UtilsTest;
 use DD\ContactList\Infrastructure\Logger;
 
 /**
@@ -46,7 +46,7 @@ class UnitTest
             [
                 'testName' => 'Тестирование поиска получателя по id',
                 'in' => [
-                    'uri' => '/recipients?id_recipient=1',
+                    'uri' => '/contacts?id_recipient=1',
                     'diConfig' => $diConfig
                 ],
                 'out' => [
@@ -64,7 +64,7 @@ class UnitTest
             [
                 'testName' => 'Тестирование поиска получателя по full_name',
                 'in' => [
-                    'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
+                    'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
                     'diConfig' => $diConfig
                 ],
                 'out' => [
@@ -82,7 +82,7 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday',
                 'in' => [
-                    'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
+                    'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
@@ -103,7 +103,7 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректными данными конфига приложения',
                 'in' => [
-                    'uri' => '/recipient?id_recipient=1',
+                    'uri' => '/contacts?id_recipient=1',
                     'diConfig' => (static function ($diConfig) {
                         $diConfig['factories'][AppConfig::class] = static function () {
                             return 'Oops';
@@ -124,7 +124,7 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с получателями',
                 'in' => [
-                    'uri' => '/recipient?id_recipient=1',
+                    'uri' => '/contacts?id_recipient=1',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
@@ -145,7 +145,7 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с клиентами',
                 'in' => [
-                    'uri' => '/customers?id_recipient=7',
+                    'uri' => '/contacts?id_recipient=7',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.customer.json';
@@ -167,7 +167,7 @@ class UnitTest
                 'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
                 'in' => [
 
-                    'uri' => '/customers?full_name=Калинин Пётр Александрович',
+                    'uri' => '/contacts?full_name=Калинин Пётр Александрович',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
@@ -238,9 +238,9 @@ class UnitTest
             $actualResult = json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
             //Лишние элементы
-            $unnecessaryElements = TestUtils::arrayDiffAssocRecursive($actualResult, $testItem['out']['result']);
+            $unnecessaryElements = UtilsTest::arrayDiffAssocRecursive($actualResult, $testItem['out']['result']);
             //Недостающие элементы
-            $missingElements = TestUtils::arrayDiffAssocRecursive($testItem['out']['result'], $actualResult);
+            $missingElements = UtilsTest::arrayDiffAssocRecursive($testItem['out']['result'], $actualResult);
 
             $errMsg = '';
 

@@ -3,8 +3,8 @@
 use DD\ContactList\Controller;
 
 return [
-//    '/recipients' => Controller\GetRecipientsCollectionController::class,
-//    '/customers' => Controller\GetCustomersCollectionController::class,
-//    '/colleagues' => Controller\GetColleaguesCollectionController::class,
-//    '/kinsfolk' => Controller\GetKinsfolkCollectionController::class,
+//    '/recipients' => Controller\GetContactsCollectionController::class,
+//    '/customers' => Controller\GetContactsCollectionController::class,
+//    '/colleagues' => Controller\GetContactsCollectionController::class,
+//    '/kinsfolk' => Controller\GetContactsCollectionController::class,
 ];

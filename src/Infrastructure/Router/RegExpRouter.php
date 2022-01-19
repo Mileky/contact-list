@@ -26,7 +26,7 @@ class RegExpRouter implements RouterInterface
     private ControllerFactory $controllerFactory;
 
     /**
-     * @param array             $handlers          - Ассоциативный массив. Ключ - регулярное выражение, а значение -
+     * @param array $handlers                      - Ассоциативный массив. Ключ - регулярное выражение, а значение -
      *                                             обработчик
      * @param ControllerFactory $controllerFactory - Фабрика по созданию контроллеров
      */
@@ -106,6 +106,5 @@ class RegExpRouter implements RouterInterface
         $ucParts = array_map('ucfirst', $parts);
 
         return lcfirst(implode('', $ucParts));
-
     }
 }

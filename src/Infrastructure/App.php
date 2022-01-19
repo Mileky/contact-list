@@ -86,7 +86,7 @@ final class App
 
 
     /**
-     * @param callable $routerFactory    - Фабрика реализующая роутинг запросов
+     * @param callable $routerFactory      - Фабрика реализующая роутинг запросов
      * @param callable $loggerFactory      - Фабрика реализующая логику создания логеров
      * @param callable $appConfigFactory   - Фабрика реализующая логику создания конфига приложения
      * @param callable $renderFactory      - Фабрика реализующая логику создания рендера

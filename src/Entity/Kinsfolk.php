@@ -7,7 +7,7 @@ use DD\ContactList\Exception;
 /**
  * Родственник
  */
-final class Kinsfolk extends Recipient
+final class Kinsfolk extends AbstractContact
 {
     /**
      * Статус родственника
@@ -44,11 +44,12 @@ final class Kinsfolk extends Recipient
         string $full_name,
         string $birthday,
         string $profession,
+        array $messengers,
         string $status,
         string $ringtone,
         string $hotkey
     ) {
-        parent::__construct($id_recipient, $full_name, $birthday, $profession);
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $messengers);
         $this->status = $status;
         $this->ringtone = $ringtone;
         $this->hotkey = $hotkey;
@@ -147,6 +148,7 @@ final class Kinsfolk extends Recipient
             'full_name',
             'birthday',
             'profession',
+            'messengers',
             'status',
             'ringtone',
             'hotkey'
@@ -163,6 +165,7 @@ final class Kinsfolk extends Recipient
             $data['full_name'],
             $data['birthday'],
             $data['profession'],
+            $data['messengers'],
             $data['status'],
             $data['ringtone'],
             $data['hotkey']

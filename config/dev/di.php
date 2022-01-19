@@ -1,14 +1,8 @@
 <?php
 
 use DD\ContactList;
-use DD\ContactList\Controller\GetColleaguesController;
-use DD\ContactList\Controller\GetCustomersController;
-use DD\ContactList\Controller\GetKinsfolkCollectionController;
-use DD\ContactList\Controller\GetColleaguesCollectionController;
-use DD\ContactList\Controller\GetCustomersCollectionController;
-use DD\ContactList\Controller\GetKinsfolkController;
-use DD\ContactList\Controller\GetRecipientsCollectionController;
-use DD\ContactList\Controller\GetRecipientsController;
+use DD\ContactList\Controller\GetContactsCollectionController;
+use DD\ContactList\Controller\GetContactsController;
 use DD\ContactList\Infrastructure\AppConfig;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\Logger\FileLogger\Logger;
@@ -29,56 +23,39 @@ return [
         'appConfig' => require __DIR__ . '/config.php',
     ],
     'services' => [
-        GetKinsfolkCollectionController::class => [
-            'args' => [
-                'logger' => LoggerInterface::class,
-                'pathToKinsfolk' => 'pathToKinsfolk'
-            ]
+
+        ContactList\Infrastructure\Console\Output\OutputInterface::class => [
+            'class' => ContactList\Infrastructure\Console\Output\EchoOutput::class
         ],
-        GetKinsfolkController::class => [
+
+        ContactList\ConsoleCommand\FindContacts::class => [
             'args' => [
-                'logger' => LoggerInterface::class,
-                'pathToKinsfolk' => 'pathToKinsfolk'
+                'output' => ContactList\Infrastructure\Console\Output\OutputInterface::class,
+                'searchContactService' => ContactList\Service\SearchContactService::class
             ]
         ],
 
-        GetColleaguesCollectionController::class => [
+        GetContactsCollectionController::class => [
             'args' => [
                 'logger' => LoggerInterface::class,
-                'pathToColleagues' => 'pathToColleagues'
+                'searchContactService' => ContactList\Service\SearchContactService::class
             ]
         ],
-        GetColleaguesController::class => [
+        GetContactsController::class => [
             'args' => [
                 'logger' => LoggerInterface::class,
-                'pathToColleagues' => 'pathToColleagues'
-            ]
-        ],
-
-        GetCustomersCollectionController::class => [
-            'args' => [
-                'logger' => LoggerInterface::class,
-                'pathToCustomers' => 'pathToCustomers'
-            ]
-        ],
-        GetCustomersController::class => [
-            'args' => [
-                'logger' => LoggerInterface::class,
-                'pathToCustomers' => 'pathToCustomers'
+                'searchContactService' => ContactList\Service\SearchContactService::class
             ]
         ],
 
-        GetRecipientsCollectionController::class => [
+        ContactList\Service\SearchContactService::class => [
             'args' => [
                 'logger' => LoggerInterface::class,
-                'pathToRecipients' => 'pathToRecipients'
+                'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
-        GetRecipientsController::class => [
-            'args' => [
-                'logger' => LoggerInterface::class,
-                'pathToRecipients' => 'pathToRecipients'
-            ]
+        ContactList\Infrastructure\DataLoader\DataLoaderInterface::class => [
+            'class' => ContactList\Infrastructure\DataLoader\JsonDataLoader::class
         ],
 
         LoggerInterface::class => [
@@ -89,6 +66,17 @@ return [
         ],
         ContactList\Infrastructure\View\RenderInterface::class => [
             'class' => ContactList\Infrastructure\View\DefaultRender::class
+        ],
+
+        ContactList\Entity\ContactRepositoryInterface::class => [
+            'class' => ContactList\Repository\ContactJsonFileRepository::class,
+            'args' => [
+                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
+                'pathToRecipients' => 'pathToRecipients',
+                'pathToCustomers' => 'pathToCustomers',
+                'pathToKinsfolk' => 'pathToKinsfolk',
+                'pathToColleagues' => 'pathToColleagues'
+            ]
         ],
 
         RouterInterface::class => [

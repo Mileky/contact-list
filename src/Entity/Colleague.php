@@ -7,7 +7,7 @@ use DD\ContactList\Exception;
 /**
  * Коллега
  */
-final class Colleague extends Recipient
+final class Colleague extends AbstractContact
 {
     /**
      * Отдел коллеги
@@ -35,6 +35,7 @@ final class Colleague extends Recipient
      * @param string $full_name  - Полное имя получателя
      * @param string $birthday   - Дата рождения получателя
      * @param string $profession - Профессия получателя
+     * @param array $messengers  - Данные о мессенджере, в котором есть пользователь
      * @param string $department - Отдел коллеги
      * @param string $position   - Должность коллеги
      * @param string $roomNumber - Номер кабинета
@@ -44,11 +45,12 @@ final class Colleague extends Recipient
         string $full_name,
         string $birthday,
         string $profession,
+        array $messengers,
         string $department,
         string $position,
         string $roomNumber
     ) {
-        parent::__construct($id_recipient, $full_name, $birthday, $profession);
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $messengers);
         $this->department = $department;
         $this->position = $position;
         $this->roomNumber = $roomNumber;
@@ -147,6 +149,7 @@ final class Colleague extends Recipient
             'full_name',
             'birthday',
             'profession',
+            'messengers',
             'department',
             'position',
             'room_number'
@@ -163,6 +166,7 @@ final class Colleague extends Recipient
             $data['full_name'],
             $data['birthday'],
             $data['profession'],
+            $data['messengers'],
             $data['department'],
             $data['position'],
             $data['room_number']

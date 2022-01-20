@@ -48,10 +48,21 @@ return [
             ]
         ],
 
+        ContactList\Controller\UpdateContactListController::class => [
+            'args' => [
+                'addBlacklistContactService' => ContactList\Service\AddBlacklistContactService::class
+            ]
+        ],
+
         ContactList\Service\SearchContactService::class => [
             'args' => [
                 'logger' => LoggerInterface::class,
                 'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
+            ]
+        ],
+        ContactList\Service\AddBlacklistContactService::class => [
+            'args' => [
+                'contactListRepository' => ContactList\Entity\ContactListRepositoryInterface::class
             ]
         ],
         ContactList\Infrastructure\DataLoader\DataLoaderInterface::class => [
@@ -76,6 +87,14 @@ return [
                 'pathToCustomers' => 'pathToCustomers',
                 'pathToKinsfolk' => 'pathToKinsfolk',
                 'pathToColleagues' => 'pathToColleagues'
+            ]
+        ],
+
+        ContactList\Entity\ContactListRepositoryInterface::class => [
+            'class' => ContactList\Repository\ContactListRepository::class,
+            'args' => [
+                'pathToContactList' => 'pathToContactList',
+                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class
             ]
         ],
 
@@ -141,6 +160,16 @@ return [
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToRecipients();
+        },
+        'pathToAddress' => static function (ContainerInterface $c): string {
+            /** @var AppConfig $appConfig */
+            $appConfig = $c->get(AppConfig::class);
+            return $appConfig->getPathToAddress();
+        },
+        'pathToContactList' => static function (ContainerInterface $c): string {
+            /** @var AppConfig $appConfig */
+            $appConfig = $c->get(AppConfig::class);
+            return $appConfig->getPathToContactList();
         },
         AppConfig::class => static function (ContainerInterface $c): AppConfig {
             $appConfig = $c->get('appConfig');

@@ -19,6 +19,11 @@ return [
     'pathToColleagues' => __DIR__ . '/../../data/colleagues.json',
 
     /**
+     *  Путь до файла с данными о контактном листе
+     */
+    'pathToContactList' => __DIR__ . '/../../data/contact_list.json',
+
+    /**
      * Путь до файла лога
      */
     'pathToLogFile' => __DIR__ . '/../../var/log/app.log',

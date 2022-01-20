@@ -13,22 +13,36 @@ class AppConfig
      * Путь до файла с данными о получателях
      * @var string
      */
-    private string $pathToRecipients = __DIR__ . '/../../data/recipient.json';
+    private string $pathToRecipients;
     /**
      * Путь до файла с данными о родне
      * @var string
      */
-    private string $pathToKinsfolk = __DIR__ . '/../../data/kinsfolk.json';
+    private string $pathToKinsfolk;
     /**
      * Путь до файла с данными о клиентах
      * @var string
      */
-    private string $pathToCustomers = __DIR__ . '/../../data/customers.json';
+    private string $pathToCustomers;
     /**
      * Путь до файла с данными о коллегах
      * @var string
      */
-    private string $pathToColleagues = __DIR__ . '/../../data/colleagues.json';
+    private string $pathToColleagues;
+
+    /**
+     * Путь до файла с данными о адресах контактов
+     *
+     * @var string
+     */
+    private string $pathToAddress;
+
+    /**
+     * Путь до контактного листа
+     *
+     * @var string
+     */
+    private string $pathToContactList;
 
     /**
      * Путь до файла с данными о логах
@@ -118,6 +132,51 @@ class AppConfig
         $this->pathToLogFile = $pathToLogFile;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getPathToContactList(): string
+    {
+        return $this->pathToContactList;
+    }
+
+    /**
+     * @param string $pathToContactList
+     *
+     * @return AppConfig
+     */
+    public function setPathToContactList(string $pathToContactList): AppConfig
+    {
+        $this->validateFilePath($pathToContactList);
+        $this->pathToContactList = $pathToContactList;
+        return $this;
+    }
+
+
+
+
+    /**
+     * @return string
+     */
+    public function getPathToAddress(): string
+    {
+        return $this->pathToAddress;
+    }
+
+    /**
+     * @param string $pathToAddress
+     *
+     * @return AppConfig
+     */
+    public function setPathToAddress(string $pathToAddress): AppConfig
+    {
+        $this->validateFilePath($pathToAddress);
+        $this->pathToAddress = $pathToAddress;
+        return $this;
+    }
+
+
 
     /**
      * Возвращает путь до файла с получателями
@@ -242,6 +301,7 @@ class AppConfig
      * @uses AppConfig::setPathToRecipient()
      * @uses AppConfig::setPathToLogFile()
      * @uses AppConfig::setPathToRecipients()
+     * @uses AppConfig::setPathToAddress()
      * @uses AppConfig::setLoggerType()
      * @uses AppConfig::setHideErrorMessage()
      */

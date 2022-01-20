@@ -1,5 +1,5 @@
 ### Тестирование переноса контакта в черный лист
-PUT http://localhost:8080/contact-list/1
+PUT http://localhost:8080/contactList/1
 
 > {%
  client.test("Тестирование переноса контакта в черный лист", function () {

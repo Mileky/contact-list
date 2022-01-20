@@ -1,5 +1,5 @@
 ### Тестирование поиска коллеги по id (без GET-параметра)
-GET http://localhost:8080/contacts/Директор
+GET http://localhost:8080/contacts/10
 
 > {%
    client.test('Тестирование поиска коллеги по id (без GET-параметра)', function () {

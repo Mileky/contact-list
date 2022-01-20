@@ -19,9 +19,9 @@ class ContactList
     /**
      * ID контакта
      *
-     * @var AbstractContact
+     * @var int
      */
-    private AbstractContact $idRecipient;
+    private int $idRecipient;
 
     /**
      * Наличие в черном списке
@@ -31,11 +31,11 @@ class ContactList
     private bool $blacklist;
 
     /**
-     * @param int             $idEntry     - ID записи
-     * @param AbstractContact $idRecipient - ID контакта
-     * @param bool            $blacklist   - Наличие в черном списке
+     * @param int $idEntry     - ID записи
+     * @param int $idRecipient - ID контакта
+     * @param bool $blacklist  - Наличие в черном списке
      */
-    public function __construct(int $idEntry, AbstractContact $idRecipient, bool $blacklist)
+    public function __construct(int $idEntry, int $idRecipient, bool $blacklist)
     {
         $this->idEntry = $idEntry;
         $this->idRecipient = $idRecipient;
@@ -53,7 +53,7 @@ class ContactList
     /**
      * @return AbstractContact
      */
-    public function getIdRecipient(): AbstractContact
+    public function getIdRecipient(): int
     {
         return $this->idRecipient;
     }
@@ -80,6 +80,17 @@ class ContactList
         return $jsonData;
     }
 
+    public function moveToIgnore(): self
+    {
+        if (true === $this->blacklist) {
+            throw new Exception\RuntimeException("Текстовый документ с id {$this->getIdRecipient()} уже находится в архиве");
+        }
+
+        $this->blacklist = true;
+
+        return $this;
+    }
+
     /**
      * Создание списка контактов
      *
@@ -87,7 +98,7 @@ class ContactList
      *
      * @return ContactList
      */
-    public function createFromArray(array $data): ContactList
+    public static function createFromArray(array $data): ContactList
     {
         $requiredFields = [
             'id_entry',

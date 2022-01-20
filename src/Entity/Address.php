@@ -7,7 +7,6 @@ namespace DD\ContactList\Entity;
  */
 class Address
 {
-
     /**
      * ID адреса
      *
@@ -90,6 +89,4 @@ class Address
         $jsonData['status'] = $this->status;
         return $jsonData;
     }
-
-
 }

@@ -1,5 +1,5 @@
 ### Тестирование ситуации когда указан несуществующий ID контакта
-GET http://localhost:80/contacts/0
+GET http://localhost:8080/contacts/0
 
 > {%
    client.test('Тестирование поиска знакомого по id (без GET-параметра)', function () {
@@ -11,7 +11,7 @@ GET http://localhost:80/contacts/0
  %}
 
 ### Тестирование поиска даты рождения и профессии знакомого по id
-GET http://localhost:80/contacts?id_recipient[]=1
+GET http://localhost:8080/contacts?id_recipient[]=1
 
 > {%
    client.test('Тестирование поиска даты рождения и профессии знакомого по id', function () {
@@ -23,7 +23,7 @@ GET http://localhost:80/contacts?id_recipient[]=1
  %}
 
 ### Тестирование поиска знакомого по Ф.И.О
-GET http://localhost:80/contacts?full_name[]=Осипов Геннадий Иванович
+GET http://localhost:8080/contacts?full_name[]=Осипов Геннадий Иванович
 
 > {%
    client.test('Тестирование поиска знакомого по Ф.И.О', function () {
@@ -35,7 +35,7 @@ GET http://localhost:80/contacts?full_name[]=Осипов Геннадий Ив�
  %}
 
 ### Тестирование поиска знакомого по дате рождения
-GET http://localhost:80/contacts?birthday[]=15.06.1985
+GET http://localhost:8080/contacts?birthday[]=15.06.1985
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -47,7 +47,7 @@ GET http://localhost:80/contacts?birthday[]=15.06.1985
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?profession[]=Автомеханик
+GET http://localhost:8080/contacts?profession[]=Автомеханик
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -59,7 +59,7 @@ GET http://localhost:80/contacts?profession[]=Автомеханик
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?contract_number[]=5684
+GET http://localhost:8080/contacts?contract_number[]=5684
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -71,7 +71,7 @@ GET http://localhost:80/contacts?contract_number[]=5684
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?average_transaction_amount[]=2500
+GET http://localhost:8080/contacts?average_transaction_amount[]=2500
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -83,7 +83,7 @@ GET http://localhost:80/contacts?average_transaction_amount[]=2500
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?discount[]=5%25
+GET http://localhost:8080/contacts?discount[]=5%25
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -95,7 +95,7 @@ GET http://localhost:80/contacts?discount[]=5%25
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?time_to_call[]=С 9:00 до 13:00 в будни
+GET http://localhost:8080/contacts?time_to_call[]=С 9:00 до 13:00 в будни
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -107,7 +107,7 @@ GET http://localhost:80/contacts?time_to_call[]=С 9:00 до 13:00 в будни
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?department[]=Дирекция
+GET http://localhost:8080/contacts?department[]=Дирекция
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -119,7 +119,7 @@ GET http://localhost:80/contacts?department[]=Дирекция
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?position[]=Директор
+GET http://localhost:8080/contacts?position[]=Директор
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -131,7 +131,7 @@ GET http://localhost:80/contacts?position[]=Директор
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?room_number[]=405
+GET http://localhost:8080/contacts?room_number[]=405
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -143,7 +143,7 @@ GET http://localhost:80/contacts?room_number[]=405
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?status[]=Дед
+GET http://localhost:8080/contacts?status[]=Дед
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -155,7 +155,7 @@ GET http://localhost:80/contacts?status[]=Дед
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?ringtone[]=Bells
+GET http://localhost:8080/contacts?ringtone[]=Bells
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -167,7 +167,7 @@ GET http://localhost:80/contacts?ringtone[]=Bells
  %}
 
 ### Тестирование поиска знакомого по профессии
-GET http://localhost:80/contacts?hotkey[]=1
+GET http://localhost:8080/contacts?hotkey[]=1
 
 > {%
    client.test('Тестирование поиска знакомого по дате рождения', function () {
@@ -179,7 +179,7 @@ GET http://localhost:80/contacts?hotkey[]=1
  %}
 
 ### Тестирование запроса без path
-GET http://localhost:80/?param=ru
+GET http://localhost:8080/?param=ru
 
 > {%
      client.test("Тестирование запроса без path", function () {
@@ -191,7 +191,7 @@ GET http://localhost:80/?param=ru
  %}
 
 ### Тестирование неподдерживаемого приложения url
-GET http://localhost:80/hhh?param=ru
+GET http://localhost:8080/hhh?param=ru
 
 > {%
      client.test("Тестирование неподдерживаемого приложения url", function () {

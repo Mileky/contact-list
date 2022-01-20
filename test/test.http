@@ -1,0 +1,10 @@
+### Тестирование переноса контакта в черный лист
+PUT http://localhost:8080/contact-list/1
+
+> {%
+ client.test("Тестирование переноса контакта в черный лист", function () {
+     client.assert(response.status === 200, "Проверяем код ответа. Ожидаю код 200. Фактическое значение: " + response.status);
+     client.assert(response.contentType.mimeType === "application/json", "Ожидаю application/type. Фактически: " + response.contentType.mimeType);
+     client.assert(response.body["blacklist"] === true, "статус наличия в ЧС некорректен Фактически: " + response.body["blacklist"]);
+ });
+ %}

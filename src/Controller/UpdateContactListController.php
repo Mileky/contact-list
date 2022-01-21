@@ -8,6 +8,7 @@ use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Service\AddBlacklistContactService;
+use Throwable;
 
 /**
  * Контроллер переноса контакта в черный список (изменение статуса 'blacklist')
@@ -52,7 +53,7 @@ class UpdateContactListController implements ControllerInterface
                 'status' => 'fail',
                 'message' => $e->getMessage()
             ];
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $httpCode = 500;
             $jsonData = [
                 'status' => 'fail',
@@ -64,7 +65,7 @@ class UpdateContactListController implements ControllerInterface
         return ServerResponseFactory::createJsonResponse($httpCode, $jsonData);
     }
 
-    private function buildJsonData(AddBlacklistContactService\ResultAddBlacklistDto $resultDto)
+    private function buildJsonData(AddBlacklistContactService\ResultAddBlacklistDto $resultDto): array
     {
         return [
             'blacklist' => $resultDto->isStatus()

@@ -54,6 +54,12 @@ return [
             ]
         ],
 
+        ContactList\Controller\CreateAddressController::class => [
+            'args' => [
+                'arrivalNewAddressService' => ContactList\Service\ArrivalNewAddressService::class
+            ]
+        ],
+
         ContactList\Service\SearchContactService::class => [
             'args' => [
                 'logger' => LoggerInterface::class,
@@ -63,6 +69,13 @@ return [
         ContactList\Service\AddBlacklistContactService::class => [
             'args' => [
                 'contactListRepository' => ContactList\Entity\ContactListRepositoryInterface::class
+            ]
+        ],
+
+        ContactList\Service\ArrivalNewAddressService::class => [
+            'args' => [
+                'addressRepository' => ContactList\Entity\AddressRepositoryInterface::class,
+                'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
         ContactList\Infrastructure\DataLoader\DataLoaderInterface::class => [
@@ -94,7 +107,17 @@ return [
             'class' => ContactList\Repository\ContactListRepository::class,
             'args' => [
                 'pathToContactList' => 'pathToContactList',
-                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class
+                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
+                'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
+            ]
+        ],
+
+        ContactList\Entity\AddressRepositoryInterface::class => [
+            'class' => ContactList\Repository\AddressJsonFileRepository::class,
+            'args' => [
+                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
+                'pathToAddress' => 'pathToAddress',
+                'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
 

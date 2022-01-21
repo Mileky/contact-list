@@ -8,3 +8,25 @@ PUT http://localhost:8080/contactList/1
      client.assert(response.body["blacklist"] === true, "статус наличия в ЧС некорректен Фактически: " + response.body["blacklist"]);
  });
  %}
+
+### Регистрация нового адреса
+POST http://localhost:8080/address
+Content-Type: application/json
+
+{
+  "id_recipient": 6,
+  "address": "ул. Плотникова. 3А",
+  "status": "home"
+}
+
+> {%
+ client.test("Регистрация нового адреса", function () {
+     client.assert(response.status === 201, "Проверяем код ответа. Ожидаю код 200. Фактическое значение: " + response.status);
+     client.assert(response.contentType.mimeType === "application/json", "Ожидаю application/type. Фактически: " + response.contentType.mimeType);
+     client.assert(response.body.hasOwnProperty("id"), "Отсутствует id книги");
+     client.assert(response.body["id_address"] === "10", "id адреса некорректен");
+     client.assert(response.body["id_recipient"] === "6", "id контакта некорректен");
+     client.assert(response.body["address"] === "ул. Плотникова. 3А", "адрес некорректен");
+     client.assert(response.body["status"] === "home", "статус адреса некорректен");
+ });
+ %}

@@ -170,7 +170,7 @@ class ContactJsonFileRepository implements ContactRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findBy(array $criteria): array
+    public function findBy(array $criteria = []): array
     {
         $loadedContactsData = $this->loadContactsData();
 

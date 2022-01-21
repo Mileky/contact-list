@@ -24,6 +24,11 @@ return [
     'pathToContactList' => __DIR__ . '/../../data/contact_list.json',
 
     /**
+     * Путь до файла с данными о адресах контактов
+     */
+    'pathToAddress' => __DIR__ . '/../../data/address.json',
+
+    /**
      * Путь до файла лога
      */
     'pathToLogFile' => __DIR__ . '/../../var/log/app.log',

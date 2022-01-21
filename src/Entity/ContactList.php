@@ -19,9 +19,9 @@ class ContactList
     /**
      * ID контакта
      *
-     * @var int
+     * @var AbstractContact
      */
-    private int $idRecipient;
+    private AbstractContact $idRecipient;
 
     /**
      * Наличие в черном списке
@@ -32,10 +32,10 @@ class ContactList
 
     /**
      * @param int $idEntry     - ID записи
-     * @param int $idRecipient - ID контакта
+     * @param AbstractContact $idRecipient - ID контакта
      * @param bool $blacklist  - Наличие в черном списке
      */
-    public function __construct(int $idEntry, int $idRecipient, bool $blacklist)
+    public function __construct(int $idEntry, AbstractContact $idRecipient, bool $blacklist)
     {
         $this->idEntry = $idEntry;
         $this->idRecipient = $idRecipient;
@@ -53,7 +53,7 @@ class ContactList
     /**
      * @return AbstractContact
      */
-    public function getIdRecipient(): int
+    public function getIdRecipient(): AbstractContact
     {
         return $this->idRecipient;
     }
@@ -83,7 +83,7 @@ class ContactList
     public function moveToIgnore(): self
     {
         if (true === $this->blacklist) {
-            throw new Exception\RuntimeException("Текстовый документ с id {$this->getIdRecipient()} уже находится в архиве");
+            throw new Exception\RuntimeException("Контакт с id {$this->getIdRecipient()->getIdRecipient()} уже находится в ЧС");
         }
 
         $this->blacklist = true;

@@ -17,11 +17,18 @@ interface AddressRepositoryInterface
     public function findById(int $contactId): array;
 
     /**
-     * Сохранение адреса в репозиторий
+     * Получение id для создания новго адреса
+     *
+     * @return int
+     */
+    public function nextId(): int;
+
+    /**
+     * Добавление нового адреса
      *
      * @param Address $address
      *
      * @return Address
      */
-//    public function save(Address $address): Address;
+    public function add(Address $address): Address;
 }

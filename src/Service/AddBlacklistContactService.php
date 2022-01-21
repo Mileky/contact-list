@@ -2,8 +2,6 @@
 
 namespace DD\ContactList\Service;
 
-use DD\ContactList\Entity\Address;
-use DD\ContactList\Entity\AddressRepositoryInterface;
 use DD\ContactList\Entity\ContactList;
 use DD\ContactList\Entity\ContactListRepositoryInterface;
 use DD\ContactList\Service\AddBlacklistContactService\Exception\ContactNotFoundException;

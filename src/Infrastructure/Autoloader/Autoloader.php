@@ -1,6 +1,6 @@
 <?php
 
-namespace DD\ContactList\Infrastructure;
+namespace DD\ContactList\Infrastructure\Autoloader;
 
 /**
  * Автозагрузчик классов
@@ -8,7 +8,7 @@ namespace DD\ContactList\Infrastructure;
 final class Autoloader
 {
     /**
-     * Зарегестрированные пространства имен
+     * Зарегистрированные пространства имен
      *
      * @var array
      */

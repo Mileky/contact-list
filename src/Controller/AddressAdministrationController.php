@@ -99,7 +99,7 @@ class AddressAdministrationController implements ControllerInterface
             }
 
 
-            $this->logger->log('run AddressAdministrationController:__invoke');
+            $this->logger->info('run AddressAdministrationController:__invoke');
 
             $resultAddAddress = [];
             if ('POST' === $serverRequest->getMethod()) {

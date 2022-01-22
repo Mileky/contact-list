@@ -2,10 +2,10 @@
 
 namespace DD\ContactListTest\Infrastructure\Uri;
 
-use DD\ContactList\Infrastructure\Autoloader;
+use DD\ContactList\Infrastructure\Autoloader\Autoloader;
 use DD\ContactList\Infrastructure\Uri\Uri;
 
-require_once __DIR__ . '/../../../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../../../src/Infrastructure/Autoloader/Autoloader.php';
 
 
 spl_autoload_register(

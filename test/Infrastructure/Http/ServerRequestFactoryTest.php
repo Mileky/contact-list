@@ -2,9 +2,9 @@
 
 namespace DD\ContactListTest\Infrastructure\Http;
 
-require_once __DIR__ . '/../../../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../../../src/Infrastructure/Autoloader/Autoloader.php';
 
-use DD\ContactList\Infrastructure\Autoloader;
+use DD\ContactList\Infrastructure\Autoloader\Autoloader;
 use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
 use DD\ContactListTest\UtilsTest;
 use JsonException;

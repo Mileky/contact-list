@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
 
-use DD\ContactList\Infrastructure\App;
-use DD\ContactList\Infrastructure\Autoloader;
+use DD\ContactList\Infrastructure\HttpApplication\App;
+use DD\ContactList\Infrastructure\Autoloader\Autoloader;
 
 spl_autoload_register(
     new Autoloader([
@@ -12,7 +12,7 @@ spl_autoload_register(
     ])
 );
 
-use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
@@ -30,13 +30,9 @@ class UnitTest
 {
     private static function testDataProvider(): array
     {
-        $handlers = include __DIR__ . '/../config/request.handlers.php';
-        $loggerFactory = static function (): LoggerInterface {
-            return new Logger\NullLogger\Logger();
-        };
         $diConfig = require __DIR__ . '/../config/dev/di.php';
-        $diConfig['services'][LoggerInterface::class] = [
-            'class' => DD\ContactList\Infrastructure\Logger\NullLogger\Logger::class
+        $diConfig['services'][Logger\AdapterInterface::class] = [
+            'class' => Logger\Adapter\NullAdapter::class
         ];
         $diConfig['services'][RenderInterface::class] = [
             'class' => NullRender::class

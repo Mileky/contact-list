@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
 
 
-use DD\ContactList\Infrastructure\App;
-use DD\ContactList\Infrastructure\Autoloader;
+use DD\ContactList\Infrastructure\HttpApplication\App;
+use DD\ContactList\Infrastructure\Autoloader\Autoloader;
 
 spl_autoload_register(
     new Autoloader([
@@ -13,7 +13,7 @@ spl_autoload_register(
     ])
 );
 
-use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;

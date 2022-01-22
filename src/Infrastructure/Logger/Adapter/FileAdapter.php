@@ -1,16 +1,16 @@
 <?php
 
-namespace DD\ContactList\Infrastructure\Logger\FileLogger;
+namespace DD\ContactList\Infrastructure\Logger\Adapter;
 
-use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use DD\ContactList\Infrastructure\Logger\AdapterInterface;
 
 /**
- *  Логирует в файл
+ * Запись лога в файл
  */
-class Logger implements LoggerInterface
+class FileAdapter implements AdapterInterface
 {
     /**
-     * Путь до файла где пишутся логи
+     * Путь до файла
      *
      * @var string
      */
@@ -29,8 +29,9 @@ class Logger implements LoggerInterface
     /**
      * @inheritDoc
      */
-    public function log(string $msg): void
+    public function write(string $logLevel, string $msg): void
     {
         file_put_contents($this->pathToFile, "$msg\n", FILE_APPEND);
     }
+
 }

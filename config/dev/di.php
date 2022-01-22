@@ -3,9 +3,8 @@
 use DD\ContactList;
 use DD\ContactList\Controller\GetContactsCollectionController;
 use DD\ContactList\Controller\GetContactsController;
-use DD\ContactList\Infrastructure\AppConfig;
+use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
-use DD\ContactList\Infrastructure\Logger\FileLogger\Logger;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Router\ChainRouters;
 use DD\ContactList\Infrastructure\Router\ControllerFactory;
@@ -120,11 +119,19 @@ return [
         ],
 
         LoggerInterface::class => [
-            'class' => Logger::class,
+            'class' => ContactList\Infrastructure\Logger\Logger::class,
+            'args' => [
+                'adapter' => ContactList\Infrastructure\Logger\AdapterInterface::class
+            ]
+        ],
+
+        ContactList\Infrastructure\Logger\AdapterInterface::class => [
+            'class' => ContactList\Infrastructure\Logger\Adapter\FileAdapter::class,
             'args' => [
                 'pathToFile' => 'pathToLogFile'
             ]
         ],
+
         ContactList\Infrastructure\View\RenderInterface::class => [
             'class' => ContactList\Infrastructure\View\DefaultRender::class
         ],
@@ -213,7 +220,7 @@ return [
             return $c;
         },
         'pathToLogFile' => static function (ContainerInterface $c): string {
-            /** @var AppConfig $appConfig */
+            /** @var \DD\ContactList\Config\AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToLogFile();
         },
@@ -256,7 +263,7 @@ return [
             $appConfig = $c->get(AppConfig::class);
             return Uri::createFromString($appConfig->getLoginUri());
         },
-        AppConfig::class => static function (ContainerInterface $c): AppConfig {
+        AppConfig::class => static function (ContainerInterface $c): ContactList\Infrastructure\HttpApplication\AppConfigInterface {
             $appConfig = $c->get('appConfig');
             return AppConfig::createFromArray($appConfig);
         },

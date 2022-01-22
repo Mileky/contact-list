@@ -111,7 +111,7 @@ class GetContactsCollectionController implements ControllerInterface
      */
     public function __invoke(ServerRequest $serverRequest): HttpResponse
     {
-        $this->logger->log('dispatch "recipient" url');
+        $this->logger->info('dispatch "contacts" url');
 
         $resultOfParamValidation = $this->validateQueryParams($serverRequest);
 

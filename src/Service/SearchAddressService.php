@@ -99,7 +99,7 @@ class SearchAddressService
      */
     private function log(string $msg): void
     {
-        $this->logger->log($msg);
+        $this->logger->debug($msg);
     }
 
 }

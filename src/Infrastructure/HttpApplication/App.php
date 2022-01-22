@@ -1,8 +1,9 @@
 <?php
 
-namespace DD\ContactList\Infrastructure;
+namespace DD\ContactList\Infrastructure\HttpApplication;
 
 use DD\ContactList\Exception;
+use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
@@ -24,9 +25,9 @@ final class App
     /**
      * Конфиг приложения
      *
-     * @var AppConfig|null
+     * @var AppConfigInterface|null
      */
-    private ?AppConfig $appConfig = null;
+    private ?AppConfigInterface $appConfig = null;
 
     /**
      * Компонент отвечающий за роутинг запросов
@@ -145,9 +146,9 @@ final class App
     }
 
     /**
-     * @return AppConfig
+     * @return AppConfigInterface
      */
-    private function getAppConfig(): AppConfig
+    private function getAppConfig(): AppConfigInterface
     {
         if (null === $this->appConfig) {
             $this->appConfig = ($this->appConfigFactory)($this->getContainer());
@@ -192,13 +193,13 @@ final class App
     ): HttpResponse {
         $hasAppConfig = false;
         try {
-            $hasAppConfig = $this->getAppConfig() instanceof AppConfig;
+            $hasAppConfig = $this->getAppConfig() instanceof AppConfigInterface;
 
             $logger = $this->getLogger();
 
             $urlPath = $serverRequest->getUri()->getPath();
 
-            $logger->log('URL request received: ' . $urlPath);
+            $logger->info('URL request received: ' . $urlPath);
 
             $dispatcher = $this->getRouter()->getDispatcher($serverRequest);
 
@@ -228,7 +229,7 @@ final class App
                 : 'system error';
 
             try {
-                $this->logger->log($e->getMessage());
+                $this->silentLog($e->getMessage());
             } catch (Throwable $e1) {
             }
             $this->silentLog($e->getMessage());
@@ -270,7 +271,7 @@ final class App
     private function silentLog(string $msg): void
     {
         try {
-            $this->getLogger()->log($msg);
+            $this->getLogger()->error($msg);
         } catch (Throwable $e) {
         }
     }

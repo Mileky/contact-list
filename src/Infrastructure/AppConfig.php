@@ -10,22 +10,26 @@ use DD\ContactList\Exception;
 class AppConfig
 {
     /**
-     * Путь до файла с данными о получателях
+     * Путь до файла с данными о знакомых
+     *
      * @var string
      */
     private string $pathToRecipients;
     /**
-     * Путь до файла с данными о родне
+     * Путь до файла с данными о родственниках
+     *
      * @var string
      */
     private string $pathToKinsfolk;
     /**
      * Путь до файла с данными о клиентах
+     *
      * @var string
      */
     private string $pathToCustomers;
     /**
      * Путь до файла с данными о коллегах
+     *
      * @var string
      */
     private string $pathToColleagues;
@@ -36,6 +40,13 @@ class AppConfig
      * @var string
      */
     private string $pathToAddress;
+
+    /**
+     * Путь до файла с данными о пользователях
+     *
+     * @var string
+     */
+    private string $pathToUsers;
 
     /**
      * Путь до контактного листа
@@ -57,6 +68,13 @@ class AppConfig
     private string $loggerType;
 
     /**
+     * Uri формы авторизации
+     *
+     * @var string
+     */
+    private string $loginUri;
+
+    /**
      * Сокрытие сообщений о ошибках
      * @var bool
      */
@@ -73,7 +91,7 @@ class AppConfig
     }
 
     /**
-     * Устанавливает фалг что нужно скрывать сообщения о ошибках
+     * Устанавливает флаг что нужно скрывать сообщения о ошибках
      *
      * @param bool $hideErrorMessage
      *
@@ -82,6 +100,26 @@ class AppConfig
     private function setHideErrorMessage(bool $hideErrorMessage): AppConfig
     {
         $this->hideErrorMessage = $hideErrorMessage;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathToUsers(): string
+    {
+        return $this->pathToUsers;
+    }
+
+    /**
+     * @param string $pathToUsers
+     *
+     * @return AppConfig
+     */
+    public function setPathToUsers(string $pathToUsers): AppConfig
+    {
+        $this->validateFilePath($pathToUsers);
+        $this->pathToUsers = $pathToUsers;
         return $this;
     }
 
@@ -105,6 +143,29 @@ class AppConfig
     private function setLoggerType(string $loggerType): AppConfig
     {
         $this->loggerType = $loggerType;
+        return $this;
+    }
+
+    /**
+     * Возвращает uri формы аутентификации
+     *
+     * @return string
+     */
+    public function getLoginUri(): string
+    {
+        return $this->loginUri;
+    }
+
+    /**
+     * Устанавливает uri формы аутентификации
+     *
+     * @param string $loginUri
+     *
+     * @return AppConfig
+     */
+    public function setLoginUri(string $loginUri): AppConfig
+    {
+        $this->loginUri = $loginUri;
         return $this;
     }
 
@@ -154,8 +215,6 @@ class AppConfig
     }
 
 
-
-
     /**
      * @return string
      */
@@ -175,7 +234,6 @@ class AppConfig
         $this->pathToAddress = $pathToAddress;
         return $this;
     }
-
 
 
     /**
@@ -301,9 +359,12 @@ class AppConfig
      * @uses AppConfig::setPathToRecipient()
      * @uses AppConfig::setPathToLogFile()
      * @uses AppConfig::setPathToRecipients()
+     * @uses AppConfig::setPathToContactList()
      * @uses AppConfig::setPathToAddress()
      * @uses AppConfig::setLoggerType()
      * @uses AppConfig::setHideErrorMessage()
+     * @uses AppConfig::setPathToUsers()
+     * @uses AppConfig::setLoginUri()
      */
     public static function createFromArray(array $config): self
     {

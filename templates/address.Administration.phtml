@@ -6,6 +6,7 @@ use DD\ContactList;
  * @var ContactList\Service\SearchAddressService\AddressDto[] $addresses
  * @var ContactList\Service\SearchContactService\ContactDto[] $contacts
  * @var array $addressValidationError
+ * @var array $addressData
  */
 
 ?>
@@ -28,7 +29,7 @@ use DD\ContactList;
                 <select name="id_recipient" id="id_recipient">
                     <?php
                     foreach ($contacts as $contact): ?>
-                        <option value="<?php
+                        <option <?php echo (isset($addressData['id_recipient']) && $addressData['id_recipient'] === (string)$contact->getId() ? 'selected' : '') ?>  value="<?php
                         echo $contact->getId() ?>"><?php
                             echo $contact->getFullName() ?></option>
                     <?php
@@ -37,7 +38,7 @@ use DD\ContactList;
             </div>
             <div>
                 <label for="address">Адрес</label>
-                <input type="text" name="address" id="address"/>
+                <input type="text" name="address" id="address" value="<?php echo ($addressData['address'] ?? '') ?>"/>
                 <?php
                 if (isset($addressValidationError)): ?>
 
@@ -56,8 +57,8 @@ use DD\ContactList;
             <div>
                 <label for="status">Статус адреса</label>
                 <select name="status" id="status">
-                    <option value="home">Дом</option>
-                    <option value="job">Работа</option>
+                    <option <?php echo (isset($addressData['status']) && $addressData['status'] === 'home' ? 'selected' : '') ?> value="home">Дом</option>
+                    <option <?php echo (isset($addressData['status']) && $addressData['status'] === 'job' ? 'selected' : '') ?> value="job">Работа</option>
                 </select>
             </div>
             <div>

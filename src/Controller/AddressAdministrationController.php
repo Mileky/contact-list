@@ -3,6 +3,7 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Exception\RuntimeException;
+use DD\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
@@ -14,6 +15,7 @@ use DD\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use DD\ContactList\Service\SearchAddressService;
 use DD\ContactList\Service\SearchAddressService\SearchAddressCriteria;
 use DD\ContactList\Service\SearchContactService;
+use Throwable;
 
 class AddressAdministrationController implements ControllerInterface
 {
@@ -53,11 +55,20 @@ class AddressAdministrationController implements ControllerInterface
     private ViewTemplateInterface $viewTemplate;
 
     /**
+     * Поставщик услуг аутентификации
+     *
+     * @var HttpAuthProvider
+     */
+    private HttpAuthProvider $httpAuthProvider;
+
+
+    /**
      * @param LoggerInterface $logger                            - Логгер
      * @param ArrivalNewAddressService $arrivalNewAddressService - Сервис добавления нового адреса у контакта
      * @param SearchContactService $searchContactService         - Сервис поиска контактов
      * @param ViewTemplateInterface $viewTemplate                - Шаблонизатор для рендеринга html
      * @param SearchAddressService $addressService               - Сервис поиска адресов
+     * @param HttpAuthProvider $httpAuthProvider                 - Поставщик услуг аутентификации
      */
     public function
     __construct(
@@ -65,13 +76,15 @@ class AddressAdministrationController implements ControllerInterface
         ArrivalNewAddressService $arrivalNewAddressService,
         SearchContactService $searchContactService,
         ViewTemplateInterface $viewTemplate,
-        SearchAddressService $addressService
+        SearchAddressService $addressService,
+        HttpAuthProvider $httpAuthProvider
     ) {
         $this->logger = $logger;
         $this->arrivalNewAddressService = $arrivalNewAddressService;
         $this->searchContactService = $searchContactService;
         $this->viewTemplate = $viewTemplate;
         $this->addressService = $addressService;
+        $this->httpAuthProvider = $httpAuthProvider;
     }
 
 
@@ -80,28 +93,46 @@ class AddressAdministrationController implements ControllerInterface
      */
     public function __invoke(ServerRequest $serverRequest): HttpResponse
     {
-        $this->logger->log('run AddressAdministrationController:__invoke');
+        try {
+            if (false === $this->httpAuthProvider->isAuth()) {
+                return $this->httpAuthProvider->doAuth($serverRequest->getUri());
+            }
 
-        $resultAddAddress = [];
-        if ('POST' === $serverRequest->getMethod()) {
-            $resultAddAddress = $this->addAddress($serverRequest);
+
+            $this->logger->log('run AddressAdministrationController:__invoke');
+
+            $resultAddAddress = [];
+            if ('POST' === $serverRequest->getMethod()) {
+                $resultAddAddress = $this->addAddress($serverRequest);
+            }
+
+            $dtoAddressCollection = $this->addressService->search(new SearchAddressCriteria());
+            $dtoContactsCollection = $this->searchContactService->search(
+                new SearchContactService\SearchContactServiceCriteria()
+            );
+
+            $viewData = [
+                'addresses' => $dtoAddressCollection,
+                'contacts' => $dtoContactsCollection
+            ];
+
+            $context = array_merge($viewData, $resultAddAddress);
+            $template = __DIR__ . '/../../templates/address.Administration.phtml';
+
+            $httpCode = 200;
+        } catch (Throwable $e) {
+            $httpCode = 500;
+            $template = __DIR__ . '/../../templates/errors.phtml';
+            $context = [
+                'errors' => [
+                    $e->getMessage()
+                ]
+            ];
         }
 
-        $dtoAddressCollection = $this->addressService->search(new SearchAddressCriteria());
-        $dtoContactsCollection = $this->searchContactService->search(
-            new SearchContactService\SearchContactServiceCriteria()
-        );
+        $html = $this->viewTemplate->render($template, $context);
 
-        $viewData = [
-            'addresses' => $dtoAddressCollection,
-            'contacts' => $dtoContactsCollection
-        ];
-
-        $context = array_merge($viewData, $resultAddAddress);
-
-        $html = $this->viewTemplate->render(__DIR__ . '/../../templates/address.Administration.phtml', $context);
-
-        return ServerResponseFactory::createHtmlResponse(200, $html);
+        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
     }
 
     /**
@@ -122,6 +153,8 @@ class AddressAdministrationController implements ControllerInterface
 
         if (0 === count($result['addressValidationError'])) {
             $this->createAddress($dataToCreate);
+        } else {
+            $result['addressData'] = $dataToCreate;
         }
 
         return $result;
@@ -155,8 +188,6 @@ class AddressAdministrationController implements ControllerInterface
         }
 
         return $errs;
-
-
     }
 
     /**
@@ -174,6 +205,6 @@ class AddressAdministrationController implements ControllerInterface
             $dataToCreate['status'],
         );
 
-       $this->arrivalNewAddressService->addAddress($requestDto);
+        $this->arrivalNewAddressService->addAddress($requestDto);
     }
 }

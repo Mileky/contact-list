@@ -1,3 +1,4 @@
+#!C:\php php
 <?php
 
 use DD\ContactList\Infrastructure\Autoloader;

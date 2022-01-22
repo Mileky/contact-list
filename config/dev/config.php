@@ -29,9 +29,20 @@ return [
     'pathToAddress' => __DIR__ . '/../../data/address.json',
 
     /**
+     * Путь до файла с данными о пользователях
+     */
+    'pathToUsers' => __DIR__ . '/../../data/users.json',
+
+
+    /**
      * Путь до файла лога
      */
     'pathToLogFile' => __DIR__ . '/../../var/log/app.log',
+
+    /**
+     * Uri, по которому можно открыть форму аутентификации
+     */
+    'loginUri' => '/login',
 
     /**
      *  Тип используемого логера

@@ -17,7 +17,7 @@ class PhtmlTemplate implements ViewTemplateInterface
         }
 
         extract($context, EXTR_SKIP);
-        unset($context);
+        unset($viewData);
 
         ob_start();
 

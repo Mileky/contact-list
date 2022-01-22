@@ -13,6 +13,7 @@ use DD\ContactList\Infrastructure\Router\DefaultRouter;
 use DD\ContactList\Infrastructure\Router\RegExpRouter;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\Router\UniversalRouter;
+use DD\ContactList\Infrastructure\Uri\Uri;
 
 
 return [
@@ -32,6 +33,12 @@ return [
             'args' => [
                 'output' => ContactList\Infrastructure\Console\Output\OutputInterface::class,
                 'searchContactService' => ContactList\Service\SearchContactService::class
+            ]
+        ],
+
+        ContactList\ConsoleCommand\HashStr::class => [
+            'args' => [
+                'output' => ContactList\Infrastructure\Console\Output\OutputInterface::class
             ]
         ],
 
@@ -96,7 +103,15 @@ return [
                 'arrivalNewAddressService' => ContactList\Service\ArrivalNewAddressService::class,
                 'searchContactService' => ContactList\Service\SearchContactService::class,
                 'viewTemplate' => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
-                'addressService' => ContactList\Service\SearchAddressService::class
+                'addressService' => ContactList\Service\SearchAddressService::class,
+                'httpAuthProvider' => ContactList\Infrastructure\Auth\HttpAuthProvider::class
+            ]
+        ],
+
+        ContactList\Controller\LoginController::class => [
+            'args' => [
+                'viewTemplate' => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
+                'httpAuthProvider' => ContactList\Infrastructure\Auth\HttpAuthProvider::class
             ]
         ],
 
@@ -125,6 +140,14 @@ return [
             ]
         ],
 
+        ContactList\Infrastructure\Auth\UserDataStorageInterface::class => [
+            'class' => ContactList\Repository\UserJsonFileRepository::class,
+            'args' => [
+                'pathToUsers' => 'pathToUsers',
+                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class
+            ]
+        ],
+
         ContactList\Entity\ContactListRepositoryInterface::class => [
             'class' => ContactList\Repository\ContactListRepository::class,
             'args' => [
@@ -140,6 +163,14 @@ return [
                 'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
                 'pathToAddress' => 'pathToAddress',
                 'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
+            ]
+        ],
+
+        ContactList\Infrastructure\Auth\HttpAuthProvider::class => [
+            'args' => [
+                'userDataStorage' => ContactList\Infrastructure\Auth\UserDataStorageInterface::class,
+                'session' => ContactList\Infrastructure\Session\SessionInterface::class,
+                'loginUri' => 'loginUri'
             ]
         ],
 
@@ -216,9 +247,22 @@ return [
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToContactList();
         },
+        'pathToUsers' => static function (ContainerInterface $c): string {
+            /** @var AppConfig $appConfig */
+            $appConfig = $c->get(AppConfig::class);
+            return $appConfig->getPathToUsers();
+        },
+        'loginUri' => static function (ContainerInterface $c): Uri {
+            $appConfig = $c->get(AppConfig::class);
+            return Uri::createFromString($appConfig->getLoginUri());
+        },
         AppConfig::class => static function (ContainerInterface $c): AppConfig {
             $appConfig = $c->get('appConfig');
             return AppConfig::createFromArray($appConfig);
-        }
+        },
+        ContactList\Infrastructure\Session\SessionInterface::class => static function (ContainerInterface $c) {
+            return ContactList\Infrastructure\Session\SessionNative::create();
+        },
+
     ],
 ];

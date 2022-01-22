@@ -2,6 +2,8 @@
 
 namespace DD\ContactList\Infrastructure\Http;
 
+use DD\ContactList\Exception\RuntimeException;
+use DD\ContactList\Infrastructure\Uri\Uri;
 use Throwable;
 use DD\ContactList\Exception;
 
@@ -16,6 +18,8 @@ class ServerResponseFactory
     private const PHRASES = [
         200 => 'OK',
         201 => 'Created',
+        301 => 'Moved Permanently',
+        302 => 'Found',
         404 => 'Not found',
         500 => 'Internal Server Error',
         503 => 'Service Unavailable',
@@ -76,4 +80,40 @@ class ServerResponseFactory
 
         return new HttpResponse('1.1', $code, $phrases, ['Content-Type' => 'text/html'], $html);
     }
+
+    /**
+     * Редирект
+     *
+     * @param Uri $uri - URI на который должно произойти перенаправление в результате редиректа
+     * @param int $httpCode - http код для редиректа. Код из подмножества 3хх
+     *
+     * @return HttpResponse - http ответ инициирующий редирект
+     */
+    public static function redirect(Uri $uri, int $httpCode = 302): HttpResponse
+    {
+        try {
+
+            if (!($httpCode >= 300 && $httpCode < 400)) {
+                throw new RuntimeException('Некорректный код ответа для редиректа');
+            }
+
+            if (false === array_key_exists($httpCode, self::PHRASES)) {
+                throw new RuntimeException('Некорректный код ответа для редиректа');
+            }
+
+            $phrases = self::PHRASES[$httpCode];
+            $body = '';
+            $headers = ['Location' => (string)$uri];
+
+        } catch (Throwable $exception) {
+            $body = '<h1>Unknown Error</h1>';
+            $httpCode = 520;
+            $phrases = 'Unknown error';
+            $headers = ['Content-Type' => 'text/html'];
+        }
+
+        return new HttpResponse('1.1', $httpCode, $phrases, $headers, $body);
+
+    }
+
 }

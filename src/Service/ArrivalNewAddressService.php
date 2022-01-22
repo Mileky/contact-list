@@ -53,9 +53,11 @@ class ArrivalNewAddressService
             throw new RuntimeException("Нельзя добавить адрес контакту с id - '$contactId'. Контакт с таким id не найден");
         }
 
+        $contact = current($contactData);
+
         $address = new Address(
             $this->addressRepository->nextId(),
-            $addressDto->getIdContact(),
+            $contact,
             $addressDto->getAddress(),
             $addressDto->getStatus()
         );
@@ -64,7 +66,7 @@ class ArrivalNewAddressService
 
         return new ResultRegisteringAddressDto(
             $address->getIdAddress(),
-            $address->getIdRecipient(),
+            $address->getIdRecipient()->getIdRecipient(),
             $address->getAddress(),
             $address->getStatus()
         );

@@ -1,0 +1,101 @@
+<?php
+
+use DD\ContactList;
+
+/**
+ * @var ContactList\Service\SearchAddressService\AddressDto[] $addresses
+ * @var ContactList\Service\SearchContactService\ContactDto[] $contacts
+ * @var array $addressValidationError
+ */
+
+?>
+
+<style>
+    form label {
+        width: 100pt;
+        display: block;
+    }
+</style>
+
+<h1>Address page</h1>
+
+<div>
+    <h2>Добавить адрес</h2>
+    <form method="post">
+        <div>
+            <div>
+                <label for="id_recipient">Имя контакта</label>
+                <select name="id_recipient" id="id_recipient">
+                    <?php
+                    foreach ($contacts as $contact): ?>
+                        <option value="<?php
+                        echo $contact->getId() ?>"><?php
+                            echo $contact->getFullName() ?></option>
+                    <?php
+                    endforeach; ?>
+                </select>
+            </div>
+            <div>
+                <label for="address">Адрес</label>
+                <input type="text" name="address" id="address"/>
+                <?php
+                if (isset($addressValidationError)): ?>
+
+                    <ul>
+                        <?php
+                        foreach ($addressValidationError as $err): ?>
+                            <li><?php
+                                echo $err ?></li>
+                        <?php
+                        endforeach; ?>
+                    </ul>
+
+                <?php
+                endif; ?>
+            </div>
+            <div>
+                <label for="status">Статус адреса</label>
+                <select name="status" id="status">
+                    <option value="home">Дом</option>
+                    <option value="job">Работа</option>
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Добавить"/>
+            </div>
+    </form>
+</div>
+
+
+<table>
+
+    <thead>
+    <tr>
+        <th>Id адреса</th>
+        <th>Id контакта</th>
+        <th>Адрес</th>
+        <th>Статус адреса</th>
+    </tr>
+    </thead>
+
+
+    <tbody>
+    <?php
+    foreach ($addresses as $index => $address): ?>
+
+        <tr>
+            <td><?php
+                echo $index ?></td>
+            <td><?php
+                echo $address->getIdRecipient() ?></td>
+            <td><?php
+                echo $address->getAddress() ?></td>
+            <td><?php
+                echo $address->getStatus() ?></td>
+        </tr>
+
+    <?php
+    endforeach; ?>
+    </tbody>
+
+</table>

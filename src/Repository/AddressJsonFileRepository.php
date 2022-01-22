@@ -40,13 +40,6 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     private ?array $contactIdToInfo = null;
 
     /**
-     * Сопоставление id контакта с номером элемента в $contactListData
-     *
-     * @var array|null
-     */
-    private ?array $idRecipient;
-
-    /**
      * Текущий id адреса контакта
      *
      * @var int
@@ -61,15 +54,15 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     private ?array $addressData = null;
 
     /**
-     * @param DataLoaderInterface $dataLoader - Загрузчик данных
-     * @param string $pathToAddress - Путь до данных с адресами контактов
+     * @param DataLoaderInterface $dataLoader               - Загрузчик данных
+     * @param string $pathToAddress                         - Путь до данных с адресами контактов
      * @param ContactRepositoryInterface $contactRepository - Репозиторий работы с контактами
      */
-    public function __construct(DataLoaderInterface $dataLoader,
+    public function __construct(
+        DataLoaderInterface $dataLoader,
         string $pathToAddress,
         ContactRepositoryInterface $contactRepository
-    )
-    {
+    ) {
         $this->dataLoader = $dataLoader;
         $this->pathToAddress = $pathToAddress;
         $this->contactRepository = $contactRepository;
@@ -78,14 +71,14 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function findById(int $contactId): array
+    public function findBy(array $criteria = []): array
     {
         $addressData = $this->loadData();
         $contactIdToInfo = $this->loadContactsData();
 
         $foundAddress = [];
         foreach ($addressData as $address) {
-            $meetSearchCriteria = $contactId === $address['id_recipient'];
+            $meetSearchCriteria = $this->CriteriaCheck($criteria, $address);
 
             if ($meetSearchCriteria) {
                 $address['id_recipient'] = $contactIdToInfo[$address['id_recipient']];
@@ -119,7 +112,6 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
         $item = $this->buildJsonDataAddress($address);
         $this->addressData[] = $item;
         $data = $this->addressData;
-        $this->idRecipient[$address->getIdRecipient()] = array_key_last($this->addressData);
 
         $jsonStr = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         file_put_contents($this->pathToAddress, $jsonStr);
@@ -135,7 +127,6 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     private function loadContactsData(): array
     {
         if (null === $this->contactIdToInfo) {
-
             $contacts = $this->contactRepository->findBy();
             $contactIdToInfo = [];
 
@@ -157,13 +148,6 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     {
         if (null === $this->addressData) {
             $this->addressData = $this->dataLoader->loadData($this->pathToAddress);
-
-            $this->idRecipient = array_combine(
-                array_map(static function (array $v) {
-                    return $v['id_recipient'];
-                }, $this->addressData),
-                array_keys($this->addressData)
-            );
         }
 
         $this->currentId = max(
@@ -189,10 +173,33 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     {
         return [
             'id_address' => $address->getIdAddress(),
-            'id_recipient' => $address->getIdRecipient(),
+            'id_recipient' => $address->getIdRecipient()->getIdRecipient(),
             'address' => $address->getAddress(),
             'status' => $address->getStatus()
         ];
+    }
+
+    /**
+     * Проверяет сущность на соответсвие критериям поиска
+     *
+     * @param array $criteria   - криетрии поиска
+     * @param array $entityData - коллекция сущностей, которые нужно проверить
+     *
+     * @return bool
+     */
+    private function CriteriaCheck(array $criteria, array $entityData): bool
+    {
+        $result = false;
+        foreach ($criteria as $key => $value) {
+            if (isset($entityData[$key]) && (string)$value === (string)$entityData[$key]) {
+                $result = true;
+            }
+        }
+        if (count($criteria) === 0) {
+            $result = true;
+        }
+
+        return $result;
     }
 
 }

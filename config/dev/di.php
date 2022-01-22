@@ -78,6 +78,28 @@ return [
                 'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
+
+        ContactList\Service\SearchAddressService::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'addressRepository' => ContactList\Entity\AddressRepositoryInterface::class
+            ]
+        ],
+
+        ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class => [
+            'class' => ContactList\Infrastructure\ViewTemplate\PhtmlTemplate::class
+        ],
+
+        ContactList\Controller\AddressAdministrationController::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'arrivalNewAddressService' => ContactList\Service\ArrivalNewAddressService::class,
+                'searchContactService' => ContactList\Service\SearchContactService::class,
+                'viewTemplate' => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
+                'addressService' => ContactList\Service\SearchAddressService::class
+            ]
+        ],
+
         ContactList\Infrastructure\DataLoader\DataLoaderInterface::class => [
             'class' => ContactList\Infrastructure\DataLoader\JsonDataLoader::class
         ],

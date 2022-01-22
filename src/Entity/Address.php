@@ -31,9 +31,9 @@ class Address
     /**
      * ID контакта
      *
-     * @var int
+     * @var AbstractContact
      */
-    private int $idRecipient;
+    private AbstractContact $idRecipient;
 
     /**
      * Адрес контакта
@@ -51,11 +51,11 @@ class Address
 
     /**
      * @param int             $idAddress   -  ID адреса
-     * @param int $idRecipient -  ID контакта
+     * @param AbstractContact $idRecipient -  ID контакта
      * @param string          $address     - Адрес контакта
      * @param string          $status      - Статус адреса (работа/дом)
      */
-    public function __construct(int $idAddress, int $idRecipient, string $address, string $status)
+    public function __construct(int $idAddress, AbstractContact $idRecipient, string $address, string $status)
     {
         $this->idAddress = $idAddress;
         $this->idRecipient = $idRecipient;
@@ -72,9 +72,9 @@ class Address
     }
 
     /**
-     * @return int
+     * @return AbstractContact
      */
-    public function getIdRecipient(): int
+    public function getIdRecipient(): AbstractContact
     {
         return $this->idRecipient;
     }

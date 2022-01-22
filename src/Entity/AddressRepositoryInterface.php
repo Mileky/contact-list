@@ -10,11 +10,11 @@ interface AddressRepositoryInterface
     /**
      * Поиск адреса по id контакта
      *
-     * @param int $contactId
+     * @param array $criteria - критерии поиска адресов
      *
      * @return Address[]
      */
-    public function findById(int $contactId): array;
+    public function findBy(array $criteria): array;
 
     /**
      * Получение id для создания новго адреса

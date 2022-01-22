@@ -7,4 +7,5 @@ return [
 //    '/customers' => Controller\GetContactsCollectionController::class,
 //    '/colleagues' => Controller\GetContactsCollectionController::class,
 //    '/kinsfolk' => Controller\GetContactsCollectionController::class,
+    '/address/administration' => Controller\AddressAdministrationController::class
 ];

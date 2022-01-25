@@ -4,16 +4,16 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "105afb8cd42f7c7961a8508cdd42b504",
+    "content-hash": "8d22f325ded57232419355bef524d917",
     "packages": [],
     "packages-dev": [
         {
             "name": "dd/framework-for-contact-list",
-            "version": "dev-lesson_26-01-2022",
+            "version": "dev-home_work_26-01-2022",
             "source": {
                 "type": "git",
                 "url": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
-                "reference": "6da8b8968e6b31cf946f099c11829e7d2232ac78"
+                "reference": "c2ff9ceafb1c8df75032096873102a775cb2c812"
             },
             "require": {
                 "ext-json": "*",
@@ -23,6 +23,11 @@
                 "phpunit/phpunit": "9.*"
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DD\\ContactList\\Infrastructure\\": "src"
+                }
+            },
             "license": [
                 "proprietary"
             ],
@@ -40,7 +45,7 @@
             "support": {
                 "email": "zinchenko@effective-group.ru"
             },
-            "time": "2022-01-25T17:10:40+00:00"
+            "time": "2022-01-25T17:20:19+00:00"
         },
         {
             "name": "doctrine/instantiator",

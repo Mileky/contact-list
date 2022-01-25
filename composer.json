@@ -25,7 +25,7 @@
   "require-dev": {
     "phpunit/phpunit": "9.*",
     "test-create-package-for-composer/test-composer": "*",
-    "dd/framework-for-contact-list": "dev-lesson_26-01-2022"
+    "dd/framework-for-contact-list": "dev-home_work_26-01-2022"
   },
   "repositories": [
     {

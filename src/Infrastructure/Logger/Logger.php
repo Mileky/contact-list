@@ -4,7 +4,7 @@ namespace DD\ContactList\Infrastructure\Logger;
 
 use DateTimeImmutable;
 use Throwable;
-use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Exception;
 
 class Logger implements LoggerInterface
 {

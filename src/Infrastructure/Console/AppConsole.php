@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\Console;
 
-use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Exception;
 use DD\ContactList\Infrastructure\Console\Output\EchoOutput;
 use DD\ContactList\Infrastructure\Console\Output\OutputInterface;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;

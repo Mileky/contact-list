@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\Http\Exception;
 
-use DD\ContactList\Exception\RuntimeException;
+use DD\ContactList\Infrastructure\Exception\RuntimeException;
 
 /**
  * Исключение бросается в случае, если не удалось создать объект http запроса

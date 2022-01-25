@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\Uri\Exception;
 
-use DD\ContactList\Exception\RuntimeException;
+use DD\ContactList\Infrastructure\Exception\RuntimeException;
 
 /**
  * Исключение выбрасывается в случае ошибки парса URL

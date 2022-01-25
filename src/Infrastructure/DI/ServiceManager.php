@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\DI;
 
-use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Exception;
 
 /**
  * Сервис менеджер

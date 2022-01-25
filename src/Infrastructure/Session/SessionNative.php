@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\Session;
 
-use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Exception;
 
 /**
  * Наттивная реализация работы с сессиями

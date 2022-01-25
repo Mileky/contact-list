@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\ViewTemplate;
 
-use DD\ContactList\Exception\RuntimeException;
+use DD\ContactList\Infrastructure\Exception\RuntimeException;
 
 class PhtmlTemplate implements ViewTemplateInterface
 {

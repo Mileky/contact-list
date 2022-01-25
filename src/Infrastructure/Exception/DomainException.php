@@ -1,13 +1,11 @@
 <?php
 
-namespace DD\ContactList\Exception;
-
-use DD\ContactList\Infrastructure\Exception as BaseException;
+namespace DD\ContactList\Infrastructure\Exception;
 
 /**
  * Это исключение создается, если значение не соответствует определенной допустимой области данных
  */
-class DomainException extends BaseException\DomainException implements ExceptionInterface
+class DomainException extends \DomainException implements ExceptionInterface
 {
 
 }

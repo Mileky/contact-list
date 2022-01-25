@@ -2,8 +2,7 @@
 
 namespace DD\ContactList\Infrastructure\HttpApplication;
 
-use DD\ContactList\Exception;
-use DD\ContactList\Config\AppConfig;
+use DD\ContactList\Infrastructure\Exception;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\Http\HttpResponse;
 use DD\ContactList\Infrastructure\Http\ServerRequest;

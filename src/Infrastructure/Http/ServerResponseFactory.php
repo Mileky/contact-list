@@ -2,10 +2,10 @@
 
 namespace DD\ContactList\Infrastructure\Http;
 
-use DD\ContactList\Exception\RuntimeException;
+use DD\ContactList\Infrastructure\Exception\RuntimeException;
 use DD\ContactList\Infrastructure\Uri\Uri;
 use Throwable;
-use DD\ContactList\Exception;
+use DD\ContactList\Infrastructure\Exception;
 
 /**
  * Фабрика создания http ответов

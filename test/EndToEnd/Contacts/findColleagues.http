@@ -1,5 +1,5 @@
 ### Тестирование поиска коллеги по id (без GET-параметра)
-GET http://localhost:8080/contacts/10
+GET http://localhost:8080/colleagues/10
 
 > {%
    client.test('Тестирование поиска коллеги по id (без GET-параметра)', function () {
@@ -16,7 +16,7 @@ GET http://localhost:8080/contacts/10
  %}
 
 ### Тестирование поиска даты рождения и профессии коллеги по id
-GET http://localhost:8080/contacts?id_recipient=10
+GET http://localhost:8080/colleagues?id_recipient=10
 
 > {%
    client.test('Тестирование поиска даты рождения и профессии коллеги по id', function () {
@@ -33,7 +33,7 @@ GET http://localhost:8080/contacts?id_recipient=10
  %}
 
 ### Тестирование поиска коллеги по Ф.И.О
-GET http://localhost:8080/contacts?full_name=Шатов Александр Иванович
+GET http://localhost:8080/colleagues?full_name=Шатов Александр Иванович
 
 > {%
    client.test('Тестирование поиска коллеги по Ф.И.О', function () {
@@ -50,7 +50,7 @@ GET http://localhost:8080/contacts?full_name=Шатов Александр Ив�
  %}
 
 ### Тестирование поиска коллеги по дате рождения
-GET http://localhost:8080/contacts?birthday=02.12.1971
+GET http://localhost:8080/colleagues?birthday=02.12.1971
 
 > {%
    client.test('Тестирование поиска коллеги по дате рождения', function () {
@@ -67,7 +67,7 @@ GET http://localhost:8080/contacts?birthday=02.12.1971
  %}
 
 ### Тестирование поиска коллеги по отделу
-GET http://localhost:8080/contacts?department=Дирекция
+GET http://localhost:8080/colleagues?department=Дирекция
 
 > {%
    client.test('Тестирование поиска коллеги по статусу отделу', function () {
@@ -84,7 +84,7 @@ GET http://localhost:8080/contacts?department=Дирекция
  %}
 
 ### Тестирование поиска коллеги по должности
-GET http://localhost:8080/contacts?position=Директор
+GET http://localhost:8080/colleagues?position=Директор
 
 > {%
    client.test('Тестирование поиска коллеги по должности', function () {
@@ -101,7 +101,7 @@ GET http://localhost:8080/contacts?position=Директор
  %}
 
 ### Тестирование поиска коллеги по номеру кабинета
-GET http://localhost:8080/contacts?room_number=405
+GET http://localhost:8080/colleagues?room_number=405
 
 > {%
    client.test('Тестирование поиска коллеги по номеру кабинета', function () {
@@ -118,7 +118,7 @@ GET http://localhost:8080/contacts?room_number=405
  %}
 
 ### Тестирование поиска контактов по категориям(коллеги)
-GET http://localhost:8080/contacts?category=colleagues
+GET http://localhost:8080/colleagues?category=colleagues
 
 > {%
    client.test('Тестирование поиска контактов по категориям(коллеги)', function () {

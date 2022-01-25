@@ -101,10 +101,11 @@ class RegExpRouter implements RouterInterface
     {
         $clearAttrName = strtolower(substr($groupName, 3, -3));
 
-        $parts = explode('_', $clearAttrName);
+//        $parts = explode('_', $clearAttrName);
+//
+//        $ucParts = array_map('ucfirst', $parts);
 
-        $ucParts = array_map('ucfirst', $parts);
-
-        return lcfirst(implode('', $ucParts));
+//        return lcfirst(implode('', $ucParts));
+        return $clearAttrName;
     }
 }

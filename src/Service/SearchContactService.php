@@ -60,7 +60,7 @@ final class SearchContactService
     {
         $criteria = $this->searchCriteriaToArray($searchCriteria);
 
-        if (array_key_exists('category', $criteria)) {
+        if (array_key_exists('category', $criteria) && 1 === count($criteria)) {
             $entitiesCollection = $this->contactRepository->findByCategory($criteria);
         } else {
             $entitiesCollection = $this->contactRepository->findBy($criteria);

@@ -162,7 +162,7 @@ class ContactListRepository implements ContactListRepositoryInterface
         $contactListId = $this->idRecipient;
 
         if (false === array_key_exists($id, $contactListId)) {
-            throw new RuntimeException("Текстовой документ с ID = $id не найден в хранилище");
+            throw new RuntimeException("Контакт с ID = $id не найден в хранилище");
         }
 
         return $contactListId[$id];

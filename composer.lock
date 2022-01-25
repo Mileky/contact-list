@@ -4,9 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b38bba3e08284bbfc6bdedf32066414",
+    "content-hash": "105afb8cd42f7c7961a8508cdd42b504",
     "packages": [],
     "packages-dev": [
+        {
+            "name": "dd/framework-for-contact-list",
+            "version": "dev-lesson_26-01-2022",
+            "source": {
+                "type": "git",
+                "url": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
+                "reference": "6da8b8968e6b31cf946f099c11829e7d2232ac78"
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.*"
+            },
+            "type": "library",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Zinchenko Danila",
+                    "email": "zinchenko@effective-group.ru",
+                    "role": "developer"
+                }
+            ],
+            "description": "Framework project",
+            "keywords": [
+                "framework"
+            ],
+            "support": {
+                "email": "zinchenko@effective-group.ru"
+            },
+            "time": "2022-01-25T17:10:40+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.4.0",
@@ -2080,41 +2115,6 @@
             "time": "2021-07-28T10:34:58+00:00"
         },
         {
-            "name": "vendor_name/framework-for-contact-list",
-            "version": "dev-lesson_26-01-2022",
-            "source": {
-                "type": "git",
-                "url": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
-                "reference": "e9de8650ba31d8f7ea369be5ad7cc39b8cc5f8bc"
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.4 || ^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "9.*"
-            },
-            "type": "library",
-            "license": [
-                "proprietary"
-            ],
-            "authors": [
-                {
-                    "name": "Zinchenko Danila",
-                    "email": "zinchenko@effective-group.ru",
-                    "role": "developer"
-                }
-            ],
-            "description": "Framework project",
-            "keywords": [
-                "framework"
-            ],
-            "support": {
-                "email": "zinchenko@effective-group.ru"
-            },
-            "time": "2022-01-25T17:02:57+00:00"
-        },
-        {
             "name": "webmozart/assert",
             "version": "1.10.0",
             "source": {
@@ -2176,7 +2176,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "vendor_name/framework-for-contact-list": 20
+        "dd/framework-for-contact-list": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

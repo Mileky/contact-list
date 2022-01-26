@@ -69,7 +69,7 @@ GET http://localhost:8080/recipients?profession=Автомеханик
  %}
 
 ### Тестирование поиска контактов по категориям(получатели)
-GET http://localhost:8080/recipients?category=recipients
+GET http://localhost:8080/recipients
 
 > {%
    client.test('Тестирование поиска контактов по категориям(получатели)', function () {

@@ -135,7 +135,7 @@ GET http://localhost:8080/kinsfolk?hotkey=1
  %}
 
 ### Тестирование поиска контактов по категориям(родня)
-GET http://localhost:8080/kinsfolk?category=kinsfolk
+GET http://localhost:8080/kinsfolk
 
 > {%
    client.test('Тестирование поиска контактов по категориям(родня)', function () {

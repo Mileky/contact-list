@@ -118,7 +118,7 @@ GET http://localhost:8080/colleagues?room_number=405
  %}
 
 ### Тестирование поиска контактов по категориям(коллеги)
-GET http://localhost:8080/colleagues?category=colleagues
+GET http://localhost:8080/colleagues
 
 > {%
    client.test('Тестирование поиска контактов по категориям(коллеги)', function () {

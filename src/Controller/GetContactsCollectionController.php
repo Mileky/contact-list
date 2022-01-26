@@ -117,7 +117,7 @@ class GetContactsCollectionController implements ControllerInterface
 
         if (null === $resultOfParamValidation) {
             $params = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
-
+            $params['category'] = substr($serverRequest->getRequestTarget(), 1);
             $foundContactsDto = $this->searchContactService->search(
                 (new SearchContactService\SearchContactServiceCriteria())
                     ->setCategory($params['category'] ?? null)

@@ -2,3 +2,4 @@
 var/log/app.log
 composer.phar
 vendor
+/composer.lock

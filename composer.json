@@ -26,11 +26,20 @@
     "phpunit/phpunit": "9.*",
     "test-create-package-for-composer/test-composer": "*",
     "dd/framework-for-contact-list": "dev-home_work_26-01-2022"
+
   },
   "repositories": [
     {
       "type": "git",
-      "url": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git"
+      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git"
+    },
+    {
+      "type": "git",
+      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/logger-for-contact-list.git"
+    },
+    {
+      "type": "git",
+      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/view-template-for-contact-list.git"
     }
   ]
 }

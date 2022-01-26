@@ -1,4 +1,4 @@
-### Тестирование переноса контакта в черный лист
+### Сценарий 1. Возможность добавлять в черный список некоторые номера
 PUT http://localhost:8080/contactList/1
 
 > {%
@@ -9,7 +9,7 @@ PUT http://localhost:8080/contactList/1
  });
  %}
 
-### Регистрация нового адреса
+### Сценарий 2. Возможность добавлять адреса знакомых из списка контактов
 POST http://localhost:8080/address
 Content-Type: application/json
 
@@ -27,5 +27,48 @@ Content-Type: application/json
      client.assert(response.body["id_recipient"] === 6, "id контакта некорректен");
      client.assert(response.body["address"] === "ул. Плотникова. 3А", "адрес некорректен");
      client.assert(response.body["status"] === "home", "статус адреса некорректен");
+ });
+ %}
+
+### Сценарий 3. Возможность знать дату рождения и профессию знакомых
+GET http://localhost:8080/recipients?id_recipient=1
+
+> {%
+   client.test('Тестирование поиска даты рождения и профессии знакомого по id', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 1, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Осипов Геннадий Иванович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "15.06.1985", "день рождения не корректно");
+   client.assert(response.body[0]['profession'] === "Системный администратор", "профессия не корректна");
+ });
+ %}
+
+### Сценарий 4. Возможность знать когда можно побеспокоить клиента
+GET http://localhost:8080/customers?id_recipient=7
+
+> {%
+   client.test('Тестирование поиска клиента по ID.', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Ожидаю код 200. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body[0]['id_recipient'] === 7, "id получателя не корректен");
+   client.assert(response.body[0]['full_name'] === "Калинин Пётр Александрович", "полное имя не корректно");
+   client.assert(response.body[0]['birthday'] === "04.06.1983", "день рождения не корректен");
+   client.assert(response.body[0]['profession'] === "Фитнес тренер", "профессия не корректна");
+   client.assert(response.body[0]['contract_number'] === "5684", "номер не корректен");
+   client.assert(response.body[0]['average_transaction_amount'] === 2500, "средняя транзакция некорректна");
+   client.assert(response.body[0]['discount'] === "5%", "скидка не корректна");
+   client.assert(response.body[0]['time_to_call'] === "С 9:00 до 13:00 в будни", "время не корректно");
+ });
+ %}
+
+### Сценарий 5. Возможность просматривать отдельные категории контактов
+GET http://localhost:8080/customers
+
+> {%
+   client.test('Сценарий 5. Возможность просматривать отдельные категории контактов', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body.hasOwnProperty('length') && response.body.length === 3, "В ответе есть 3 элемента");
  });
  %}

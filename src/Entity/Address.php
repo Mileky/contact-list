@@ -10,17 +10,6 @@ use DD\ContactList\Exception\RuntimeException;
  */
 class Address
 {
-
-    /**
-     * Статус адреса "дом"
-     */
-    public const ADDRESS_HOME = 'home';
-
-    /**
-     * Статус адреса "работа"
-     */
-    public const ADDRESS_JOB = 'job';
-
     /**
      * ID адреса
      *

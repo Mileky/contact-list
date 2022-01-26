@@ -1,17 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use DD\ContactList\Infrastructure\HttpApplication\App;
-use DD\ContactList\Infrastructure\Autoloader\Autoloader;
-
-spl_autoload_register(
-    new Autoloader([
-        '\\DD\\ContactList\\' => __DIR__ . '/../src/',
-        '\\DD\\ContactListTest\\' => __DIR__ . '/../test/',
-    ])
-);
-
 use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\Http\ServerRequest;

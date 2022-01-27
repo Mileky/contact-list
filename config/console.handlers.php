@@ -5,5 +5,5 @@ use DD\ContactList\ConsoleCommand\HashStr;
 
 return [
     'find-contacts' => FindContacts::class,
-    'hash' => HashStr::class
+    'hash'          => HashStr::class
 ];

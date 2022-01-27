@@ -10,11 +10,11 @@ use DD\ContactList\Exception;
 final class Recipient extends AbstractContact
 {
     /**
-     * @param int $id_recipient  - id Получателя
-     * @param string $full_name  - Полное имя получателя
-     * @param string $birthday   - Дата рождения получателя
-     * @param string $profession - Профессия получателя
-     * @param array $messengers  - Данные о мессенджере, в котором есть пользователь
+     * @param int    $id_recipient - id Получателя
+     * @param string $full_name    - Полное имя получателя
+     * @param string $birthday     - Дата рождения получателя
+     * @param string $profession   - Профессия получателя
+     * @param array  $messengers   - Данные о мессенджере, в котором есть пользователь
      */
     public function __construct(
         int $id_recipient,

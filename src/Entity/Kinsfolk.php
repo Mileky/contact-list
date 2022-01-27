@@ -31,13 +31,13 @@ final class Kinsfolk extends AbstractContact
     private string $hotkey;
 
     /**
-     * @param int $id_recipient  - id Получателя
-     * @param string $full_name  - Полное имя получателя
-     * @param string $birthday   - Дата рождения получателя
-     * @param string $profession - Профессия получателя
-     * @param string $status     - Статус родственника
-     * @param string $ringtone   - Рингтон стоящий на родственнике
-     * @param string $hotkey     - Горячая клавиша для звонка родственнику
+     * @param int    $id_recipient - id Получателя
+     * @param string $full_name    - Полное имя получателя
+     * @param string $birthday     - Дата рождения получателя
+     * @param string $profession   - Профессия получателя
+     * @param string $status       - Статус родственника
+     * @param string $ringtone     - Рингтон стоящий на родственнике
+     * @param string $hotkey       - Горячая клавиша для звонка родственнику
      */
     public function __construct(
         int $id_recipient,

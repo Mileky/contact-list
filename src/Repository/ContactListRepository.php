@@ -57,14 +57,15 @@ class ContactListRepository implements ContactListRepositoryInterface
     private DataLoaderInterface $dataLoader;
 
     /**
-     * @param string $pathToContactList
-     * @param DataLoaderInterface $dataLoader
+     * @param string                     $pathToContactList
+     * @param DataLoaderInterface        $dataLoader
      * @param ContactRepositoryInterface $contactRepository
      */
-    public function __construct(string $pathToContactList, DataLoaderInterface $dataLoader,
+    public function __construct(
+        string $pathToContactList,
+        DataLoaderInterface $dataLoader,
         ContactRepositoryInterface $contactRepository
-    )
-    {
+    ) {
         $this->pathToContactList = $pathToContactList;
         $this->dataLoader = $dataLoader;
         $this->contactRepository = $contactRepository;
@@ -78,7 +79,6 @@ class ContactListRepository implements ContactListRepositoryInterface
     private function loadContactsData(): array
     {
         if (null === $this->contactIdToInfo) {
-
             $contacts = $this->contactRepository->findBy();
             $contactIdToInfo = [];
 
@@ -171,9 +171,9 @@ class ContactListRepository implements ContactListRepositoryInterface
     private function buildJsonDataContactList(ContactList $contactList): array
     {
         return [
-            'id_entry' => $contactList->getIdEntry(),
+            'id_entry'     => $contactList->getIdEntry(),
             'id_recipient' => $contactList->getIdRecipient()->getIdRecipient(),
-            'blacklist' => $contactList->isBlacklist()
+            'blacklist'    => $contactList->isBlacklist()
         ];
     }
 }

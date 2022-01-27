@@ -26,15 +26,15 @@ final class ServerRequestFactoryTest
         //Arrange
         $servers = [
             'SERVER_PROTOCOL' => 'HTTP/1.1',
-            'SERVER_PORT' => '80',
-            'REQUEST_URI' => '/samhtml/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example',
-            'REQUEST_METHOD' => 'GET',
-            'SERVER_NAME' => 'localhost',
+            'SERVER_PORT'     => '80',
+            'REQUEST_URI'     => '/samhtml/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example',
+            'REQUEST_METHOD'  => 'GET',
+            'SERVER_NAME'     => 'localhost',
 
-            'HTTP_HOST' => 'localhost:80',
+            'HTTP_HOST'       => 'localhost:80',
             'HTTP_CONNECTION' => 'Keep-Alive',
             'HTTP_USER_AGENT' => 'Apache-HttpClient\/4.5.13 (Java\/11.0.11)',
-            'HTTP_COOKIE' => 'XDEBUG_SESSION=16151',
+            'HTTP_COOKIE'     => 'XDEBUG_SESSION=16151',
         ];
         $expectedBody = 'test';
         $expectedProtocolVersion = '1.1';

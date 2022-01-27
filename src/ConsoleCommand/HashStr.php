@@ -56,6 +56,5 @@ class HashStr implements CommandInterface
         }
 
         $this->output->print($msg . "\n");
-
     }
 }

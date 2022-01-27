@@ -36,17 +36,15 @@ class CreateAddressController implements ControllerInterface
 
             $httpCode = 201;
             $jsonData = $this->buildJsonData($responseDto);
-
         } catch (Throwable $e) {
             $httpCode = 500;
             $jsonData = [
-                'status' => 'fail',
+                'status'  => 'fail',
                 'message' => $e->getMessage()
             ];
         }
 
         return ServerResponseFactory::createJsonResponse($httpCode, $jsonData);
-
     }
 
     private function runService($requestData): ArrivalNewAddressService\ResultRegisteringAddressDto
@@ -63,10 +61,10 @@ class CreateAddressController implements ControllerInterface
     private function buildJsonData(ArrivalNewAddressService\ResultRegisteringAddressDto $responseDto): array
     {
         return [
-            'id_address' => $responseDto->getIdAddress(),
+            'id_address'   => $responseDto->getIdAddress(),
             'id_recipient' => $responseDto->getIdContact(),
-            'address' => $responseDto->getAddress(),
-            'status' => $responseDto->getStatus()
+            'address'      => $responseDto->getAddress(),
+            'status'       => $responseDto->getStatus()
         ];
     }
 }

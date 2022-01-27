@@ -63,12 +63,12 @@ class AddressAdministrationController implements ControllerInterface
 
 
     /**
-     * @param LoggerInterface $logger                            - Логгер
+     * @param LoggerInterface          $logger                   - Логгер
      * @param ArrivalNewAddressService $arrivalNewAddressService - Сервис добавления нового адреса у контакта
-     * @param SearchContactService $searchContactService         - Сервис поиска контактов
-     * @param ViewTemplateInterface $viewTemplate                - Шаблонизатор для рендеринга html
-     * @param SearchAddressService $addressService               - Сервис поиска адресов
-     * @param HttpAuthProvider $httpAuthProvider                 - Поставщик услуг аутентификации
+     * @param SearchContactService     $searchContactService     - Сервис поиска контактов
+     * @param ViewTemplateInterface    $viewTemplate             - Шаблонизатор для рендеринга html
+     * @param SearchAddressService     $addressService           - Сервис поиска адресов
+     * @param HttpAuthProvider         $httpAuthProvider         - Поставщик услуг аутентификации
      */
     public function
     __construct(
@@ -113,7 +113,7 @@ class AddressAdministrationController implements ControllerInterface
 
             $viewData = [
                 'addresses' => $dtoAddressCollection,
-                'contacts' => $dtoContactsCollection
+                'contacts'  => $dtoContactsCollection
             ];
 
             $context = array_merge($viewData, $resultAddAddress);
@@ -185,6 +185,8 @@ class AddressAdministrationController implements ControllerInterface
             $errs[] = 'Адрес не может быть длиннее 250 символов';
         } elseif ($addressLength === 0) {
             $errs[] = 'Адрес не может быть пустым';
+        } elseif (1 !== preg_match('/[^А-Яа-я]*, [1-9]+\/?([0-9]*)?/', $dataToCreate['address'])) {
+            $errs[] = 'Адрес имеет неверный формат';
         }
 
         return $errs;

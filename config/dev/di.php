@@ -17,12 +17,12 @@ use DD\ContactList\Infrastructure\Uri\Uri;
 
 return [
     'instances' => [
-        'controllerNs' => 'DD\\ContactList\\Controller',
-        'handlers' => require __DIR__ . '/../request.handlers.php',
+        'controllerNs'   => 'DD\\ContactList\\Controller',
+        'handlers'       => require __DIR__ . '/../request.handlers.php',
         'regExpHandlers' => require __DIR__ . '/../regExp.handlers.php',
-        'appConfig' => require __DIR__ . '/config.php',
+        'appConfig'      => require __DIR__ . '/config.php',
     ],
-    'services' => [
+    'services'  => [
 
         ContactList\Infrastructure\Console\Output\OutputInterface::class => [
             'class' => ContactList\Infrastructure\Console\Output\EchoOutput::class
@@ -30,7 +30,7 @@ return [
 
         ContactList\ConsoleCommand\FindContacts::class => [
             'args' => [
-                'output' => ContactList\Infrastructure\Console\Output\OutputInterface::class,
+                'output'               => ContactList\Infrastructure\Console\Output\OutputInterface::class,
                 'searchContactService' => ContactList\Service\SearchContactService::class
             ]
         ],
@@ -43,13 +43,13 @@ return [
 
         GetContactsCollectionController::class => [
             'args' => [
-                'logger' => LoggerInterface::class,
+                'logger'               => LoggerInterface::class,
                 'searchContactService' => ContactList\Service\SearchContactService::class
             ]
         ],
-        GetContactsController::class => [
+        GetContactsController::class           => [
             'args' => [
-                'logger' => LoggerInterface::class,
+                'logger'               => LoggerInterface::class,
                 'searchContactService' => ContactList\Service\SearchContactService::class
             ]
         ],
@@ -66,9 +66,9 @@ return [
             ]
         ],
 
-        ContactList\Service\SearchContactService::class => [
+        ContactList\Service\SearchContactService::class       => [
             'args' => [
-                'logger' => LoggerInterface::class,
+                'logger'            => LoggerInterface::class,
                 'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
@@ -87,7 +87,7 @@ return [
 
         ContactList\Service\SearchAddressService::class => [
             'args' => [
-                'logger' => LoggerInterface::class,
+                'logger'            => LoggerInterface::class,
                 'addressRepository' => ContactList\Entity\AddressRepositoryInterface::class
             ]
         ],
@@ -98,18 +98,18 @@ return [
 
         ContactList\Controller\AddressAdministrationController::class => [
             'args' => [
-                'logger' => LoggerInterface::class,
+                'logger'                   => LoggerInterface::class,
                 'arrivalNewAddressService' => ContactList\Service\ArrivalNewAddressService::class,
-                'searchContactService' => ContactList\Service\SearchContactService::class,
-                'viewTemplate' => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
-                'addressService' => ContactList\Service\SearchAddressService::class,
-                'httpAuthProvider' => ContactList\Infrastructure\Auth\HttpAuthProvider::class
+                'searchContactService'     => ContactList\Service\SearchContactService::class,
+                'viewTemplate'             => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
+                'addressService'           => ContactList\Service\SearchAddressService::class,
+                'httpAuthProvider'         => ContactList\Infrastructure\Auth\HttpAuthProvider::class
             ]
         ],
 
         ContactList\Controller\LoginController::class => [
             'args' => [
-                'viewTemplate' => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
+                'viewTemplate'     => ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface::class,
                 'httpAuthProvider' => ContactList\Infrastructure\Auth\HttpAuthProvider::class
             ]
         ],
@@ -120,14 +120,14 @@ return [
 
         LoggerInterface::class => [
             'class' => ContactList\Infrastructure\Logger\Logger::class,
-            'args' => [
+            'args'  => [
                 'adapter' => ContactList\Infrastructure\Logger\AdapterInterface::class
             ]
         ],
 
         ContactList\Infrastructure\Logger\AdapterInterface::class => [
             'class' => ContactList\Infrastructure\Logger\Adapter\FileAdapter::class,
-            'args' => [
+            'args'  => [
                 'pathToFile' => 'pathToLogFile'
             ]
         ],
@@ -138,37 +138,37 @@ return [
 
         ContactList\Entity\ContactRepositoryInterface::class => [
             'class' => ContactList\Repository\ContactJsonFileRepository::class,
-            'args' => [
-                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
+            'args'  => [
+                'dataLoader'       => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
                 'pathToRecipients' => 'pathToRecipients',
-                'pathToCustomers' => 'pathToCustomers',
-                'pathToKinsfolk' => 'pathToKinsfolk',
+                'pathToCustomers'  => 'pathToCustomers',
+                'pathToKinsfolk'   => 'pathToKinsfolk',
                 'pathToColleagues' => 'pathToColleagues'
             ]
         ],
 
         ContactList\Infrastructure\Auth\UserDataStorageInterface::class => [
             'class' => ContactList\Repository\UserJsonFileRepository::class,
-            'args' => [
+            'args'  => [
                 'pathToUsers' => 'pathToUsers',
-                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class
+                'dataLoader'  => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class
             ]
         ],
 
         ContactList\Entity\ContactListRepositoryInterface::class => [
             'class' => ContactList\Repository\ContactListRepository::class,
-            'args' => [
+            'args'  => [
                 'pathToContactList' => 'pathToContactList',
-                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
+                'dataLoader'        => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
                 'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
 
         ContactList\Entity\AddressRepositoryInterface::class => [
             'class' => ContactList\Repository\AddressJsonFileRepository::class,
-            'args' => [
-                'dataLoader' => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
-                'pathToAddress' => 'pathToAddress',
+            'args'  => [
+                'dataLoader'        => ContactList\Infrastructure\DataLoader\DataLoaderInterface::class,
+                'pathToAddress'     => 'pathToAddress',
                 'contactRepository' => ContactList\Entity\ContactRepositoryInterface::class
             ]
         ],
@@ -176,29 +176,29 @@ return [
         ContactList\Infrastructure\Auth\HttpAuthProvider::class => [
             'args' => [
                 'userDataStorage' => ContactList\Infrastructure\Auth\UserDataStorageInterface::class,
-                'session' => ContactList\Infrastructure\Session\SessionInterface::class,
-                'loginUri' => 'loginUri'
+                'session'         => ContactList\Infrastructure\Session\SessionInterface::class,
+                'loginUri'        => 'loginUri'
             ]
         ],
 
-        RouterInterface::class => [
+        RouterInterface::class   => [
             'class' => ChainRouters::class,
-            'args' => [
+            'args'  => [
                 RegExpRouter::class,
                 DefaultRouter::class,
                 UniversalRouter::class
             ]
         ],
-        UniversalRouter::class => [
+        UniversalRouter::class   => [
             'args' => [
                 'controllerFactory' => ControllerFactory::class,
-                'controllerNs' => 'controllerNs'
+                'controllerNs'      => 'controllerNs'
             ]
 
         ],
-        DefaultRouter::class => [
+        DefaultRouter::class     => [
             'args' => [
-                'handlers' => 'handlers',
+                'handlers'          => 'handlers',
                 'controllerFactory' => ControllerFactory::class
             ]
         ],
@@ -207,63 +207,65 @@ return [
                 'diContainer' => ContainerInterface::class
             ]
         ],
-        RegExpRouter::class => [
+        RegExpRouter::class      => [
             'args' => [
-                'handlers' => 'regExpHandlers',
+                'handlers'          => 'regExpHandlers',
                 'controllerFactory' => ControllerFactory::class
             ]
         ]
 
     ],
     'factories' => [
-        ContainerInterface::class => static function (ContainerInterface $c): ContainerInterface {
+        ContainerInterface::class                                  => static function (ContainerInterface $c
+        ): ContainerInterface {
             return $c;
         },
-        'pathToLogFile' => static function (ContainerInterface $c): string {
+        'pathToLogFile'                                            => static function (ContainerInterface $c): string {
             /** @var \DD\ContactList\Config\AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToLogFile();
         },
-        'pathToKinsfolk' => static function (ContainerInterface $c): string {
+        'pathToKinsfolk'                                           => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToKinsfolk();
         },
-        'pathToColleagues' => static function (ContainerInterface $c): string {
+        'pathToColleagues'                                         => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToColleagues();
         },
-        'pathToCustomers' => static function (ContainerInterface $c): string {
+        'pathToCustomers'                                          => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToCustomers();
         },
-        'pathToRecipients' => static function (ContainerInterface $c): string {
+        'pathToRecipients'                                         => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToRecipients();
         },
-        'pathToAddress' => static function (ContainerInterface $c): string {
+        'pathToAddress'                                            => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToAddress();
         },
-        'pathToContactList' => static function (ContainerInterface $c): string {
+        'pathToContactList'                                        => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToContactList();
         },
-        'pathToUsers' => static function (ContainerInterface $c): string {
+        'pathToUsers'                                              => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToUsers();
         },
-        'loginUri' => static function (ContainerInterface $c): Uri {
+        'loginUri'                                                 => static function (ContainerInterface $c): Uri {
             $appConfig = $c->get(AppConfig::class);
             return Uri::createFromString($appConfig->getLoginUri());
         },
-        AppConfig::class => static function (ContainerInterface $c): ContactList\Infrastructure\HttpApplication\AppConfigInterface {
+        AppConfig::class                                           => static function (ContainerInterface $c
+        ): ContactList\Infrastructure\HttpApplication\AppConfigInterface {
             $appConfig = $c->get('appConfig');
             return AppConfig::createFromArray($appConfig);
         },

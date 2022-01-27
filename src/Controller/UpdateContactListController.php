@@ -50,13 +50,13 @@ class UpdateContactListController implements ControllerInterface
         } catch (AddBlacklistContactService\Exception\ContactNotFoundException $e) {
             $httpCode = 404;
             $jsonData = [
-                'status' => 'fail',
+                'status'  => 'fail',
                 'message' => $e->getMessage()
             ];
         } catch (Throwable $e) {
             $httpCode = 500;
             $jsonData = [
-                'status' => 'fail',
+                'status'  => 'fail',
                 'message' => $e->getMessage()
             ];
         }

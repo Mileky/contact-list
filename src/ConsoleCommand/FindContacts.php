@@ -25,13 +25,13 @@ class FindContacts implements CommandInterface
     private SearchContactService $searchContactService;
 
     /**
-     * @param OutputInterface $output - Компонент отвечающий за вывод данных в консоль
+     * @param OutputInterface      $output               - Компонент отвечающий за вывод данных в консоль
      * @param SearchContactService $searchContactService - Сервис поиска контактов
      */
-    public function __construct(OutputInterface $output,
+    public function __construct(
+        OutputInterface $output,
         SearchContactService $searchContactService
-    )
-    {
+    ) {
         $this->output = $output;
         $this->searchContactService = $searchContactService;
     }
@@ -94,7 +94,9 @@ class FindContacts implements CommandInterface
                 ->setRoomNumber($params['room_number'] ?? null)
         );
         $jsonContactData = $this->buildJsonData($foundContactsDto);
-        $this->output->print(json_encode($jsonContactData, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        $this->output->print(
+            json_encode($jsonContactData, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        );
     }
 
     /**
@@ -124,9 +126,9 @@ class FindContacts implements CommandInterface
     {
         $jsonData = [
             'id_recipient' => $contactDto->getId(),
-            'full_name' => $contactDto->getFullName(),
-            'birthday' => $contactDto->getBirthday(),
-            'profession' => $contactDto->getProfession(),
+            'full_name'    => $contactDto->getFullName(),
+            'birthday'     => $contactDto->getBirthday(),
+            'profession'   => $contactDto->getProfession(),
         ];
 
         if ($contactDto->getType() === SearchContactService\ContactDto::TYPE_COLLEAGUE) {

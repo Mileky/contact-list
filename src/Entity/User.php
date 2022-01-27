@@ -29,7 +29,7 @@ class User
     private string $password;
 
     /**
-     * @param int $id          - ID юзера
+     * @param int    $id       - ID юзера
      * @param string $login    - Логин юзера
      * @param string $password - Пароль юзера
      */

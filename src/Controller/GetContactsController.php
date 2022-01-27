@@ -19,7 +19,7 @@ final class GetContactsController extends GetContactsCollectionController
     protected function buildResult(array $foundContacts): array
     {
         return count($foundContacts) ? $this->serializeContact(current($foundContacts)) : [
-            'status' => 'fail',
+            'status'  => 'fail',
             'message' => 'entity not found'
         ];
     }

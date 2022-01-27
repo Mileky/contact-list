@@ -36,10 +36,10 @@ final class CustomerDto
     private ?string $timeToCall;
 
     /**
-     * @param string|null $contractNumber        - Номер контракта
-     * @param int|null $averageTransactionAmount - Средняя сумма транзакций
-     * @param string|null $discount              - Скидка
-     * @param string|null $timeToCall            - Время для звонка
+     * @param string|null $contractNumber           - Номер контракта
+     * @param int|null    $averageTransactionAmount - Средняя сумма транзакций
+     * @param string|null $discount                 - Скидка
+     * @param string|null $timeToCall               - Время для звонка
      */
     public function __construct(
         ?string $contractNumber,

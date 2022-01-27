@@ -37,7 +37,7 @@ class AddBlacklistContactService
         /** @var ContactList $contactListEntity */
         $contactListEntity = current($contactList);
 
-        $contactListEntity->moveToIgnore();
+        $contactListEntity->moveToBlacklist();
 
         $this->contactListRepository->save($contactListEntity);
 

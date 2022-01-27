@@ -35,10 +35,10 @@ class ResultRegisteringAddressDto
     private string $status;
 
     /**
-     * @param int $idAddress  - Id адреса
-     * @param int $idContact  - Id контакта
-     * @param string $address - Адрес контакта
-     * @param string $status  - Статус адреса (работа/дом)
+     * @param int    $idAddress - Id адреса
+     * @param int    $idContact - Id контакта
+     * @param string $address   - Адрес контакта
+     * @param string $status    - Статус адреса (работа/дом)
      */
     public function __construct(int $idAddress, int $idContact, string $address, string $status)
     {

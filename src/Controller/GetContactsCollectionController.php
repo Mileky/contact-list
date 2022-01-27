@@ -31,7 +31,7 @@ class GetContactsCollectionController implements ControllerInterface
     private LoggerInterface $logger;
 
     /**
-     * @param LoggerInterface $logger                    - логгер
+     * @param LoggerInterface      $logger               - логгер
      * @param SearchContactService $searchContactService - сервис поиска контактов
      */
     public function __construct(
@@ -52,20 +52,20 @@ class GetContactsCollectionController implements ControllerInterface
     private function validateQueryParams(ServerRequest $serverRequest): ?string
     {
         $paramValidations = [
-            'id_recipient' => 'incorrect id_recipient',
-            'full_name' => 'incorrect full_name',
-            'birthday' => 'incorrect birthday',
-            'profession' => 'incorrect profession',
-            'contract_number' => 'incorrect contract_number',
+            'id_recipient'               => 'incorrect id_recipient',
+            'full_name'                  => 'incorrect full_name',
+            'birthday'                   => 'incorrect birthday',
+            'profession'                 => 'incorrect profession',
+            'contract_number'            => 'incorrect contract_number',
             'average_transaction_amount' => 'incorrect average_transaction_amount',
-            'discount' => 'incorrect discount',
-            'time_to_call' => 'incorrect time_to_call',
-            'status' => 'incorrect status',
-            'ringtone' => 'incorrect ringtone',
-            'hotkey' => 'incorrect hotkey',
-            'department' => 'incorrect department',
-            'position' => 'incorrect position',
-            'room_number' => 'incorrect room_number',
+            'discount'                   => 'incorrect discount',
+            'time_to_call'               => 'incorrect time_to_call',
+            'status'                     => 'incorrect status',
+            'ringtone'                   => 'incorrect ringtone',
+            'hotkey'                     => 'incorrect hotkey',
+            'department'                 => 'incorrect department',
+            'position'                   => 'incorrect position',
+            'room_number'                => 'incorrect room_number',
 
         ];
 
@@ -118,6 +118,7 @@ class GetContactsCollectionController implements ControllerInterface
         if (null === $resultOfParamValidation) {
             $params = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
             $params['category'] = substr($serverRequest->getRequestTarget(), 1);
+
             $foundContactsDto = $this->searchContactService->search(
                 (new SearchContactService\SearchContactServiceCriteria())
                     ->setCategory($params['category'] ?? null)
@@ -142,7 +143,7 @@ class GetContactsCollectionController implements ControllerInterface
         } else {
             $httpCode = 500;
             $result = [
-                'status' => 'fail',
+                'status'  => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
@@ -152,7 +153,7 @@ class GetContactsCollectionController implements ControllerInterface
     /**
      * Сериализация данных о Контакте для результата поиска
      *
-     * @param SearchContactService\ContactDto $contactDto  - найденный контакт
+     * @param SearchContactService\ContactDto $contactDto - найденный контакт
      *
      * @return array
      */
@@ -160,9 +161,9 @@ class GetContactsCollectionController implements ControllerInterface
     {
         $jsonData = [
             'id_recipient' => $contactDto->getId(),
-            'full_name' => $contactDto->getFullName(),
-            'birthday' => $contactDto->getBirthday(),
-            'profession' => $contactDto->getProfession(),
+            'full_name'    => $contactDto->getFullName(),
+            'birthday'     => $contactDto->getBirthday(),
+            'profession'   => $contactDto->getProfession(),
         ];
 
         if ($contactDto->getType() === SearchContactService\ContactDto::TYPE_COLLEAGUE) {

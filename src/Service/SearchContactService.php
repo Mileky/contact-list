@@ -37,7 +37,7 @@ final class SearchContactService
 
 
     /**
-     * @param LoggerInterface $logger
+     * @param LoggerInterface            $logger
      * @param ContactRepositoryInterface $contactRepository
      */
     public function __construct(
@@ -167,21 +167,21 @@ final class SearchContactService
     private function searchCriteriaToArray(SearchContactServiceCriteria $searchCriteria): array
     {
         $criteriaForRepository = [
-            'category' => $searchCriteria->getCategory(),
-            'id_recipient' => $searchCriteria->getId(),
-            'full_name' => $searchCriteria->getFullName(),
-            'birthday' => $searchCriteria->getBirthday(),
-            'profession' => $searchCriteria->getProfession(),
-            'status' => $searchCriteria->getStatus(),
-            'ringtone' => $searchCriteria->getRingtone(),
-            'hotkey' => $searchCriteria->getHotkey(),
-            'contract_number' => $searchCriteria->getContractNumber(),
+            'category'                   => $searchCriteria->getCategory(),
+            'id_recipient'               => $searchCriteria->getId(),
+            'full_name'                  => $searchCriteria->getFullName(),
+            'birthday'                   => $searchCriteria->getBirthday(),
+            'profession'                 => $searchCriteria->getProfession(),
+            'status'                     => $searchCriteria->getStatus(),
+            'ringtone'                   => $searchCriteria->getRingtone(),
+            'hotkey'                     => $searchCriteria->getHotkey(),
+            'contract_number'            => $searchCriteria->getContractNumber(),
             'average_transaction_amount' => $searchCriteria->getAverageTransactionAmount(),
-            'discount' => $searchCriteria->getDiscount(),
-            'time_to_call' => $searchCriteria->getTimeToCall(),
-            'department' => $searchCriteria->getDepartment(),
-            'position' => $searchCriteria->getPosition(),
-            'room_number' => $searchCriteria->getRoomNumber(),
+            'discount'                   => $searchCriteria->getDiscount(),
+            'time_to_call'               => $searchCriteria->getTimeToCall(),
+            'department'                 => $searchCriteria->getDepartment(),
+            'position'                   => $searchCriteria->getPosition(),
+            'room_number'                => $searchCriteria->getRoomNumber(),
 
         ];
 

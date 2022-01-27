@@ -28,9 +28,9 @@ class NewAddressDto
     private string $status;
 
     /**
-     * @param int $idContact  - Id контакта
-     * @param string $address - Адрес контакта
-     * @param string $status  - Статус адреса (работа, дом)
+     * @param int    $idContact - Id контакта
+     * @param string $address   - Адрес контакта
+     * @param string $status    - Статус адреса (работа, дом)
      */
     public function __construct(int $idContact, string $address, string $status)
     {
@@ -62,7 +62,6 @@ class NewAddressDto
     {
         return $this->status;
     }
-
 
 
 }

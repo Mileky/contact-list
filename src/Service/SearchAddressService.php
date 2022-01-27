@@ -28,7 +28,7 @@ class SearchAddressService
     private AddressRepositoryInterface $addressRepository;
 
     /**
-     * @param LoggerInterface $logger
+     * @param LoggerInterface            $logger
      * @param AddressRepositoryInterface $addressRepository
      */
     public function __construct(LoggerInterface $logger, AddressRepositoryInterface $addressRepository)
@@ -62,10 +62,10 @@ class SearchAddressService
     private function searchCriteriaToArray(SearchAddressCriteria $searchAddressCriteria): array
     {
         $criteriaForRepository = [
-            'id_address' => $searchAddressCriteria->getIdAddress(),
+            'id_address'   => $searchAddressCriteria->getIdAddress(),
             'id_recipient' => $searchAddressCriteria->getIdRecipient(),
-            'address' => $searchAddressCriteria->getAddress(),
-            'status' => $searchAddressCriteria->getStatus()
+            'address'      => $searchAddressCriteria->getAddress(),
+            'status'       => $searchAddressCriteria->getStatus()
         ];
 
         return array_filter($criteriaForRepository, static function ($v): bool {

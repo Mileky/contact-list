@@ -33,10 +33,10 @@ class AddressDto
     private string $status;
 
     /**
-     * @param int $id_address   - Id адреса
-     * @param int $id_recipient - Id контакта
-     * @param string $address   - Адрес контакта
-     * @param string $status    - Статус адреса (дом/работа)
+     * @param int    $id_address   - Id адреса
+     * @param int    $id_recipient - Id контакта
+     * @param string $address      - Адрес контакта
+     * @param string $status       - Статус адреса (дом/работа)
      */
     public function __construct(int $id_address, int $id_recipient, string $address, string $status)
     {

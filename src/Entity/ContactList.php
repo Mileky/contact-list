@@ -31,9 +31,9 @@ class ContactList
     private bool $blacklist;
 
     /**
-     * @param int $idEntry     - ID записи
+     * @param int             $idEntry     - ID записи
      * @param AbstractContact $idRecipient - ID контакта
-     * @param bool $blacklist  - Наличие в черном списке
+     * @param bool            $blacklist   - Наличие в черном списке
      */
     public function __construct(int $idEntry, AbstractContact $idRecipient, bool $blacklist)
     {
@@ -80,10 +80,12 @@ class ContactList
         return $jsonData;
     }
 
-    public function moveToIgnore(): self
+    public function moveToBlacklist(): self
     {
         if (true === $this->blacklist) {
-            throw new Exception\RuntimeException("Контакт с id {$this->getIdRecipient()->getIdRecipient()} уже находится в ЧС");
+            throw new Exception\RuntimeException(
+                "Контакт с id {$this->getIdRecipient()->getIdRecipient()} уже находится в ЧС"
+            );
         }
 
         $this->blacklist = true;

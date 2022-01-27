@@ -50,7 +50,9 @@ class ArrivalNewAddressService
         $contactData = $this->contactRepository->findBy(['id_recipient' => $contactId]);
 
         if (1 !== count($contactData)) {
-            throw new RuntimeException("Нельзя добавить адрес контакту с id - '$contactId'. Контакт с таким id не найден");
+            throw new RuntimeException(
+                "Нельзя добавить адрес контакту с id - '$contactId'. Контакт с таким id не найден"
+            );
         }
 
         $contact = current($contactData);

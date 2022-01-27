@@ -44,10 +44,10 @@ class AbstractContact implements JsonSerializable
     protected array $messengers;
 
     /**
-     * @param int $id_recipient
-     * @param string $full_name
-     * @param string $birthday
-     * @param string $profession
+     * @param int         $id_recipient
+     * @param string      $full_name
+     * @param string      $birthday
+     * @param string      $profession
      * @param Messenger[] $messengers - Данные о мессенджере, в котором есть пользователь
      */
     public function __construct(
@@ -119,9 +119,9 @@ class AbstractContact implements JsonSerializable
     {
         return [
             'id_recipient' => $this->idRecipient,
-            'full_name' => $this->fullName,
-            'birthday' => $this->birthday,
-            'profession' => $this->profession
+            'full_name'    => $this->fullName,
+            'birthday'     => $this->birthday,
+            'profession'   => $this->profession
         ];
     }
 }

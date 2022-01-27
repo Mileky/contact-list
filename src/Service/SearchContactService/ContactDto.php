@@ -84,13 +84,13 @@ final class ContactDto
     private ?ColleagueDto $colleagueData;
 
     /**
-     * @param string $type                     - Тип контакта
-     * @param int $id                          - Id контакта
-     * @param string $fullName                 - Полное имя контакта
-     * @param string $birthday                 - День рождения контакта
-     * @param string|null $profession          - Профессия контакта
-     * @param KinsfolkDto|null $kinsfolkData   - Данные родственников
-     * @param CustomerDto|null $customerData   - Данные клиентов
+     * @param string            $type          - Тип контакта
+     * @param int               $id            - Id контакта
+     * @param string            $fullName      - Полное имя контакта
+     * @param string            $birthday      - День рождения контакта
+     * @param string|null       $profession    - Профессия контакта
+     * @param KinsfolkDto|null  $kinsfolkData  - Данные родственников
+     * @param CustomerDto|null  $customerData  - Данные клиентов
      * @param ColleagueDto|null $colleagueData - Данные коллег
      */
     public function __construct(

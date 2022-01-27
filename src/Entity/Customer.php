@@ -35,14 +35,14 @@ final class Customer extends AbstractContact
     private string $timeToCall;
 
     /**
-     * @param int $id_recipient             - id Получателя
-     * @param string $full_name             - Полное имя получателя
-     * @param string $birthday              - Дата рождения получателя
-     * @param string $profession            - Профессия получателя
-     * @param string $contractNumber        - Контактный телефон клиента
-     * @param int $averageTransactionAmount - Средняя сумма по транзакциям клиента
-     * @param string $discount              - Скидка клиента
-     * @param string $timeToCall            - Время в которое можно беспокоить клиента
+     * @param int    $id_recipient             - id Получателя
+     * @param string $full_name                - Полное имя получателя
+     * @param string $birthday                 - Дата рождения получателя
+     * @param string $profession               - Профессия получателя
+     * @param string $contractNumber           - Контактный телефон клиента
+     * @param int    $averageTransactionAmount - Средняя сумма по транзакциям клиента
+     * @param string $discount                 - Скидка клиента
+     * @param string $timeToCall               - Время в которое можно беспокоить клиента
      */
     public function __construct(
         int $id_recipient,

@@ -54,8 +54,8 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     private ?array $addressData = null;
 
     /**
-     * @param DataLoaderInterface $dataLoader               - Загрузчик данных
-     * @param string $pathToAddress                         - Путь до данных с адресами контактов
+     * @param DataLoaderInterface        $dataLoader        - Загрузчик данных
+     * @param string                     $pathToAddress     - Путь до данных с адресами контактов
      * @param ContactRepositoryInterface $contactRepository - Репозиторий работы с контактами
      */
     public function __construct(
@@ -172,10 +172,10 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     private function buildJsonDataAddress(Address $address): array
     {
         return [
-            'id_address' => $address->getIdAddress(),
+            'id_address'   => $address->getIdAddress(),
             'id_recipient' => $address->getIdRecipient()->getIdRecipient(),
-            'address' => $address->getAddress(),
-            'status' => $address->getStatus()
+            'address'      => $address->getAddress(),
+            'status'       => $address->getStatus()
         ];
     }
 

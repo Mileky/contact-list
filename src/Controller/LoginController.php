@@ -31,7 +31,7 @@ class LoginController implements ControllerInterface
 
     /**
      * @param ViewTemplateInterface $viewTemplate
-     * @param HttpAuthProvider $httpAuthProvider
+     * @param HttpAuthProvider      $httpAuthProvider
      */
     public function __construct(
         ViewTemplateInterface $viewTemplate,

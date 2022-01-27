@@ -51,11 +51,11 @@ class ContactJsonFileRepository implements ContactRepositoryInterface
     private string $pathToColleagues;
 
     /**
-     * @param DataLoaderInterface $dataLoader - Загрузчик данных
-     * @param string $pathToRecipients        - Путь до данных с Знакомыми
-     * @param string $pathToCustomers         - Путь до данных с Клиентами
-     * @param string $pathToKinsfolk          - Путь до данных с Родственниками
-     * @param string $pathToColleagues        - Путь до данных с Коллегами
+     * @param DataLoaderInterface $dataLoader       - Загрузчик данных
+     * @param string              $pathToRecipients - Путь до данных с Знакомыми
+     * @param string              $pathToCustomers  - Путь до данных с Клиентами
+     * @param string              $pathToKinsfolk   - Путь до данных с Родственниками
+     * @param string              $pathToColleagues - Путь до данных с Коллегами
      */
     public function __construct(
         DataLoaderInterface $dataLoader,
@@ -143,8 +143,8 @@ class ContactJsonFileRepository implements ContactRepositoryInterface
 
         return [
             'recipients' => $recipients,
-            'kinsfolk' => $kinsfolk,
-            'customers' => $customers,
+            'kinsfolk'   => $kinsfolk,
+            'customers'  => $customers,
             'colleagues' => $colleague,
         ];
     }

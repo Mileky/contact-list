@@ -32,44 +32,44 @@ class UnitTest
         return [
             [
                 'testName' => 'Тестирование поиска получателя по id',
-                'in' => [
-                    'uri' => '/contacts?id_recipient=1',
+                'in'       => [
+                    'uri'      => '/contacts?id_recipient=1',
                     'diConfig' => $diConfig
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 200,
-                    'result' => [
+                    'result'   => [
                         [
                             'id_recipient' => 1,
-                            'full_name' => 'Осипов Геннадий Иванович',
-                            'birthday' => '15.06.1985',
-                            'profession' => 'Системный администратор'
+                            'full_name'    => 'Осипов Геннадий Иванович',
+                            'birthday'     => '15.06.1985',
+                            'profession'   => 'Системный администратор'
                         ],
                     ],
                 ]
             ],
             [
                 'testName' => 'Тестирование поиска получателя по full_name',
-                'in' => [
-                    'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
+                'in'       => [
+                    'uri'      => '/contacts?full_name=Осипов Геннадий Иванович',
                     'diConfig' => $diConfig
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 200,
-                    'result' => [
+                    'result'   => [
                         [
                             'id_recipient' => 1,
-                            'full_name' => 'Осипов Геннадий Иванович',
-                            'birthday' => '15.06.1985',
-                            'profession' => 'Системный администратор'
+                            'full_name'    => 'Осипов Геннадий Иванович',
+                            'birthday'     => '15.06.1985',
+                            'profession'   => 'Системный администратор'
                         ],
                     ],
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday',
-                'in' => [
-                    'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
+                'in'       => [
+                    'uri'      => '/contacts?full_name=Осипов Геннадий Иванович',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
@@ -79,18 +79,18 @@ class UnitTest
                         $diConfig
                     )
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 503,
-                    'result' => [
-                        'status' => 'fail',
+                    'result'   => [
+                        'status'  => 'fail',
                         'message' => 'Отсутствуют обязательные элементы: birthday'
                     ]
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации с некорректными данными конфига приложения',
-                'in' => [
-                    'uri' => '/contacts?id_recipient=1',
+                'in'       => [
+                    'uri'      => '/contacts?id_recipient=1',
                     'diConfig' => (static function ($diConfig) {
                         $diConfig['factories'][AppConfig::class] = static function () {
                             return 'Oops';
@@ -100,18 +100,18 @@ class UnitTest
                         $diConfig
                     )
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
+                    'result'   => [
+                        'status'  => 'fail',
                         'message' => 'system error'
                     ]
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с получателями',
-                'in' => [
-                    'uri' => '/contacts?id_recipient=1',
+                'in'       => [
+                    'uri'      => '/contacts?id_recipient=1',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
@@ -121,18 +121,18 @@ class UnitTest
                         $diConfig
                     )
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
+                    'result'   => [
+                        'status'  => 'fail',
                         'message' => 'Некорректный путь до файла с данными'
                     ]
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла с клиентами',
-                'in' => [
-                    'uri' => '/contacts?id_recipient=7',
+                'in'       => [
+                    'uri'      => '/contacts?id_recipient=7',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.customer.json';
@@ -142,19 +142,19 @@ class UnitTest
                         $diConfig
                     )
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
+                    'result'   => [
+                        'status'  => 'fail',
                         'message' => 'Некорректный путь до файла с данными'
                     ]
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
-                'in' => [
+                'in'       => [
 
-                    'uri' => '/contacts?full_name=Калинин Пётр Александрович',
+                    'uri'      => '/contacts?full_name=Калинин Пётр Александрович',
                     'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
@@ -164,10 +164,10 @@ class UnitTest
                         $diConfig
                     )
                 ],
-                'out' => [
+                'out'      => [
                     'httpCode' => 503,
-                    'result' => [
-                        'status' => 'fail',
+                    'result'   => [
+                        'status'  => 'fail',
                         'message' => 'Отсутствуют обязательные элементы: id_recipient'
                     ]
                 ]

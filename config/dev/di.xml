@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+
+    <services>
+        <service id="DD\ContactList\Config\AppConfig" public="true">
+            <factory class="DD\ContactList\Config\AppConfig" method="createFromArray"/>
+            <argument key="$config" type="collection">
+                <argument key="pathToLogFile">%kernel.project_dir%/var/log/app.log</argument>
+                <argument key="pathToKinsfolk">%kernel.project_dir%/data/kinsfolk.json</argument>
+                <argument key="pathToColleagues">%kernel.project_dir%/data/colleagues.json</argument>
+                <argument key="pathToCustomers">%kernel.project_dir%/data/customers.json</argument>
+                <argument key="pathToRecipients">%kernel.project_dir%/data/recipient.json</argument>
+                <argument key="pathToAddress">%kernel.project_dir%/data/address.json</argument>
+                <argument key="pathToContactList">%kernel.project_dir%/data/contact_list.json</argument>
+                <argument key="pathToUsers">%kernel.project_dir%/data/users.json</argument>
+                <argument key="hideErrorMessage">false</argument>
+                <argument key="loginUri">/login</argument>
+            </argument>
+        </service>
+
+        <service id="DD\ContactList\Controller\AddressAdministrationController" public="true">
+            <argument key="$logger" type="service"
+                      id="DD\ContactList\Infrastructure\Logger\LoggerInterface"/>
+            <argument key="$arrivalNewAddressService" type="service"
+                      id="DD\ContactList\Service\ArrivalNewAddressService"/>
+            <argument key="$searchContactService" type="service"
+                      id="DD\ContactList\Service\SearchContactService"/>
+            <argument key="$addressService" type="service"
+                      id="DD\ContactList\Service\SearchAddressService"/>
+            <argument key="$viewTemplate" type="service"
+                      id="DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"/>
+            <argument key="$httpAuthProvider" type="service"
+                      id="DD\ContactList\Infrastructure\Auth\HttpAuthProvider"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Logger\LoggerInterface"
+                 public="true"
+                 class="DD\ContactList\Infrastructure\Logger\Logger">
+            <argument key="$adapter" type="service"
+                      id="DD\ContactList\Infrastructure\Logger\AdapterInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Logger\AdapterInterface" public="false"
+                 class="DD\ContactList\Infrastructure\Logger\Adapter\FileAdapter">
+            <argument key="$pathToFile" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToLogFile"/>
+                </service>
+            </argument>
+        </service>
+
+        <service id="DD\ContactList\Service\ArrivalNewAddressService" public="false">
+            <argument key="$addressRepository" type="service" id="DD\ContactList\Entity\AddressRepositoryInterface"/>
+            <argument key="$contactRepository" type="service" id="DD\ContactList\Entity\ContactRepositoryInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Entity\AddressRepositoryInterface" public="false"
+                 class="DD\ContactList\Repository\AddressJsonFileRepository">
+            <argument key="$pathToAddress" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToAddress"/>
+                </service>
+            </argument>
+
+            <argument key="$contactRepository" type="service" id="DD\ContactList\Entity\ContactRepositoryInterface"/>
+            <argument key="$dataLoader" type="service"
+                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Entity\ContactRepositoryInterface" public="false"
+                 class="DD\ContactList\Repository\ContactJsonFileRepository">
+            <argument key="$dataLoader" type="service"
+                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
+            <argument key="$pathToRecipients" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToRecipients"/>
+                </service>
+            </argument>
+            <argument key="$pathToCustomers" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToCustomers"/>
+                </service>
+            </argument>
+            <argument key="$pathToKinsfolk" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToKinsfolk"/>
+                </service>
+            </argument>
+            <argument key="$pathToColleagues" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToColleagues"/>
+                </service>
+            </argument>
+        </service>
+
+        <service id="DD\ContactList\Service\SearchContactService" public="false">
+            <argument key="$logger" type="service" id="DD\ContactList\Infrastructure\Logger\LoggerInterface"/>
+            <argument key="$contactRepository" type="service" id="DD\ContactList\Entity\ContactRepositoryInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface" public="false"
+                 class="DD\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
+
+        <service id="DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface" public="false"
+                 class="DD\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate"/>
+
+        <service id="DD\ContactList\Service\SearchAddressService" public="false">
+            <argument key="$logger" type="service" id="DD\ContactList\Infrastructure\Logger\LoggerInterface"/>
+            <argument key="$addressRepository" type="service" id="DD\ContactList\Entity\AddressRepositoryInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Auth\HttpAuthProvider" public="false">
+            <argument key="$userDataStorage" type="service"
+                      id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface"/>
+            <argument key="$session" type="service" id="DD\ContactList\Infrastructure\Session\SessionInterface"/>
+            <argument key="$loginUri" type="service">
+                <service>
+                    <factory class="DD\ContactList\Infrastructure\Uri\Uri" method="createFromString"/>
+                    <argument key="$uri" type="service">
+                        <service>
+                            <factory service="DD\ContactList\Config\AppConfig" method="getLoginUri"/>
+                        </service>
+                    </argument>
+                </service>
+            </argument>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface" public="false"
+                 class="DD\ContactList\Repository\UserJsonFileRepository">
+            <argument key="$pathToUsers" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToUsers"/>
+                </service>
+            </argument>
+            <argument key="$dataLoader" type="service"
+                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Session\SessionInterface" public="false">
+            <factory class="DD\ContactList\Infrastructure\Session\SessionNative" method="create"/>
+        </service>
+
+        <service id="DD\ContactList\Controller\LoginController" public="true">
+            <argument key="$viewTemplate" type="service" id="DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"/>
+            <argument key="$httpAuthProvider" type="service" id="DD\ContactList\Infrastructure\Auth\HttpAuthProvider"/>
+        </service>
+
+        <service id="DD\ContactList\Controller\GetContactsCollectionController" public="true">
+            <argument key="$logger" type="service" id="DD\ContactList\Infrastructure\Logger\LoggerInterface"/>
+            <argument key="$searchContactService" type="service" id="DD\ContactList\Service\SearchContactService"/>
+        </service>
+
+        <service id="DD\ContactList\Controller\GetContactsController" public="true">
+            <argument key="$logger" type="service" id="DD\ContactList\Infrastructure\Logger\LoggerInterface"/>
+            <argument key="$searchContactService" type="service" id="DD\ContactList\Service\SearchContactService"/>
+        </service>
+
+        <service id="DD\ContactList\Controller\UpdateContactListController" public="true">
+            <argument key="$addBlacklistContactService" type="service" id="DD\ContactList\Service\AddBlacklistContactService"/>
+        </service>
+
+        <service id="DD\ContactList\Service\AddBlacklistContactService" public="false">
+            <argument key="$contactListRepository" type="service" id="DD\ContactList\Entity\ContactListRepositoryInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Entity\ContactListRepositoryInterface" public="false"
+        class="DD\ContactList\Repository\ContactListRepository">
+            <argument key="$pathToContactList" type="service">
+                <service>
+                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToContactList"/>
+                </service>
+            </argument>
+
+
+            <argument key="$dataLoader" type="service" id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
+            <argument key="$contactRepository" type="service" id="DD\ContactList\Entity\ContactRepositoryInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Controller\CreateAddressController" public="true">
+            <argument key="$arrivalNewAddressService" type="service" id="DD\ContactList\Service\ArrivalNewAddressService"/>
+        </service>
+
+        <service id="DD\ContactList\ConsoleCommand\HashStr" public="true">
+            <argument key="$output" type="service" id="DD\ContactList\Infrastructure\Console\Output\OutputInterface"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Console\Output\OutputInterface" public="true"
+        class="DD\ContactList\Infrastructure\Console\Output\EchoOutput"/>
+
+        <service id="DD\ContactList\ConsoleCommand\FindContacts" public="true">
+            <argument key="$output" type="service" id="DD\ContactList\Infrastructure\Console\Output\OutputInterface"/>
+            <argument key="$searchContactService" type="service" id="DD\ContactList\Service\SearchContactService"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\View\RenderInterface" public="true"
+        class="DD\ContactList\Infrastructure\View\DefaultRender"/>
+
+        <service id="DD\ContactList\Infrastructure\Router\ControllerFactory" public="false">
+            <argument key="$diContainer" type="service" id="service_container"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Router\RouterInterface" public="true"
+        class="DD\ContactList\Infrastructure\Router\ChainRouters">
+            <argument type="service" id="DD\ContactList\Infrastructure\Router\RegExpRouter"/>
+            <argument type="service" id="DD\ContactList\Infrastructure\Router\DefaultRouter"/>
+            <argument type="service" id="DD\ContactList\Infrastructure\Router\UniversalRouter"/>
+        </service>
+
+
+
+
+
+
+        <service id="DD\ContactList\Infrastructure\Router\RegExpRouter" public="true">
+            <argument key="$handlers" type="collection">
+                <argument key="/^.*?\/(?<___CATEGORY___>[a-z]+)\/(?<___ID_RECIPIENT___>[0-9]+).*$/">DD\ContactList\Controller\GetContactsController</argument>
+            </argument>
+            <argument key="$controllerFactory" type="service" id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
+        </service>
+
+
+
+
+
+
+
+        <service id="DD\ContactList\Infrastructure\Router\DefaultRouter" public="true">
+            <argument key="$handlers" type="collection">
+                <argument key="/recipients">DD\ContactList\Controller\GetContactsCollectionController</argument>
+                <argument key="/customers">DD\ContactList\Controller\GetContactsCollectionController</argument>
+                <argument key="/colleagues">DD\ContactList\Controller\GetContactsCollectionController</argument>
+                <argument key="/kinsfolk">DD\ContactList\Controller\GetContactsCollectionController</argument>
+                <argument key="/address/administration">DD\ContactList\Controller\AddressAdministrationController</argument>
+                <argument key="/login">DD\ContactList\Controller\LoginController</argument>
+            </argument>
+
+            <argument key="$controllerFactory" type="service" id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
+        </service>
+
+        <service id="DD\ContactList\Infrastructure\Router\UniversalRouter" public="true">
+            <argument key="$controllerNs">DD\ContactList\Controller</argument>
+            <argument key="$controllerFactory" type="service" id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
+        </service>
+
+    </services>
+
+
+</container>

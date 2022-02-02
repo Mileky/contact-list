@@ -3,6 +3,8 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
+use DD\ContactList\Infrastructure\DI\ContainerInterface;
+use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\Container;
@@ -12,20 +14,23 @@ use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\View\RenderInterface;
 
 $httpResponse = (new App(
-    static function (Container $di): RouterInterface {
+    static function (ContainerInterface $di): RouterInterface {
         return $di->get(RouterInterface::class);
     },
-    static function (Container $di): LoggerInterface {
+    static function (ContainerInterface $di): LoggerInterface {
         return $di->get(LoggerInterface::class);
     },
-    static function (Container $di): AppConfig {
+    static function (ContainerInterface $di): AppConfig {
         return $di->get(AppConfig::class);
     },
-    static function (Container $di): RenderInterface {
+    static function (ContainerInterface $di): RenderInterface {
         return $di->get(RenderInterface::class);
     },
-    static function (): Container {
-        return Container::createFromArray(require __DIR__ . '/../config/dev/di.php');
-    }
+    new SymfonyDiContainerInit(
+        __DIR__ . '/../config/dev/di.xml',
+        [
+            'kernel.project_dir' => __DIR__ . '/../'
+        ]
+    )
 ))->dispatch(ServerRequestFactory::createFromGlobals($_SERVER, file_get_contents('php://input')));
 

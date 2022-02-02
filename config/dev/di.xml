@@ -216,7 +216,7 @@
 
         <service id="DD\ContactList\Infrastructure\Router\RegExpRouter" public="true">
             <argument key="$handlers" type="collection">
-                <argument key="/^.*?\/(?<___CATEGORY___>[a-z]+)\/(?<___ID_RECIPIENT___>[0-9]+).*$/">DD\ContactList\Controller\GetContactsController</argument>
+                <argument key="/^.*?\/(?&lt;___CATEGORY___>[a-z]+)\/(?&lt;___ID_RECIPIENT___>[0-9]+).*$/">DD\ContactList\Controller\GetContactsController</argument>
             </argument>
             <argument key="$controllerFactory" type="service" id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
         </service>

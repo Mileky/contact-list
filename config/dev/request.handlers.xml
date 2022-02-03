@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="request.handlers" type="collection">
+            <parameter key="/recipients">DD\ContactList\Controller\GetContactsCollectionController</parameter>
+            <parameter key="/customers">DD\ContactList\Controller\GetContactsCollectionController</parameter>
+            <parameter key="/colleagues">DD\ContactList\Controller\GetContactsCollectionController</parameter>
+            <parameter key="/kinsfolk">DD\ContactList\Controller\GetContactsCollectionController</parameter>
+            <parameter key="/address/administration">DD\ContactList\Controller\AddressAdministrationController</parameter>
+            <parameter key="/login">DD\ContactList\Controller\LoginController</parameter>
+        </parameter>
+    </parameters>
+
+</container>

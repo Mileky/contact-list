@@ -21,7 +21,7 @@
   "require": {
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
-    "dd/framework-for-contact-list": "dev-home_work_31-01-2022"
+    "dd/framework-for-contact-list": "dev-home_work_04-02-2022"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",

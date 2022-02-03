@@ -16,7 +16,33 @@
 
     <services>
 
-        <defaults autowire="true" public="false"/>
+        <defaults autowire="true" public="false">
+            <bind key="string $pathToAddress" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToAddress()
+            </bind>
+            <bind key="string $pathToRecipients" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToRecipients()
+            </bind>
+            <bind key="string $pathToCustomers" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToCustomers()
+            </bind>
+            <bind key="string $pathToKinsfolk" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToKinsfolk()
+            </bind>
+            <bind key="string $pathToColleagues" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToColleagues()
+            </bind>
+            <bind key="string $pathToContactList" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToContactList()
+            </bind>
+            <bind key="string $pathToUsers" type="expression">
+                service('DD\\ContactList\\Config\\AppConfig').getPathToUsers()
+            </bind>
+
+            <bind key="string $controllerNs">%controllerNs%</bind>
+        </defaults>
+
+
         <prototype namespace="DD\ContactList\" resource="./../../src"/>
         <prototype namespace="DD\ContactList\Infrastructure\"
                    resource="./../../vendor/dd/framework-for-contact-list/src"/>
@@ -34,10 +60,7 @@
 
         <service id="DD\ContactList\Infrastructure\Logger\LoggerInterface"
                  public="true"
-                 class="DD\ContactList\Infrastructure\Logger\Logger">
-            <argument key="$adapter" type="service"
-                      id="DD\ContactList\Infrastructure\Logger\AdapterInterface"/>
-        </service>
+                 class="DD\ContactList\Infrastructure\Logger\Logger"/>
 
         <service id="DD\ContactList\Infrastructure\Logger\AdapterInterface" public="false"
                  class="DD\ContactList\Infrastructure\Logger\Adapter\FileAdapter">
@@ -50,93 +73,37 @@
 
 
         <service id="DD\ContactList\Entity\AddressRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\AddressJsonFileRepository">
-            <argument key="$pathToAddress" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToAddress"/>
-                </service>
-            </argument>
+                 class="DD\ContactList\Repository\AddressJsonFileRepository"/>
 
-            <argument key="$contactRepository" type="service" id="DD\ContactList\Entity\ContactRepositoryInterface"/>
-            <argument key="$dataLoader" type="service"
-                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
-        </service>
 
         <service id="DD\ContactList\Entity\ContactRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\ContactJsonFileRepository">
-            <argument key="$dataLoader" type="service"
-                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
-            <argument key="$pathToRecipients" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToRecipients"/>
-                </service>
-            </argument>
-            <argument key="$pathToCustomers" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToCustomers"/>
-                </service>
-            </argument>
-            <argument key="$pathToKinsfolk" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToKinsfolk"/>
-                </service>
-            </argument>
-            <argument key="$pathToColleagues" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToColleagues"/>
-                </service>
-            </argument>
-        </service>
+                 class="DD\ContactList\Repository\ContactJsonFileRepository"/>
 
         <service id="DD\ContactList\Entity\ContactListRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\ContactListRepository">
-            <argument key="$pathToContactList" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToContactList"/>
-                </service>
-            </argument>
-            <argument key="$dataLoader" type="service"
-                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
-            <argument key="$contactRepository" type="service" id="DD\ContactList\Entity\ContactRepositoryInterface"/>
-        </service>
+                 class="DD\ContactList\Repository\ContactListRepository"/>
 
-        <service id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface" public="false"
+        <service id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
                  class="DD\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
 
-        <service id="DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface" public="false"
+        <service id="DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"
                  class="DD\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate"/>
 
         <service id="DD\ContactList\Infrastructure\Auth\HttpAuthProvider" public="false">
-            <argument key="$userDataStorage" type="service"
-                      id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface"/>
-            <argument key="$session" type="service" id="DD\ContactList\Infrastructure\Session\SessionInterface"/>
             <argument key="$loginUri" type="service">
                 <service>
                     <factory class="DD\ContactList\Infrastructure\Uri\Uri" method="createFromString"/>
-                    <argument key="$uri" type="service">
-                        <service>
-                            <factory service="DD\ContactList\Config\AppConfig" method="getLoginUri"/>
-                        </service>
+                    <argument key="$uri" type="expression">service('DD\\ContactList\\Config\\AppConfig').getLoginUri()
                     </argument>
                 </service>
             </argument>
         </service>
 
-        <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface" public="false"
-                 class="DD\ContactList\Repository\UserJsonFileRepository">
-            <argument key="$pathToUsers" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToUsers"/>
-                </service>
-            </argument>
-            <argument key="$dataLoader" type="service"
-                      id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
-        </service>
+        <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface"
+                 class="DD\ContactList\Repository\UserJsonFileRepository"/>
 
         <service id="DD\ContactList\Infrastructure\Session\SessionInterface" public="false">
             <factory class="DD\ContactList\Infrastructure\Session\SessionNative" method="create"/>
         </service>
-
 
 
         <service id="DD\ContactList\Infrastructure\Console\Output\OutputInterface" public="true"
@@ -145,11 +112,11 @@
         <service id="DD\ContactList\Infrastructure\View\RenderInterface" public="true"
                  class="DD\ContactList\Infrastructure\View\DefaultRender"/>
 
-        <service id="DD\ContactList\Infrastructure\Router\ControllerFactory" public="false">
+        <service id="DD\ContactList\Infrastructure\Router\ControllerFactory">
             <argument key="$diContainer" type="service" id="service_container"/>
         </service>
 
-        <service id="DD\ContactList\Infrastructure\Router\RouterInterface" public="true"
+        <service id="DD\ContactList\Infrastructure\Router\RouterInterface"
                  class="DD\ContactList\Infrastructure\Router\ChainRouters">
             <argument type="service" id="DD\ContactList\Infrastructure\Router\RegExpRouter"/>
             <argument type="service" id="DD\ContactList\Infrastructure\Router\DefaultRouter"/>
@@ -158,24 +125,12 @@
 
         <service id="DD\ContactList\Infrastructure\Router\RegExpRouter">
             <argument key="$handlers">%regExp.handlers%</argument>
-            <argument key="$controllerFactory" type="service"
-                      id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
         </service>
 
         <service id="DD\ContactList\Infrastructure\Router\DefaultRouter">
             <argument key="$handlers">%request.handlers%</argument>
-
-            <argument key="$controllerFactory" type="service"
-                      id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
-        </service>
-
-        <service id="DD\ContactList\Infrastructure\Router\UniversalRouter">
-            <argument key="$controllerNs">%controllerNs%</argument>
-            <argument key="$controllerFactory" type="service"
-                      id="DD\ContactList\Infrastructure\Router\ControllerFactory"/>
         </service>
 
     </services>
-
 
 </container>

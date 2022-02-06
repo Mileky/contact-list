@@ -14,7 +14,6 @@ use Throwable;
 
 class LoginController implements ControllerInterface
 {
-
     /**
      * Шаблонизатор
      *
@@ -151,5 +150,4 @@ class LoginController implements ControllerInterface
     {
         return $this->httpAuthProvider->auth($login, $password);
     }
-
 }

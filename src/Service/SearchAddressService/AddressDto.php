@@ -77,6 +77,4 @@ class AddressDto
     {
         return $this->status;
     }
-
-
 }

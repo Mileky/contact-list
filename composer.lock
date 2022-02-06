@@ -4,19 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1894c6770938d89827c15c6b922db01",
+    "content-hash": "69f83142ac41f5d2a09c9dc87490a100",
     "packages": [
         {
             "name": "dd/framework-for-contact-list",
-            "version": "dev-home_work_04-02-2022",
+            "version": "dev-home_work_07-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
-                "reference": "4f49a4dc02e5171103f06c682e76a088afdd5fca"
+                "reference": "422cfc26fa4ac2cbda67a98a82c741f421e6a101"
             },
             "require": {
-                "dd/logger-for-contact-list": "dev-home_work_31-01-2022",
-                "dd/view-template-for-contact-list": "dev-home_work_31-01-2022",
+                "dd/logger-for-contact-list": "dev-home_work_04-02-2022",
+                "dd/view-template-for-contact-list": "dev-home_work_04-02-2022",
                 "ext-json": "*",
                 "php": "^7.4 || ^8.0",
                 "psr/container": "^1.1.2",
@@ -59,11 +59,11 @@
             "support": {
                 "email": "zinchenko@effective-group.ru"
             },
-            "time": "2022-02-03T12:08:54+00:00"
+            "time": "2022-02-06T11:18:34+00:00"
         },
         {
             "name": "dd/logger-for-contact-list",
-            "version": "dev-home_work_31-01-2022",
+            "version": "dev-home_work_04-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/logger-for-contact-list.git",
@@ -93,7 +93,7 @@
         },
         {
             "name": "dd/view-template-for-contact-list",
-            "version": "dev-home_work_31-01-2022",
+            "version": "dev-home_work_04-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/view-template-for-contact-list.git",
@@ -994,12 +994,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php80\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php80\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -1077,12 +1077,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php81\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php81\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -1377,12 +1377,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3188,41 +3188,60 @@
             "time": "2020-09-28T06:39:44+00:00"
         },
         {
-            "name": "test-create-package-for-composer/test-composer",
-            "version": "2.0.0",
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Mileky/test-composer.git",
-                "reference": "bc2bae7dacef057b21b81245069f702eb6521b2e"
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "5e4e71592f69da17871dba6e80dd51bce74a351a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Mileky/test-composer/zipball/bc2bae7dacef057b21b81245069f702eb6521b2e",
-                "reference": "bc2bae7dacef057b21b81245069f702eb6521b2e",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/5e4e71592f69da17871dba6e80dd51bce74a351a",
+                "reference": "5e4e71592f69da17871dba6e80dd51bce74a351a",
                 "shasum": ""
             },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "bin": [
+                "bin/phpcs",
+                "bin/phpcbf"
+            ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "proprietary"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
-                    "name": "test",
-                    "email": "test@example.com",
-                    "role": "Developer"
+                    "name": "Greg Sherwood",
+                    "role": "lead"
                 }
             ],
-            "description": "package creation test",
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "https://github.com/squizlabs/PHP_CodeSniffer",
             "keywords": [
-                "create",
-                "test"
+                "phpcs",
+                "standards"
             ],
             "support": {
-                "issues": "https://github.com/Mileky/test-composer/issues",
-                "source": "https://github.com/Mileky/test-composer/tree/2.0.0"
+                "issues": "https://github.com/squizlabs/PHP_CodeSniffer/issues",
+                "source": "https://github.com/squizlabs/PHP_CodeSniffer",
+                "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2022-01-24T20:24:23+00:00"
+            "time": "2021-12-12T21:44:58+00:00"
         },
         {
             "name": "theseer/tokenizer",

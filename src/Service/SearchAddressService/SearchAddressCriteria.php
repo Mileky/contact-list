@@ -107,6 +107,4 @@ class SearchAddressCriteria
         $this->status = $status;
         return $this;
     }
-
-
 }

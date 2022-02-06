@@ -101,5 +101,4 @@ class SearchAddressService
     {
         $this->logger->debug($msg);
     }
-
 }

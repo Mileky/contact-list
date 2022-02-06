@@ -58,5 +58,4 @@ final class Recipient extends AbstractContact
             $data['messengers']
         );
     }
-
 }

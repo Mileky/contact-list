@@ -9,5 +9,4 @@ use DD\ContactList\Infrastructure\Exception as BaseException;
  */
 class ErrorCreateAppConfigException extends BaseException\ErrorCreateAppConfigException implements ExceptionInterface
 {
-
 }

@@ -21,5 +21,4 @@ interface UserRepositoryInterface
      * @return User|null - сущность пользователя
      */
     public function findUserByLogin(string $login): ?User;
-
 }

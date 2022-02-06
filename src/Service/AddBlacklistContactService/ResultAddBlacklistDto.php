@@ -26,6 +26,4 @@ class ResultAddBlacklistDto
     {
         return $this->status;
     }
-
-
 }

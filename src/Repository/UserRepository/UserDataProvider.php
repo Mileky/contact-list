@@ -10,5 +10,4 @@ use DD\ContactList\Infrastructure\Auth\UserDataProviderInterface;
  */
 class UserDataProvider extends User implements UserDataProviderInterface
 {
-
 }

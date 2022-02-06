@@ -62,6 +62,4 @@ class NewAddressDto
     {
         return $this->status;
     }
-
-
 }

@@ -406,6 +406,4 @@ final class SearchContactServiceCriteria
         $this->category = $category;
         return $this;
     }
-
-
 }

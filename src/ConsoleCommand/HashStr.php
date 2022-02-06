@@ -7,7 +7,6 @@ use DD\ContactList\Infrastructure\Console\Output\OutputInterface;
 
 class HashStr implements CommandInterface
 {
-
     /**
      * Компонент вывода данных в консоль
      *

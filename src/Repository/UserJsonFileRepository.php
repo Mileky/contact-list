@@ -155,5 +155,4 @@ class UserJsonFileRepository implements UserRepositoryInterface, UserDataStorage
             throw new Exception\RuntimeException('Пароль пользователя должен быть строкой');
         }
     }
-
 }

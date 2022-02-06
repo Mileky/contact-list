@@ -70,8 +70,7 @@ class AddressAdministrationController implements ControllerInterface
      * @param SearchAddressService     $addressService           - Сервис поиска адресов
      * @param HttpAuthProvider         $httpAuthProvider         - Поставщик услуг аутентификации
      */
-    public function
-    __construct(
+    public function __construct(
         LoggerInterface $logger,
         ArrivalNewAddressService $arrivalNewAddressService,
         SearchContactService $searchContactService,

@@ -9,7 +9,6 @@ use DD\ContactList\Service\AddBlacklistContactService\ResultAddBlacklistDto;
 
 class AddBlacklistContactService
 {
-
     /**
      * Репозиторий для работы с списком контактов
      *

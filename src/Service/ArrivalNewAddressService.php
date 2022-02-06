@@ -73,6 +73,4 @@ class ArrivalNewAddressService
             $address->getStatus()
         );
     }
-
-
 }

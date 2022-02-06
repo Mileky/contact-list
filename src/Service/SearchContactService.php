@@ -189,6 +189,4 @@ final class SearchContactService
             return null !== $v;
         });
     }
-
-
 }

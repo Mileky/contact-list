@@ -12,7 +12,6 @@ use Throwable;
 
 class CreateAddressController implements ControllerInterface
 {
-
     private ArrivalNewAddressService $arrivalNewAddressService;
 
     /**

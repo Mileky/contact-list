@@ -63,6 +63,4 @@ final class KinsfolkDto
     {
         return $this->hotkey;
     }
-
-
 }

@@ -84,6 +84,4 @@ final class CustomerDto
     {
         return $this->timeToCall;
     }
-
-
 }

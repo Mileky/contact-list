@@ -2,7 +2,6 @@
 
 namespace DD\ContactList\Controller;
 
-
 final class GetContactsController extends GetContactsCollectionController
 {
     /**

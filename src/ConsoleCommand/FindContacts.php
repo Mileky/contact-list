@@ -9,7 +9,6 @@ use JsonException;
 
 class FindContacts implements CommandInterface
 {
-
     /**
      * Компонент отвечающий за вывод данных в консоль
      *
@@ -148,5 +147,4 @@ class FindContacts implements CommandInterface
 
         return $jsonData;
     }
-
 }

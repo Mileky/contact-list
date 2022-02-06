@@ -24,5 +24,4 @@ interface ContactRepositoryInterface
      * @return array
      */
     public function findByCategory(array $criteria): array;
-
 }

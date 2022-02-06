@@ -318,5 +318,4 @@ class AppConfig extends BaseConfig
             throw new Exception\ErrorCreateAppConfigException('Некорректный путь до файла с данными');
         }
     }
-
 }

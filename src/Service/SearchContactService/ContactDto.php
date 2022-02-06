@@ -176,6 +176,4 @@ final class ContactDto
     {
         return $this->colleagueData;
     }
-
-
 }

@@ -13,7 +13,6 @@ use DD\ContactList\Exception;
 
 class ContactJsonFileRepository implements ContactRepositoryInterface
 {
-
     /**
      * Загрузчик данных
      *
@@ -178,7 +177,7 @@ class ContactJsonFileRepository implements ContactRepositoryInterface
         $foundContacts = [];
         foreach ($loadedContactsData as $contactsData) {
             foreach ($contactsData as $contactData) {
-                $contactMeetSearchCriteria = $this->CriteriaCheck($criteria, $contactData);
+                $contactMeetSearchCriteria = $this->criteriaCheck($criteria, $contactData);
 
                 if ($contactMeetSearchCriteria) {
                     $foundContacts[] = $this->contactFactory($contactData);
@@ -197,7 +196,7 @@ class ContactJsonFileRepository implements ContactRepositoryInterface
      *
      * @return bool
      */
-    private function CriteriaCheck(array $searchCriteria, array $entityData): bool
+    private function criteriaCheck(array $searchCriteria, array $entityData): bool
     {
         $result = false;
         foreach ($searchCriteria as $key => $value) {

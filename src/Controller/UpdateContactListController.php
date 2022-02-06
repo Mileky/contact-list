@@ -15,7 +15,6 @@ use Throwable;
  */
 class UpdateContactListController implements ControllerInterface
 {
-
     /**
      * Сервис занесения контакта в ЧС
      *

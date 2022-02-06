@@ -171,6 +171,4 @@ final class Kinsfolk extends AbstractContact
             $data['hotkey']
         );
     }
-
-
 }

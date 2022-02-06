@@ -63,6 +63,4 @@ final class ColleagueDto
     {
         return $this->roomNumber;
     }
-
-
 }

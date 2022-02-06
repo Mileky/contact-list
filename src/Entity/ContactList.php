@@ -121,6 +121,4 @@ class ContactList
             $data['blacklist']
         );
     }
-
-
 }

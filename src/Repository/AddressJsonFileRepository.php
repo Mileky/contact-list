@@ -78,7 +78,7 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
 
         $foundAddress = [];
         foreach ($addressData as $address) {
-            $meetSearchCriteria = $this->CriteriaCheck($criteria, $address);
+            $meetSearchCriteria = $this->criteriaCheck($criteria, $address);
 
             if ($meetSearchCriteria) {
                 $address['id_recipient'] = $contactIdToInfo[$address['id_recipient']];
@@ -187,7 +187,7 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
      *
      * @return bool
      */
-    private function CriteriaCheck(array $criteria, array $entityData): bool
+    private function criteriaCheck(array $criteria, array $entityData): bool
     {
         $result = false;
         foreach ($criteria as $key => $value) {
@@ -201,5 +201,4 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
 
         return $result;
     }
-
 }

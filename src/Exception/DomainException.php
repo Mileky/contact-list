@@ -9,5 +9,4 @@ use DD\ContactList\Infrastructure\Exception as BaseException;
  */
 class DomainException extends BaseException\DomainException implements ExceptionInterface
 {
-
 }

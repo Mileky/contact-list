@@ -172,5 +172,4 @@ final class Colleague extends AbstractContact
             $data['room_number']
         );
     }
-
 }

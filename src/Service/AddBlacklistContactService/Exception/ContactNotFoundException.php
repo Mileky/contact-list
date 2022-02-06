@@ -7,5 +7,4 @@ namespace DD\ContactList\Service\AddBlacklistContactService\Exception;
  */
 class ContactNotFoundException extends RuntimeException
 {
-
 }

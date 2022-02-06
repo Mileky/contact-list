@@ -15,7 +15,6 @@ use DD\ContactList\Service\SearchContactService;
  */
 class GetContactsCollectionController implements ControllerInterface
 {
-
     /**
      * Сервис поиска контактов
      *
@@ -183,6 +182,4 @@ class GetContactsCollectionController implements ControllerInterface
 
         return $jsonData;
     }
-
-
 }

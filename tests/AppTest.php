@@ -5,6 +5,7 @@ namespace DD\ContactListTest;
 use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
+use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
@@ -14,8 +15,10 @@ use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\Uri\Uri;
 use DD\ContactList\Infrastructure\View\NullRender;
 use DD\ContactList\Infrastructure\View\RenderInterface;
+use Exception;
 use JsonException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Тестирование приложения
@@ -23,25 +26,60 @@ use PHPUnit\Framework\TestCase;
 class AppTest extends TestCase
 {
     /**
+     * Создание symfony di
+     *
+     * @return ContainerBuilder
+     * @throws Exception
+     */
+    public static function createDiContainer(): ContainerBuilder
+    {
+        $containerBuilder = SymfonyDiContainerInit::createContainerBuilder(
+            __DIR__ . '/../config/dev/di.xml',
+            [
+                'kernel.project_dir' => __DIR__ . '/../'
+            ]
+        );
+
+        $containerBuilder->getDefinition(AdapterInterface::class)
+            ->setClass(NullAdapter::class)
+            ->setArguments([]);
+        $containerBuilder->getDefinition(RenderInterface::class)
+            ->setClass(NullRender::class)
+            ->setArguments([]);
+
+        return $containerBuilder;
+    }
+
+    /**
+     * Метод используемый в тестах как иллюстрация некорректной работы фабрики
+     *
+     * @param array $config
+     *
+     * @return string
+     */
+    public static function bugFactory(array $config): string
+    {
+        return 'Oops';
+    }
+
+    /**
      * Поставщик данных для тестирования приложения
      *
      * @return array
+     * @throws Exception
      */
     public static function dataProvider(): array
     {
-        $diConfig = require __DIR__ . '/../config/dev/di.php';
-        $diConfig['services'][AdapterInterface::class] = [
-            'class' => NullAdapter::class
-        ];
-        $diConfig['services'][RenderInterface::class] = [
-            'class' => NullRender::class
-        ];
-
         return [
             'Тестирование поиска получателя по id' => [
                 'in' => [
                     'uri' => '/contacts?id_recipient=1',
-                    'diConfig' => $diConfig
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $c->compile();
+                        return $c;
+                    })(
+                        self::createDiContainer()
+                    )
                 ],
                 'out' => [
                     'httpCode' => 200,
@@ -59,7 +97,12 @@ class AppTest extends TestCase
             'Тестирование поиска получателя по full_name' => [
                 'in' => [
                     'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
-                    'diConfig' => $diConfig
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $c->compile();
+                        return $c;
+                    })(
+                        self::createDiContainer()
+                    )
                 ],
                 'out' => [
                     'httpCode' => 200,
@@ -77,13 +120,14 @@ class AppTest extends TestCase
             'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday' => [
                 'in' => [
                     'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
-                    'diConfig' => (static function ($diConfig) {
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
-                        $diConfig['instances']['appConfig'] = $config;
-                        return $diConfig;
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $appConfigParams = $c->getParameter('app.config');
+                        $appConfigParams['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
+                        $c->setParameter('app.config', $appConfigParams);
+                        $c->compile();
+                        return $c;
                     })(
-                        $diConfig
+                        self::createDiContainer()
                     )
                 ],
                 'out' => [
@@ -98,13 +142,12 @@ class AppTest extends TestCase
             'Тестирование ситуации с некорректными данными конфига приложения' => [
                 'in' => [
                     'uri' => '/contacts?id_recipient=1',
-                    'diConfig' => (static function ($diConfig) {
-                        $diConfig['factories'][AppConfig::class] = static function () {
-                            return 'Oops';
-                        };
-                        return $diConfig;
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $c->getDefinition(AppConfig::class)->setFactory([AppTest::class, 'bugFactory']);
+                        $c->compile();
+                        return $c;
                     })(
-                        $diConfig
+                        self::createDiContainer()
                     )
                 ],
                 'out' => [
@@ -119,13 +162,14 @@ class AppTest extends TestCase
             'Тестирование ситуации с некорректным путем до файла с получателями' => [
                 'in' => [
                     'uri' => '/contacts?id_recipient=1',
-                    'diConfig' => (static function ($diConfig) {
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
-                        $diConfig['instances']['appConfig'] = $config;
-                        return $diConfig;
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $appConfigParams = $c->getParameter('app.config');
+                        $appConfigParams['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
+                        $c->setParameter('app.config', $appConfigParams);
+                        $c->compile();
+                        return $c;
                     })(
-                        $diConfig
+                        self::createDiContainer()
                     )
                 ],
                 'out' => [
@@ -140,13 +184,14 @@ class AppTest extends TestCase
             'Тестирование ситуации с некорректным путем до файла с клиентами' => [
                 'in' => [
                     'uri' => '/contacts?id_recipient=7',
-                    'diConfig' => (static function ($diConfig) {
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['pathToRecipients'] = __DIR__ . '/data/unknown.customer.json';
-                        $diConfig['instances']['appConfig'] = $config;
-                        return $diConfig;
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $appConfigParams = $c->getParameter('app.config');
+                        $appConfigParams['pathToCustomers'] = __DIR__ . '/data/unknown.customers.json';
+                        $c->setParameter('app.config', $appConfigParams);
+                        $c->compile();
+                        return $c;
                     })(
-                        $diConfig
+                        self::createDiContainer()
                     )
                 ],
                 'out' => [
@@ -161,13 +206,14 @@ class AppTest extends TestCase
             'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient' => [
                 'in' => [
                     'uri' => '/contacts?full_name=Калинин Пётр Александрович',
-                    'diConfig' => (static function ($diConfig) {
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
-                        $diConfig['instances']['appConfig'] = $config;
-                        return $diConfig;
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $appConfigParams = $c->getParameter('app.config');
+                        $appConfigParams['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
+                        $c->setParameter('app.config', $appConfigParams);
+                        $c->compile();
+                        return $c;
                     })(
-                        $diConfig
+                        self::createDiContainer()
                     )
                 ],
                 'out' => [
@@ -203,7 +249,7 @@ class AppTest extends TestCase
             ['Content-Type' => 'application/json'],
             null
         );
-        $diConfig = $in['diConfig'];
+        $diContainer = $in['diContainer'];
         $app = new App(
             static function (ContainerInterface $di): RouterInterface {
                 return $di->get(RouterInterface::class);
@@ -217,8 +263,8 @@ class AppTest extends TestCase
             static function (ContainerInterface $di): RenderInterface {
                 return $di->get(RenderInterface::class);
             },
-            static function () use ($diConfig): ContainerInterface {
-                return Container::createFromArray($diConfig);
+            static function () use ($diContainer): ContainerInterface {
+                return $diContainer;
             }
         );
 

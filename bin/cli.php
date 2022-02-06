@@ -18,6 +18,10 @@ use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
         __DIR__ . '/../config/dev/di.xml',
         [
             'kernel.project_dir' => __DIR__ . '/../'
-        ]
+        ],
+        new SymfonyDiContainerInit\CacheParams(
+            'DEV' !== getenv('ENV_TYPE'),
+            __DIR__ . '/../var/cache/di-symfony/DDContactListCachedContainer.php'
+        )
     )
 ))->dispatch();

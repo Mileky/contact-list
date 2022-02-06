@@ -7,7 +7,6 @@ use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Config\AppConfig;
-use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
@@ -30,7 +29,11 @@ $httpResponse = (new App(
         __DIR__ . '/../config/dev/di.xml',
         [
             'kernel.project_dir' => __DIR__ . '/../'
-        ]
+        ],
+        new SymfonyDiContainerInit\CacheParams(
+            'DEV' !== getenv('ENV_TYPE'),
+            __DIR__ . '/../var/cache/di-symfony/DDContactListCachedContainer.php'
+        )
     )
 ))->dispatch(ServerRequestFactory::createFromGlobals($_SERVER, file_get_contents('php://input')));
 

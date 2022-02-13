@@ -3,8 +3,10 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
+use DD\ContactList\Config\ContainerExtensions;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
+use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
@@ -26,10 +28,13 @@ $httpResponse = (new App(
         return $di->get(RenderInterface::class);
     },
     new SymfonyDiContainerInit(
-        __DIR__ . '/../config/dev/di.xml',
-        [
-            'kernel.project_dir' => __DIR__ . '/../'
-        ],
+        new ContainerParams(
+            __DIR__ . '/../config/dev/di.xml',
+            [
+                'kernel.project_dir' => __DIR__ . '/../'
+            ],
+            ContainerExtensions::httpAppContainerExtension()
+        ),
         new SymfonyDiContainerInit\CacheParams(
             'DEV' !== getenv('ENV_TYPE'),
             __DIR__ . '/../var/cache/di-symfony/DDContactListCachedContainer.php'

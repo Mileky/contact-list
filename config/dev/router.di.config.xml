@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:e_rtr="https://effective-group.ru/schema/dic/dd_infrastructure_router"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <e_rtr:config>
+
+        <e_rtr:regExpRouter>
+            <e_rtr:route pattern="/^.*?\/(?&lt;___CATEGORY___>[a-z]+)\/(?&lt;___ID_RECIPIENT___>[0-9]+).*$/">DD\ContactList\Controller\GetContactsController</e_rtr:route>
+        </e_rtr:regExpRouter>
+
+        <e_rtr:defaultRouter>
+            <e_rtr:route pattern="/recipients">DD\ContactList\Controller\GetContactsCollectionController</e_rtr:route>
+            <e_rtr:route pattern="/customers">DD\ContactList\Controller\GetContactsCollectionController</e_rtr:route>
+            <e_rtr:route pattern="/colleagues">DD\ContactList\Controller\GetContactsCollectionController</e_rtr:route>
+            <e_rtr:route pattern="/kinsfolk">DD\ContactList\Controller\GetContactsCollectionController</e_rtr:route>
+            <e_rtr:route pattern="/address/administration">DD\ContactList\Controller\AddressAdministrationController</e_rtr:route>
+            <e_rtr:route pattern="/login">DD\ContactList\Controller\LoginController</e_rtr:route>
+        </e_rtr:defaultRouter>
+
+        <e_rtr:universalRouter>
+            <e_rtr:controllerNamespace>DD\ContactList\Controller</e_rtr:controllerNamespace>
+        </e_rtr:universalRouter>
+
+
+    </e_rtr:config>
+
+</container>

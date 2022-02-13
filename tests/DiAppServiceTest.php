@@ -2,7 +2,9 @@
 
 namespace DD\ContactListTest;
 
+use DD\ContactList\Config\ContainerExtensions;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
+use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use DD\ContactList;
@@ -97,10 +99,13 @@ class DiAppServiceTest extends TestCase
     {
         //Arrange
         $diContainerFactory = new SymfonyDiContainerInit(
-            __DIR__ . '/../config/dev/di.xml',
-            [
-                'kernel.project_dir' => __DIR__ . '/../'
-            ]
+            new ContainerParams(
+                __DIR__ . '/../config/dev/di.xml',
+                [
+                    'kernel.project_dir' => __DIR__ . '/../'
+                ],
+                ContainerExtensions::httpAppContainerExtension()
+            )
         );
         $diContainer = $diContainerFactory();
 

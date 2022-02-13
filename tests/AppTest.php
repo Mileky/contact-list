@@ -3,9 +3,11 @@
 namespace DD\ContactListTest;
 
 use DD\ContactList\Config\AppConfig;
+use DD\ContactList\Config\ContainerExtensions;
 use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
+use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
 use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
@@ -34,15 +36,18 @@ class AppTest extends TestCase
     public static function createDiContainer(): ContainerBuilder
     {
         $containerBuilder = SymfonyDiContainerInit::createContainerBuilder(
-            __DIR__ . '/../config/dev/di.xml',
-            [
-                'kernel.project_dir' => __DIR__ . '/../'
-            ]
+            new ContainerParams(
+                __DIR__ . '/../config/dev/di.xml',
+                [
+                    'kernel.project_dir' => __DIR__ . '/../'
+                ],
+                ContainerExtensions::httpAppContainerExtension()
+            )
         );
 
-        $containerBuilder->getDefinition(AdapterInterface::class)
-            ->setClass(NullAdapter::class)
-            ->setArguments([]);
+        $containerBuilder->removeAlias(AdapterInterface::class);
+        $containerBuilder->setAlias(AdapterInterface::class, NullAdapter::class);
+
         $containerBuilder->getDefinition(RenderInterface::class)
             ->setClass(NullRender::class)
             ->setArguments([]);

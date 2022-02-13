@@ -5,14 +5,8 @@
 >
 
     <imports>
-        <import resource="regExp.handlers.xml"/>
-        <import resource="request.handlers.xml"/>
         <import resource="app.config.xml"/>
     </imports>
-
-    <parameters>
-        <parameter key="controllerNs">DD\ContactList\Controller</parameter>
-    </parameters>
 
     <services>
 
@@ -39,42 +33,24 @@
                 service('DD\\ContactList\\Config\\AppConfig').getPathToUsers()
             </bind>
 
-            <bind key="string $controllerNs">%controllerNs%</bind>
         </defaults>
-
 
         <prototype namespace="DD\ContactList\" resource="./../../src"/>
         <prototype namespace="DD\ContactList\Infrastructure\"
-                   resource="./../../vendor/dd/framework-for-contact-list/src"/>
+                   resource="./../../vendor/dd/framework-for-contact-list/src"
+                   exclude="./../../vendor/dd/framework-for-contact-list/src/{Router,Logger}"
+                   />
 
         <instanceof id="DD\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
-        <instanceof id="DD\ContactList\Infrastructure\Router\RouterInterface" public="true"/>
         <instanceof id="DD\ContactList\Infrastructure\Console\CommandInterface" public="true"/>
-
 
         <service id="DD\ContactList\Config\AppConfig" public="true">
             <factory class="DD\ContactList\Config\AppConfig" method="createFromArray"/>
             <argument key="$config">%app.config%</argument>
         </service>
 
-
-        <service id="DD\ContactList\Infrastructure\Logger\LoggerInterface"
-                 public="true"
-                 class="DD\ContactList\Infrastructure\Logger\Logger"/>
-
-        <service id="DD\ContactList\Infrastructure\Logger\AdapterInterface" public="false"
-                 class="DD\ContactList\Infrastructure\Logger\Adapter\FileAdapter">
-            <argument key="$pathToFile" type="service">
-                <service>
-                    <factory service="DD\ContactList\Config\AppConfig" method="getPathToLogFile"/>
-                </service>
-            </argument>
-        </service>
-
-
         <service id="DD\ContactList\Entity\AddressRepositoryInterface" public="false"
                  class="DD\ContactList\Repository\AddressJsonFileRepository"/>
-
 
         <service id="DD\ContactList\Entity\ContactRepositoryInterface" public="false"
                  class="DD\ContactList\Repository\ContactJsonFileRepository"/>
@@ -84,9 +60,6 @@
 
         <service id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
                  class="DD\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
-
-        <service id="DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"
-                 class="DD\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate"/>
 
         <service id="DD\ContactList\Infrastructure\Auth\HttpAuthProvider" public="false">
             <argument key="$loginUri" type="service">
@@ -105,31 +78,11 @@
             <factory class="DD\ContactList\Infrastructure\Session\SessionNative" method="create"/>
         </service>
 
-
         <service id="DD\ContactList\Infrastructure\Console\Output\OutputInterface" public="true"
                  class="DD\ContactList\Infrastructure\Console\Output\EchoOutput"/>
 
         <service id="DD\ContactList\Infrastructure\View\RenderInterface" public="true"
                  class="DD\ContactList\Infrastructure\View\DefaultRender"/>
-
-        <service id="DD\ContactList\Infrastructure\Router\ControllerFactory">
-            <argument key="$diContainer" type="service" id="service_container"/>
-        </service>
-
-        <service id="DD\ContactList\Infrastructure\Router\RouterInterface"
-                 class="DD\ContactList\Infrastructure\Router\ChainRouters">
-            <argument type="service" id="DD\ContactList\Infrastructure\Router\RegExpRouter"/>
-            <argument type="service" id="DD\ContactList\Infrastructure\Router\DefaultRouter"/>
-            <argument type="service" id="DD\ContactList\Infrastructure\Router\UniversalRouter"/>
-        </service>
-
-        <service id="DD\ContactList\Infrastructure\Router\RegExpRouter">
-            <argument key="$handlers">%regExp.handlers%</argument>
-        </service>
-
-        <service id="DD\ContactList\Infrastructure\Router\DefaultRouter">
-            <argument key="$handlers">%request.handlers%</argument>
-        </service>
 
     </services>
 

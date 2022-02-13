@@ -3,12 +3,12 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
-use DD\ContactList\Infrastructure\Http\HttpResponse;
-use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Validator\Assert;
 use DD\ContactList\Service\SearchContactService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Контроллер для работы с Знакомыми
@@ -30,41 +30,51 @@ class GetContactsCollectionController implements ControllerInterface
     private LoggerInterface $logger;
 
     /**
-     * @param LoggerInterface      $logger               - логгер
-     * @param SearchContactService $searchContactService - сервис поиска контактов
+     * Фабрика создания серверного ответа
+     *
+     * @var ServerResponseFactory
+     */
+    private ServerResponseFactory $serverResponseFactory;
+
+    /**
+     * @param LoggerInterface $logger                      - логгер
+     * @param SearchContactService $searchContactService   - сервис поиска контактов
+     * @param ServerResponseFactory $serverResponseFactory - Фабрика создания серверного ответа
      */
     public function __construct(
         LoggerInterface $logger,
-        SearchContactService $searchContactService
+        SearchContactService $searchContactService,
+        ServerResponseFactory $serverResponseFactory
     ) {
         $this->logger = $logger;
         $this->searchContactService = $searchContactService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
     /**
      * Валидирует параметры запроса
      *
-     * @param ServerRequest $serverRequest - объект серверного запроса
+     * @param ServerRequestInterface $serverRequest - объект серверного запроса
      *
      * @return string|null - строка с ошибкой или null, если ошибки нет
      */
-    private function validateQueryParams(ServerRequest $serverRequest): ?string
+    private function validateQueryParams(ServerRequestInterface $serverRequest): ?string
     {
         $paramValidations = [
-            'id_recipient'               => 'incorrect id_recipient',
-            'full_name'                  => 'incorrect full_name',
-            'birthday'                   => 'incorrect birthday',
-            'profession'                 => 'incorrect profession',
-            'contract_number'            => 'incorrect contract_number',
+            'id_recipient' => 'incorrect id_recipient',
+            'full_name' => 'incorrect full_name',
+            'birthday' => 'incorrect birthday',
+            'profession' => 'incorrect profession',
+            'contract_number' => 'incorrect contract_number',
             'average_transaction_amount' => 'incorrect average_transaction_amount',
-            'discount'                   => 'incorrect discount',
-            'time_to_call'               => 'incorrect time_to_call',
-            'status'                     => 'incorrect status',
-            'ringtone'                   => 'incorrect ringtone',
-            'hotkey'                     => 'incorrect hotkey',
-            'department'                 => 'incorrect department',
-            'position'                   => 'incorrect position',
-            'room_number'                => 'incorrect room_number',
+            'discount' => 'incorrect discount',
+            'time_to_call' => 'incorrect time_to_call',
+            'status' => 'incorrect status',
+            'ringtone' => 'incorrect ringtone',
+            'hotkey' => 'incorrect hotkey',
+            'department' => 'incorrect department',
+            'position' => 'incorrect position',
+            'room_number' => 'incorrect room_number',
 
         ];
 
@@ -104,11 +114,11 @@ class GetContactsCollectionController implements ControllerInterface
     /**
      * Обработка запроса поиска контактов
      *
-     * @param ServerRequest $serverRequest
+     * @param ServerRequestInterface $serverRequest
      *
-     * @return HttpResponse
+     * @return ResponseInterface
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse
+    public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         $this->logger->info('dispatch "contacts" url');
 
@@ -142,11 +152,11 @@ class GetContactsCollectionController implements ControllerInterface
         } else {
             $httpCode = 500;
             $result = [
-                'status'  => 'fail',
+                'status' => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode, $result);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $result);
     }
 
     /**
@@ -160,9 +170,9 @@ class GetContactsCollectionController implements ControllerInterface
     {
         $jsonData = [
             'id_recipient' => $contactDto->getId(),
-            'full_name'    => $contactDto->getFullName(),
-            'birthday'     => $contactDto->getBirthday(),
-            'profession'   => $contactDto->getProfession(),
+            'full_name' => $contactDto->getFullName(),
+            'birthday' => $contactDto->getBirthday(),
+            'profession' => $contactDto->getProfession(),
         ];
 
         if ($contactDto->getType() === SearchContactService\ContactDto::TYPE_COLLEAGUE) {

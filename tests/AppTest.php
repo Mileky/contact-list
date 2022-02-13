@@ -4,21 +4,20 @@ namespace DD\ContactListTest;
 
 use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Config\ContainerExtensions;
-use DD\ContactList\Infrastructure\DI\Container;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
-use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
 use DD\ContactList\Infrastructure\Logger\AdapterInterface;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
-use DD\ContactList\Infrastructure\Uri\Uri;
 use DD\ContactList\Infrastructure\View\NullRender;
 use DD\ContactList\Infrastructure\View\RenderInterface;
 use Exception;
 use JsonException;
+use Nyholm\Psr7\ServerRequest;
+use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -248,12 +247,14 @@ class AppTest extends TestCase
         //Arrange
         $httpRequest = new ServerRequest(
             'GET',
-            '1.1',
-            $in['uri'],
-            Uri::createFromString($in['uri']),
-            ['Content-Type' => 'application/json'],
-            null
+            new Uri($in['uri']),
+            ['Content-Type' => 'application/json']
         );
+
+        $queryParams = [];
+        parse_str($httpRequest->getUri()->getQuery(), $queryParams);
+        $httpRequest = $httpRequest->withQueryParams($queryParams);
+
         $diContainer = $in['diContainer'];
         $app = new App(
             static function (ContainerInterface $di): RouterInterface {

@@ -5,8 +5,6 @@ namespace DD\ContactList\Controller;
 use DD\ContactList\Exception\RuntimeException;
 use DD\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
-use DD\ContactList\Infrastructure\Http\HttpResponse;
-use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
@@ -15,6 +13,8 @@ use DD\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use DD\ContactList\Service\SearchAddressService;
 use DD\ContactList\Service\SearchAddressService\SearchAddressCriteria;
 use DD\ContactList\Service\SearchContactService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 class AddressAdministrationController implements ControllerInterface
@@ -61,14 +61,22 @@ class AddressAdministrationController implements ControllerInterface
      */
     private HttpAuthProvider $httpAuthProvider;
 
+    /**
+     * Фабрика создания серверного ответа
+     *
+     * @var ServerResponseFactory
+     */
+    private ServerResponseFactory $serverResponseFactory;
+
 
     /**
-     * @param LoggerInterface          $logger                   - Логгер
+     * @param LoggerInterface $logger                            - Логгер
      * @param ArrivalNewAddressService $arrivalNewAddressService - Сервис добавления нового адреса у контакта
-     * @param SearchContactService     $searchContactService     - Сервис поиска контактов
-     * @param ViewTemplateInterface    $viewTemplate             - Шаблонизатор для рендеринга html
-     * @param SearchAddressService     $addressService           - Сервис поиска адресов
-     * @param HttpAuthProvider         $httpAuthProvider         - Поставщик услуг аутентификации
+     * @param SearchContactService $searchContactService         - Сервис поиска контактов
+     * @param ViewTemplateInterface $viewTemplate                - Шаблонизатор для рендеринга html
+     * @param SearchAddressService $addressService               - Сервис поиска адресов
+     * @param HttpAuthProvider $httpAuthProvider                 - Поставщик услуг аутентификации
+     * @param ServerResponseFactory $serverResponseFactory       - Фабрика создания серверного ответа
      */
     public function __construct(
         LoggerInterface $logger,
@@ -76,7 +84,8 @@ class AddressAdministrationController implements ControllerInterface
         SearchContactService $searchContactService,
         ViewTemplateInterface $viewTemplate,
         SearchAddressService $addressService,
-        HttpAuthProvider $httpAuthProvider
+        HttpAuthProvider $httpAuthProvider,
+        ServerResponseFactory $serverResponseFactory
     ) {
         $this->logger = $logger;
         $this->arrivalNewAddressService = $arrivalNewAddressService;
@@ -84,13 +93,14 @@ class AddressAdministrationController implements ControllerInterface
         $this->viewTemplate = $viewTemplate;
         $this->addressService = $addressService;
         $this->httpAuthProvider = $httpAuthProvider;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
 
     /**
      * @inheritDoc
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse
+    public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         try {
             if (false === $this->httpAuthProvider->isAuth()) {
@@ -112,7 +122,7 @@ class AddressAdministrationController implements ControllerInterface
 
             $viewData = [
                 'addresses' => $dtoAddressCollection,
-                'contacts'  => $dtoContactsCollection
+                'contacts' => $dtoContactsCollection
             ];
 
             $context = array_merge($viewData, $resultAddAddress);
@@ -131,17 +141,17 @@ class AddressAdministrationController implements ControllerInterface
 
         $html = $this->viewTemplate->render($template, $context);
 
-        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
+        return $this->serverResponseFactory->createHtmlResponse($httpCode, $html);
     }
 
     /**
      * Результат добавления новых адресов
      *
-     * @param ServerRequest $serverRequest
+     * @param ServerRequestInterface $serverRequest
      *
-     * @return array - данные о ошибках при добавлении адреса
+     * @return array - данные об ошибках при добавлении адреса
      */
-    private function addAddress(ServerRequest $serverRequest): array
+    private function addAddress(ServerRequestInterface $serverRequest): array
     {
         $dataToCreate = [];
         parse_str($serverRequest->getBody(), $dataToCreate);

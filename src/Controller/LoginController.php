@@ -2,14 +2,14 @@
 
 namespace DD\ContactList\Controller;
 
+use DD\ContactList\Exception;
 use DD\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
-use DD\ContactList\Infrastructure\Http\HttpResponse;
-use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
-use DD\ContactList\Infrastructure\Uri\Uri;
 use DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
-use DD\ContactList\Exception;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Throwable;
 
 class LoginController implements ControllerInterface
@@ -29,22 +29,42 @@ class LoginController implements ControllerInterface
     private HttpAuthProvider $httpAuthProvider;
 
     /**
-     * @param ViewTemplateInterface $viewTemplate
-     * @param HttpAuthProvider      $httpAuthProvider
+     * Фабрика для создания uri
+     *
+     * @var UriFactoryInterface
+     */
+    private UriFactoryInterface $uriFactory;
+
+    /**
+     * Фабрика создания серверного ответа
+     *
+     * @var ServerResponseFactory
+     */
+    private ServerResponseFactory $serverResponseFactory;
+
+    /**
+     * @param ViewTemplateInterface $viewTemplate          - Шаблонизатор
+     * @param HttpAuthProvider $httpAuthProvider           - Сервис услуги аутентификации
+     * @param UriFactoryInterface $uriFactory              - Фабрика для создания uri
+     * @param ServerResponseFactory $serverResponseFactory - Фабрика создания серверного ответа
      */
     public function __construct(
         ViewTemplateInterface $viewTemplate,
-        HttpAuthProvider $httpAuthProvider
+        HttpAuthProvider $httpAuthProvider,
+        UriFactoryInterface $uriFactory,
+        ServerResponseFactory $serverResponseFactory
     ) {
         $this->viewTemplate = $viewTemplate;
         $this->httpAuthProvider = $httpAuthProvider;
+        $this->serverResponseFactory = $serverResponseFactory;
+        $this->uriFactory = $uriFactory;
     }
 
 
     /**
      * @inheritDoc
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse
+    public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         try {
             $response = $this->doLogin($serverRequest);
@@ -60,9 +80,9 @@ class LoginController implements ControllerInterface
      *
      * @param Throwable $e
      *
-     * @return HttpResponse
+     * @return ResponseInterface
      */
-    private function buildErrorResponse(Throwable $e): HttpResponse
+    private function buildErrorResponse(Throwable $e): ResponseInterface
     {
         $httpCode = 500;
         $context = [
@@ -76,17 +96,17 @@ class LoginController implements ControllerInterface
             $context
         );
 
-        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
+        return $this->serverResponseFactory->createHtmlResponse($httpCode, $html);
     }
 
     /**
      * Реализация процесса аутентификации
      *
-     * @param ServerRequest $serverRequest
+     * @param ServerRequestInterface $serverRequest
      *
-     * @return HttpResponse
+     * @return ResponseInterface
      */
-    private function doLogin(ServerRequest $serverRequest): HttpResponse
+    private function doLogin(ServerRequestInterface $serverRequest): ResponseInterface
     {
         $response = null;
         $context = [];
@@ -99,9 +119,9 @@ class LoginController implements ControllerInterface
             if ($this->isAuth($authData['login'], $authData['password'])) {
                 $queryParams = $serverRequest->getQueryParams();
                 $redirect = array_key_exists('redirect', $queryParams)
-                    ? Uri::createFromString($queryParams['redirect'])
-                    : Uri::createFromString('/');
-                $response = ServerResponseFactory::redirect($redirect);
+                    ? $this->uriFactory->createUri($queryParams['redirect'])
+                    : $this->uriFactory->createUri('/');
+                $response = $this->serverResponseFactory->redirect($redirect);
             } else {
                 $context['errMsg'] = 'Логин и пароль не подходят';
             }
@@ -109,7 +129,7 @@ class LoginController implements ControllerInterface
 
         if (null === $response) {
             $html = $this->viewTemplate->render(__DIR__ . '/../../templates/login.phtml', $context);
-            $response = ServerResponseFactory::createHtmlResponse(200, $html);
+            $response = $this->serverResponseFactory->createHtmlResponse(200, $html);
         }
 
         return $response;

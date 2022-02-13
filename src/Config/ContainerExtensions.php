@@ -2,6 +2,7 @@
 
 namespace DD\ContactList\Config;
 
+use DD\ContactList\Infrastructure\Http\SymfonyDi\DiHttpExt;
 use DD\ContactList\Infrastructure\Logger\SymfonyDi\DiLoggerExt;
 use DD\ContactList\Infrastructure\Router\SymfonyDi\DiRouterExt;
 use DD\ContactList\Infrastructure\ViewTemplate\SymfonyDi\DiViewTemplateExt;
@@ -21,7 +22,8 @@ class ContainerExtensions
         return [
             new DiRouterExt(),
             new DiLoggerExt(),
-            new DiViewTemplateExt()
+            new DiViewTemplateExt(),
+            new DiHttpExt()
         ];
     }
 

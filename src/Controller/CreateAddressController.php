@@ -3,30 +3,46 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
-use DD\ContactList\Infrastructure\Http\HttpResponse;
-use DD\ContactList\Infrastructure\Http\ServerRequest;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Service\ArrivalNewAddressService;
 use DD\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 class CreateAddressController implements ControllerInterface
 {
+    /**
+     * Сервис добавления адреса
+     *
+     * @var ArrivalNewAddressService
+     */
     private ArrivalNewAddressService $arrivalNewAddressService;
 
     /**
-     * @param ArrivalNewAddressService $arrivalNewAddressService
+     * Фабрика создания серверного ответа
+     *
+     * @var ServerResponseFactory
      */
-    public function __construct(ArrivalNewAddressService $arrivalNewAddressService)
-    {
+    private ServerResponseFactory $serverResponseFactory;
+
+    /**
+     * @param ArrivalNewAddressService $arrivalNewAddressService
+     * @param ServerResponseFactory $serverResponseFactory
+     */
+    public function __construct(
+        ArrivalNewAddressService $arrivalNewAddressService,
+        ServerResponseFactory $serverResponseFactory
+    ) {
         $this->arrivalNewAddressService = $arrivalNewAddressService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
 
     /**
      * @inheritDoc
      */
-    public function __invoke(ServerRequest $serverRequest): HttpResponse
+    public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         try {
             $requestData = json_decode($serverRequest->getBody(), 10, JSON_THROW_ON_ERROR, JSON_THROW_ON_ERROR);
@@ -43,7 +59,7 @@ class CreateAddressController implements ControllerInterface
             ];
         }
 
-        return ServerResponseFactory::createJsonResponse($httpCode, $jsonData);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $jsonData);
     }
 
     private function runService($requestData): ArrivalNewAddressService\ResultRegisteringAddressDto

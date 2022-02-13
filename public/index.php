@@ -3,16 +3,18 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
+use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Config\ContainerExtensions;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
 use DD\ContactList\Infrastructure\HttpApplication\App;
-use DD\ContactList\Config\AppConfig;
-use DD\ContactList\Infrastructure\Http\ServerRequestFactory;
 use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\View\RenderInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Message\ServerRequestInterface;
 
 $httpResponse = (new App(
     static function (ContainerInterface $di): RouterInterface {
@@ -40,5 +42,17 @@ $httpResponse = (new App(
             __DIR__ . '/../var/cache/di-symfony/DDContactListCachedContainer.php'
         )
     )
-))->dispatch(ServerRequestFactory::createFromGlobals($_SERVER, file_get_contents('php://input')));
+))->dispatch(
+    (static function (): ServerRequestInterface {
+        $psr17Factory = new Psr17Factory();
 
+        $creator = new ServerRequestCreator(
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory
+        );
+
+        return $creator->fromGlobals();
+    })()
+);

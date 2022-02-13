@@ -38,7 +38,7 @@
         <prototype namespace="DD\ContactList\" resource="./../../src"/>
         <prototype namespace="DD\ContactList\Infrastructure\"
                    resource="./../../vendor/dd/framework-for-contact-list/src"
-                   exclude="./../../vendor/dd/framework-for-contact-list/src/{Router,Logger}"
+                   exclude="./../../vendor/dd/framework-for-contact-list/src/{Router,Logger,Http}"
                    />
 
         <instanceof id="DD\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
@@ -63,9 +63,9 @@
 
         <service id="DD\ContactList\Infrastructure\Auth\HttpAuthProvider" public="false">
             <argument key="$loginUri" type="service">
-                <service>
-                    <factory class="DD\ContactList\Infrastructure\Uri\Uri" method="createFromString"/>
-                    <argument key="$uri" type="expression">service('DD\\ContactList\\Config\\AppConfig').getLoginUri()
+                <service class="Nyholm\Psr7\Uri">
+                    <argument key="$uri" type="expression">
+                        service('DD\\ContactList\\Config\\AppConfig').getLoginUri()
                     </argument>
                 </service>
             </argument>
@@ -83,6 +83,14 @@
 
         <service id="DD\ContactList\Infrastructure\View\RenderInterface" public="true"
                  class="DD\ContactList\Infrastructure\View\DefaultRender"/>
+
+        <service id="Nyholm\Psr7\Factory\Psr17Factory"/>
+
+        <service id="Psr\Http\Message\UriFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
+
+        <service id="Psr\Http\Message\ResponseFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
+
+        <service id="Psr\Http\Message\StreamFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
 
     </services>
 

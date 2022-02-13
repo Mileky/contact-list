@@ -6,7 +6,7 @@ use DD\ContactList\Exception\RuntimeException;
 use DD\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
-use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
 use DD\ContactList\Service\ArrivalNewAddressService;
 use DD\ContactList\Service\ArrivalNewAddressService\NewAddressDto;

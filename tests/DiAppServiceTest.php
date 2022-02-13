@@ -28,10 +28,10 @@ class DiAppServiceTest extends TestCase
                 'serviceId' => ContactList\Controller\LoginController::class,
                 'expectedValue' => ContactList\Controller\LoginController::class
             ],
-            ContactList\Infrastructure\Logger\LoggerInterface::class => [
-                'serviceId' => ContactList\Infrastructure\Logger\LoggerInterface::class,
-                'expectedValue' => ContactList\Infrastructure\Logger\Logger::class
-            ],
+//            ContactList\Infrastructure\Logger\LoggerInterface::class => [
+//                'serviceId' => ContactList\Infrastructure\Logger\LoggerInterface::class,
+//                'expectedValue' => ContactList\Infrastructure\Logger\Logger::class
+//            ],
             ContactList\Config\AppConfig::class => [
                 'serviceId' => ContactList\Config\AppConfig::class,
                 'expectedValue' => ContactList\Config\AppConfig::class

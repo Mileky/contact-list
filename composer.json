@@ -23,7 +23,9 @@
     "ext-json": "*",
     "dd/framework-for-contact-list": "dev-home_work_11-02-2022",
     "psr/http-message": "^1.0",
-    "nyholm/psr7-server": "^1.0"
+    "nyholm/psr7-server": "^1.0",
+    "psr/log": "^1.1",
+    "monolog/monolog": "^2.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",

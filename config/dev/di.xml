@@ -39,7 +39,7 @@
         <prototype namespace="DD\ContactList\Infrastructure\"
                    resource="./../../vendor/dd/framework-for-contact-list/src"
                    exclude="./../../vendor/dd/framework-for-contact-list/src/{Router,Logger,Http}"
-                   />
+        />
 
         <instanceof id="DD\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
         <instanceof id="DD\ContactList\Infrastructure\Console\CommandInterface" public="true"/>
@@ -91,6 +91,11 @@
         <service id="Psr\Http\Message\ResponseFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
 
         <service id="Psr\Http\Message\StreamFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
+
+<!--        <service id="Psr\Log\NullLogger"/>-->
+
+<!--        <service id="Psr\Log\LoggerInterface" alias="Psr\Log\NullLogger" public="true"/>-->
+
 
     </services>
 

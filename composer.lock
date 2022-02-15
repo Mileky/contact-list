@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
-                "reference": "f88922282e3f0e8aa3ca0e03b6e743e453a0018b"
+                "reference": "35c916b15a768ac84a47867a674c77a5695b108b"
             },
             "require": {
                 "dd/logger-for-contact-list": "dev-home_work_15-02-2022",
@@ -65,7 +65,7 @@
             "support": {
                 "email": "zinchenko@effective-group.ru"
             },
-            "time": "2022-02-15T09:35:12+00:00"
+            "time": "2022-02-15T09:40:19+00:00"
         },
         {
             "name": "dd/logger-for-contact-list",

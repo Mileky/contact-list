@@ -21,7 +21,7 @@
   "require": {
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
-    "dd/framework-for-contact-list": "dev-home_work_11-02-2022",
+    "dd/framework-for-contact-list": "dev-home_work_15-02-2022",
     "psr/http-message": "^1.0",
     "nyholm/psr7-server": "^1.0"
   },

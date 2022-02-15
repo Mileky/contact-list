@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
-                "reference": "6591bdf4348c95a4ac4eb83f77fb2c4ab757dd6b"
+                "reference": "62e38c20f136cac3f7474ec17a2579342e0e4065"
             },
             "require": {
                 "dd/logger-for-contact-list": "dev-home_work_11-02-2022",
@@ -24,6 +24,7 @@
                 "psr/http-factory-implementation": "^1.0",
                 "psr/http-message": "^1.0",
                 "psr/http-message-implementation": "^1.0",
+                "psr/log": "^1.1",
                 "symfony/config": "^5.4",
                 "symfony/dependency-injection": "^5.4",
                 "symfony/expression-language": "^5.4"
@@ -64,7 +65,7 @@
             "support": {
                 "email": "zinchenko@effective-group.ru"
             },
-            "time": "2022-02-13T12:50:03+00:00"
+            "time": "2022-02-13T13:17:26+00:00"
         },
         {
             "name": "dd/logger-for-contact-list",
@@ -72,7 +73,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/logger-for-contact-list.git",
-                "reference": "b20c92505f8031ff83198840b7c810508b3b2700"
+                "reference": "1acba6c455e0b3825f1eb4549afd9a4bbefa0591"
             },
             "require": {
                 "ext-json": "*",
@@ -98,7 +99,7 @@
                 }
             ],
             "description": "description",
-            "time": "2022-02-13T10:30:45+00:00"
+            "time": "2022-02-13T13:43:26+00:00"
         },
         {
             "name": "dd/view-template-for-contact-list",
@@ -3146,16 +3147,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "5.0.4",
+            "version": "5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4"
+                "reference": "0ca8db5a5fc9c8646244e629625ac486fa286bf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
-                "reference": "19c519631c5a511b7ed0ad64a6713fdb3fd25fe4",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/0ca8db5a5fc9c8646244e629625ac486fa286bf2",
+                "reference": "0ca8db5a5fc9c8646244e629625ac486fa286bf2",
                 "shasum": ""
             },
             "require": {
@@ -3198,7 +3199,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/global-state/issues",
-                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.4"
+                "source": "https://github.com/sebastianbergmann/global-state/tree/5.0.5"
             },
             "funding": [
                 {
@@ -3206,7 +3207,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-10T07:01:19+00:00"
+            "time": "2022-02-14T08:28:10+00:00"
         },
         {
             "name": "sebastian/lines-of-code",

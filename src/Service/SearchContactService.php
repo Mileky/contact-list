@@ -8,7 +8,7 @@ use DD\ContactList\Entity\ContactRepositoryInterface;
 use DD\ContactList\Entity\Customer;
 use DD\ContactList\Entity\Kinsfolk;
 use DD\ContactList\Entity\Recipient;
-use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use DD\ContactList\Service\SearchContactService\ColleagueDto;
 use DD\ContactList\Service\SearchContactService\ContactDto;
 use DD\ContactList\Service\SearchContactService\CustomerDto;

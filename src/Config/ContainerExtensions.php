@@ -21,7 +21,7 @@ class ContainerExtensions
     {
         return [
             new DiRouterExt(),
-            new DiLoggerExt(),
+//            new DiLoggerExt(),
             new DiViewTemplateExt(),
             new DiHttpExt()
         ];
@@ -36,7 +36,7 @@ class ContainerExtensions
     {
         return [
             new DiRouterExt(),
-            new DiLoggerExt()
+//            new DiLoggerExt()
         ];
     }
 }

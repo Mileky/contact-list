@@ -4,7 +4,7 @@ namespace DD\ContactList\Controller;
 
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
-use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use DD\ContactList\Infrastructure\Validator\Assert;
 use DD\ContactList\Service\SearchContactService;
 use Psr\Http\Message\ResponseInterface;

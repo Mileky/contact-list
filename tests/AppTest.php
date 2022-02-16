@@ -8,9 +8,6 @@ use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
 use DD\ContactList\Infrastructure\HttpApplication\App;
-use DD\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
-use DD\ContactList\Infrastructure\Logger\AdapterInterface;
-use DD\ContactList\Infrastructure\Logger\LoggerInterface;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\View\NullRender;
 use DD\ContactList\Infrastructure\View\RenderInterface;
@@ -19,7 +16,10 @@ use JsonException;
 use Nyholm\Psr7\ServerRequest;
 use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Тестирование приложения
@@ -44,8 +44,9 @@ class AppTest extends TestCase
             )
         );
 
-        $containerBuilder->removeAlias(AdapterInterface::class);
-        $containerBuilder->setAlias(AdapterInterface::class, NullAdapter::class);
+        $containerBuilder->removeAlias(LoggerInterface::class);
+        $containerBuilder->setDefinition(NullLogger::class, new Definition());
+        $containerBuilder->setAlias(LoggerInterface::class, NullLogger::class)->setPublic(true);
 
         $containerBuilder->getDefinition(RenderInterface::class)
             ->setClass(NullRender::class)

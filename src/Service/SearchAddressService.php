@@ -4,7 +4,7 @@ namespace DD\ContactList\Service;
 
 use DD\ContactList\Entity\Address;
 use DD\ContactList\Entity\AddressRepositoryInterface;
-use DD\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use DD\ContactList\Service\SearchAddressService\AddressDto;
 use DD\ContactList\Service\SearchAddressService\SearchAddressCriteria;
 

@@ -26,8 +26,8 @@
 
                 <argument type="service">
                     <service class="Monolog\Handler\TelegramBotHandler">
-                        <argument key="$apiKey">%monolog.logger.telegram.token%</argument>
-                        <argument key="$channel">%monolog.logger.telegram.chanel%</argument>
+                        <argument key="$apiKey">5180977574:AAE1IpwoQz_gN5sJQRU37NTcLebyFYjOYZg</argument>
+                        <argument key="$channel">-772655709</argument>
                         <argument key="$level" type="constant">Monolog\Logger::ERROR</argument>
                     </service>
                 </argument>

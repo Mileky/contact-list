@@ -11,6 +11,9 @@
 
         <service id="DD\ContactList\Infrastructure\ViewTemplate\TwigTemplate">
             <argument key="$pathToTemplates">%kernel.project_dir%/templates/</argument>
+            <argument key="$cacheDir">%kernel.project_dir%/var/cache/twig/</argument>
+            <argument key="$debug">false</argument>
+
         </service>
 
     </services>

@@ -7,7 +7,6 @@ use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Config\ContainerExtensions;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
-use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use Psr\Log\LoggerInterface;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
@@ -30,7 +29,7 @@ $httpResponse = (new App(
         return $di->get(RenderInterface::class);
     },
     new SymfonyDiContainerInit(
-        new ContainerParams(
+        new \DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit\ContainerParams(
             __DIR__ . '/../config/dev/di.xml',
             [
                 'kernel.project_dir' => __DIR__ . '/../'

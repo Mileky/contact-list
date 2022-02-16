@@ -22,7 +22,6 @@ class ContainerExtensions
         return [
             new DiRouterExt(),
 //            new DiLoggerExt(),
-            new DiViewTemplateExt(),
             new DiHttpExt()
         ];
     }

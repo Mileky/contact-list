@@ -1,0 +1,78 @@
+<style>
+    form label {
+        width: 100pt;
+        display: block;
+    }
+</style>
+
+<h1>Address page</h1>
+
+<div>
+    <h2>Добавить адрес</h2>
+    <form method="post">
+        <div>
+            <div>
+                <label for="id_recipient">Имя контакта</label>
+                <select name="id_recipient" id="id_recipient">
+                    {% for contact in contacts %}
+                        <option {% if addressData.id_recipient == contact.getId() %}selected{% endif %} value ="{{ contact.getId() }}">
+                            {{ contact.getFullName() }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="address">Адрес</label>
+                <input type="text" name="address" id="address" placeholder="Улица, номер дома" value="{{ addressData.address }}"/>
+                {% if addressValidationError is defined %}
+                    <ul>
+                        {% for err in addressValidationError %}
+                            {{ err }}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div>
+                <label for="status">Статус адреса</label>
+                <select name="status" id="status">
+
+                    <option {% if addressData.status == 'home' %}selected{% endif %} value ="home">Дом</option>
+
+                    <option {% if addressData.status == 'job' %}selected{% endif %} value ="job">Работа</option>
+
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Добавить"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<table>
+
+    <thead>
+    <tr>
+        <th>Id адреса</th>
+        <th>Id контакта</th>
+        <th>Адрес</th>
+        <th>Статус адреса</th>
+    </tr>
+    </thead>
+
+
+    <tbody>
+    {% for address in addresses %}
+
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ address.getIdRecipient() }}</td>
+            <td>{{ address.getAddress() }}</td>
+            <td>{{ address.getStatus() }}</td>
+        </tr>
+
+    {% endfor %}
+    </tbody>
+
+</table>

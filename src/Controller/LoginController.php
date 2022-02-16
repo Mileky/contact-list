@@ -92,7 +92,7 @@ class LoginController implements ControllerInterface
         ];
 
         $html = $this->viewTemplate->render(
-            __DIR__ . '/../../templates/errors.phtml',
+            'errors.twig',
             $context
         );
 
@@ -128,7 +128,7 @@ class LoginController implements ControllerInterface
         }
 
         if (null === $response) {
-            $html = $this->viewTemplate->render(__DIR__ . '/../../templates/login.phtml', $context);
+            $html = $this->viewTemplate->render('login.twig', $context);
             $response = $this->serverResponseFactory->createHtmlResponse(200, $html);
         }
 

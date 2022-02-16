@@ -126,12 +126,12 @@ class AddressAdministrationController implements ControllerInterface
             ];
 
             $context = array_merge($viewData, $resultAddAddress);
-            $template = __DIR__ . '/../../templates/address.Administration.phtml';
+            $template = 'address.Administration.twig';
 
             $httpCode = 200;
         } catch (Throwable $e) {
             $httpCode = 500;
-            $template = __DIR__ . '/../../templates/errors.phtml';
+            $template = 'errors.twig';
             $context = [
                 'errors' => [
                     $e->getMessage()

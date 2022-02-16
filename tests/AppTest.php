@@ -6,7 +6,7 @@ use DD\ContactList\Config\AppConfig;
 use DD\ContactList\Config\ContainerExtensions;
 use DD\ContactList\Infrastructure\DI\ContainerInterface;
 use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
-use DD\ContactList\Infrastructure\Di\SymfonyDiContainerInit\ContainerParams;
+use DD\ContactList\Infrastructure\DI\SymfonyDiContainerInit\ContainerParams;
 use DD\ContactList\Infrastructure\HttpApplication\App;
 use DD\ContactList\Infrastructure\Router\RouterInterface;
 use DD\ContactList\Infrastructure\View\NullRender;

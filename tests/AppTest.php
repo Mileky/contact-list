@@ -76,7 +76,83 @@ class AppTest extends TestCase
     public static function dataProvider(): array
     {
         return [
-            'Тестирование поиска получателя по id' => [
+            'Тестирование поиска клиента по id' => [
+                'in' => [
+                    'uri' => '/contacts?id_recipient=7',
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $c->compile();
+                        return $c;
+                    })(
+                        self::createDiContainer()
+                    )
+                ],
+                'out' => [
+                    'httpCode' => 200,
+                    'result' => [
+                        [
+                            'id_recipient' => 7,
+                            'full_name' => 'Калинин Пётр Александрович',
+                            'birthday' => '04.06.1983',
+                            'profession' => 'Фитнес тренер',
+                            'contract_number' => '5684',
+                            'average_transaction_amount' => '2500',
+                            'discount' => '5%',
+                            'time_to_call' => 'С 9:00 до 13:00 в будни'
+                        ],
+                    ]
+                ]
+            ],
+            'Тестирование поиска коллеги по id' => [
+                'in' => [
+                    'uri' => '/contacts?id_recipient=10',
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $c->compile();
+                        return $c;
+                    })(
+                        self::createDiContainer()
+                    )
+                ],
+                'out' => [
+                    'httpCode' => 200,
+                    'result' => [
+                        [
+                            'id_recipient' => 10,
+                            'full_name' => 'Шатов Александр Иванович',
+                            'birthday' => '02.12.1971',
+                            'profession' => '',
+                            'department' => 'Дирекция',
+                            'position' => 'Директор',
+                            'room_number' => '405'
+                        ],
+                    ]
+                ]
+            ],
+            'Тестирование поиска родственника по id' => [
+                'in' => [
+                    'uri' => '/contacts?id_recipient=6',
+                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
+                        $c->compile();
+                        return $c;
+                    })(
+                        self::createDiContainer()
+                    )
+                ],
+                'out' => [
+                    'httpCode' => 200,
+                    'result' => [
+                        [
+                            'id_recipient' => 6,
+                            'full_name' => 'Дед',
+                            'birthday' => '04.06.1945',
+                            'profession' => 'Столяр',
+                            'status' => 'Дед',
+                            'ringtone' => 'Bells',
+                            'hotkey' => '1'
+                        ],
+                    ]
+                ]
+            ],
+            'Тестирование поиска знакомого по id' => [
                 'in' => [
                     'uri' => '/contacts?id_recipient=1',
                     'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {

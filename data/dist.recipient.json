@@ -15,7 +15,7 @@
     "id_recipient": 2,
     "full_name": "Тамара",
     "birthday": "06.06.1990",
-    "profession": "",
+    "profession": "null",
     "messengers": []
   },
   {
@@ -29,7 +29,7 @@
     "id_recipient": 4,
     "full_name": "Катя",
     "birthday": "08.03.1989",
-    "profession": "",
+    "profession": "null",
     "messengers": []
   },
   {

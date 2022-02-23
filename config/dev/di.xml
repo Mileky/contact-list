@@ -72,7 +72,7 @@
         </service>
 
         <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface"
-                 class="DD\ContactList\Repository\UserJsonFileRepository"/>
+                 class="DD\ContactList\Repository\UserDbRepository"/>
 
         <service id="DD\ContactList\Infrastructure\Session\SessionInterface" public="false">
             <factory class="DD\ContactList\Infrastructure\Session\SessionNative" method="create"/>

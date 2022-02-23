@@ -2,10 +2,9 @@
 
 namespace DD\ContactList\Config;
 
+use DD\ContactList\Infrastructure\Db\SymfonyDi\DiDbExt;
 use DD\ContactList\Infrastructure\Http\SymfonyDi\DiHttpExt;
-use DD\ContactList\Infrastructure\Logger\SymfonyDi\DiLoggerExt;
 use DD\ContactList\Infrastructure\Router\SymfonyDi\DiRouterExt;
-use DD\ContactList\Infrastructure\ViewTemplate\SymfonyDi\DiViewTemplateExt;
 
 /**
  * Наборы расширений для di контейнера
@@ -21,8 +20,8 @@ class ContainerExtensions
     {
         return [
             new DiRouterExt(),
-//            new DiLoggerExt(),
-            new DiHttpExt()
+            new DiHttpExt(),
+            new DiDbExt()
         ];
     }
 
@@ -35,7 +34,8 @@ class ContainerExtensions
     {
         return [
             new DiRouterExt(),
-//            new DiLoggerExt()
+            new DiDbExt(),
+            new DiHttpExt()
         ];
     }
 }

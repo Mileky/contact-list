@@ -51,11 +51,11 @@
     },
     {
       "type": "git",
-      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/logger-for-contact-list.git"
+      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/view-template-for-contact-list.git"
     },
     {
       "type": "git",
-      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/view-template-for-contact-list.git"
+      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/db-for-contact-list.git"
     }
   ]
 }

@@ -14,9 +14,9 @@ class AddressDto
     /**
      * Id контакта
      *
-     * @var int
+     * @var array
      */
-    private int $id_recipient;
+    private array $id_recipient;
 
     /**
      * Адрес контакта
@@ -33,17 +33,31 @@ class AddressDto
     private string $status;
 
     /**
-     * @param int    $id_address   - Id адреса
-     * @param int    $id_recipient - Id контакта
-     * @param string $address      - Адрес контакта
-     * @param string $status       - Статус адреса (дом/работа)
+     * Id контактов для печати на веб странице
+     *
+     * @var string
      */
-    public function __construct(int $id_address, int $id_recipient, string $address, string $status)
-    {
+    private string $titleContacts;
+
+    /**
+     * @param int $id_address - Id адреса
+     * @param array $id_recipient - Id контакта
+     * @param string $address - Адрес контакта
+     * @param string $status - Статус адреса (дом/работа)
+     * @param string $titleContacts - Id контактов для печати на веб странице
+     */
+    public function __construct(
+        int $id_address,
+        array $id_recipient,
+        string $address,
+        string $status,
+        string $titleContacts
+    ) {
         $this->id_address = $id_address;
         $this->id_recipient = $id_recipient;
         $this->address = $address;
         $this->status = $status;
+        $this->titleContacts = $titleContacts;
     }
 
     /**
@@ -55,9 +69,9 @@ class AddressDto
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getIdRecipient(): int
+    public function getRecipients(): array
     {
         return $this->id_recipient;
     }
@@ -76,5 +90,13 @@ class AddressDto
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleContacts(): string
+    {
+        return $this->titleContacts;
     }
 }

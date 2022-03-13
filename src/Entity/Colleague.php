@@ -145,7 +145,7 @@ final class Colleague extends AbstractContact
     public static function createFromArray(array $data): Colleague
     {
         $requiredFields = [
-            'id_recipient',
+            'id',
             'full_name',
             'birthday',
             'profession',
@@ -162,7 +162,7 @@ final class Colleague extends AbstractContact
             throw new Exception\InvalidDataStructureException($errMsg);
         }
         return new Colleague(
-            $data['id_recipient'],
+            $data['id'],
             $data['full_name'],
             $data['birthday'],
             $data['profession'],

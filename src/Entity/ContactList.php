@@ -103,7 +103,7 @@ class ContactList
     public static function createFromArray(array $data): ContactList
     {
         $requiredFields = [
-            'id_entry',
+            'id',
             'id_recipient',
             'blacklist'
         ];
@@ -116,7 +116,7 @@ class ContactList
         }
 
         return new ContactList(
-            $data['id_entry'],
+            $data['id'],
             $data['id_recipient'],
             $data['blacklist']
         );

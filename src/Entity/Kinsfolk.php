@@ -144,7 +144,7 @@ final class Kinsfolk extends AbstractContact
     public static function createFromArray(array $data): Kinsfolk
     {
         $requiredFields = [
-            'id_recipient',
+            'id',
             'full_name',
             'birthday',
             'profession',
@@ -161,7 +161,7 @@ final class Kinsfolk extends AbstractContact
             throw new Exception\InvalidDataStructureException($errMsg);
         }
         return new Kinsfolk(
-            $data['id_recipient'],
+            $data['id'],
             $data['full_name'],
             $data['birthday'],
             $data['profession'],

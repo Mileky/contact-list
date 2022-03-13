@@ -4,15 +4,15 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "376486905d0309f74ed1ddf3001676a4",
+    "content-hash": "1cc906850a7dfc605694553be5c26197",
     "packages": [
         {
             "name": "dd/db-for-contact-list",
-            "version": "dev-home_work_24-02-2022",
+            "version": "dev-home_work_28-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/db-for-contact-list.git",
-                "reference": "54c5f8a633e234144eb77f63202cbffd5161d0b4"
+                "reference": "58430d415d6b2bace0c5d9f0b0c70024657e7879"
             },
             "require": {
                 "ext-json": "*",
@@ -38,19 +38,19 @@
                 }
             ],
             "description": "description",
-            "time": "2022-02-24T06:30:28+00:00"
+            "time": "2022-02-27T12:36:49+00:00"
         },
         {
             "name": "dd/framework-for-contact-list",
-            "version": "dev-home_work_24-02-2022",
+            "version": "dev-home_work_28-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/framework-for-contact-list.git",
-                "reference": "94955fcce678aed98f871dd543b7e77275cfccbb"
+                "reference": "5664569e3633fde45e0e3d0c968f6f1b476875b9"
             },
             "require": {
-                "dd/db-for-contact-list": "dev-home_work_24-02-2022",
-                "dd/view-template-for-contact-list": "dev-home_work_24-02-2022",
+                "dd/db-for-contact-list": "dev-home_work_28-02-2022",
+                "dd/view-template-for-contact-list": "dev-home_work_28-02-2022",
                 "ext-json": "*",
                 "php": "^7.4 || ^8.0",
                 "psr/container": "^1.1.2",
@@ -99,11 +99,11 @@
             "support": {
                 "email": "zinchenko@effective-group.ru"
             },
-            "time": "2022-02-23T12:12:04+00:00"
+            "time": "2022-02-27T12:45:41+00:00"
         },
         {
             "name": "dd/view-template-for-contact-list",
-            "version": "dev-home_work_24-02-2022",
+            "version": "dev-home_work_28-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/zinchenko.d.s/view-template-for-contact-list.git",
@@ -1254,12 +1254,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3850,7 +3850,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dd/framework-for-contact-list": 20
+        "dd/framework-for-contact-list": 20,
+        "dd/db-for-contact-list": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

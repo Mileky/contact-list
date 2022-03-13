@@ -36,7 +36,7 @@ final class Recipient extends AbstractContact
     public static function createFromArray(array $data): Recipient
     {
         $requiredFields = [
-            'id_recipient',
+            'id',
             'full_name',
             'birthday',
             'profession',
@@ -51,7 +51,7 @@ final class Recipient extends AbstractContact
         }
 
         return new Recipient(
-            $data['id_recipient'],
+            $data['id'],
             $data['full_name'],
             $data['birthday'],
             $data['profession'],

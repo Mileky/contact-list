@@ -16,9 +16,9 @@ class ResultRegisteringAddressDto
     /**
      * Id контакта
      *
-     * @var int
+     * @var array
      */
-    private int $idContact;
+    private array $contacts;
 
     /**
      * Адрес контакта
@@ -36,14 +36,14 @@ class ResultRegisteringAddressDto
 
     /**
      * @param int    $idAddress - Id адреса
-     * @param int    $idContact - Id контакта
+     * @param array    $contacts - Id контакта
      * @param string $address   - Адрес контакта
      * @param string $status    - Статус адреса (работа/дом)
      */
-    public function __construct(int $idAddress, int $idContact, string $address, string $status)
+    public function __construct(int $idAddress, array $contacts, string $address, string $status)
     {
         $this->idAddress = $idAddress;
-        $this->idContact = $idContact;
+        $this->contacts = $contacts;
         $this->address = $address;
         $this->status = $status;
     }
@@ -57,11 +57,11 @@ class ResultRegisteringAddressDto
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getIdContact(): int
+    public function getContacts(): array
     {
-        return $this->idContact;
+        return $this->contacts;
     }
 
     /**

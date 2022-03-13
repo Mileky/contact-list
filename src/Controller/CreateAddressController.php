@@ -77,7 +77,7 @@ class CreateAddressController implements ControllerInterface
     {
         return [
             'id_address'   => $responseDto->getIdAddress(),
-            'id_recipient' => $responseDto->getIdContact(),
+            'id_recipient' => $responseDto->getContacts(),
             'address'      => $responseDto->getAddress(),
             'status'       => $responseDto->getStatus()
         ];

@@ -13,7 +13,7 @@
         <div>
             <div>
                 <label for="id_recipient">Имя контакта</label>
-                <select name="id_recipient" id="id_recipient">
+                <select name="id_recipient[]" id="id_recipient" multiple>
                     {% for contact in contacts %}
                         <option {% if addressData.id_recipient == contact.getId() %}selected{% endif %} value ="{{ contact.getId() }}">
                             {{ contact.getFullName() }}
@@ -67,7 +67,7 @@
 
         <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ address.getIdRecipient() }}</td>
+            <td>{{ address.getTitleContacts() }}</td>
             <td>{{ address.getAddress() }}</td>
             <td>{{ address.getStatus() }}</td>
         </tr>

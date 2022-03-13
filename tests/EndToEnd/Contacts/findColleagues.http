@@ -8,7 +8,7 @@ GET http://localhost:8080/colleagues/10
    client.assert(response.body['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body['profession'] === "", "профессия не корректна");
+   client.assert(response.body['profession'] === "null", "профессия не корректна");
    client.assert(response.body['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body['position'] === "Директор", "должность не корректна");
    client.assert(response.body['room_number'] === "405", "номер кабинета не корректен");
@@ -25,7 +25,7 @@ GET http://localhost:8080/colleagues?id_recipient=10
    client.assert(response.body[0]['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body[0]['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body[0]['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body[0]['profession'] === "", "профессия не корректна");
+   client.assert(response.body[0]['profession'] === "null", "профессия не корректна");
    client.assert(response.body[0]['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body[0]['position'] === "Директор", "должность не корректна");
    client.assert(response.body[0]['room_number'] === "405", "номер кабинета не корректен");
@@ -42,7 +42,7 @@ GET http://localhost:8080/colleagues?full_name=Шатов Александр И�
    client.assert(response.body[0]['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body[0]['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body[0]['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body[0]['profession'] === "", "профессия не корректна");
+   client.assert(response.body[0]['profession'] === "null", "профессия не корректна");
    client.assert(response.body[0]['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body[0]['position'] === "Директор", "должность не корректна");
    client.assert(response.body[0]['room_number'] === "405", "номер кабинета не корректен");
@@ -59,7 +59,7 @@ GET http://localhost:8080/colleagues?birthday=02.12.1971
    client.assert(response.body[0]['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body[0]['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body[0]['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body[0]['profession'] === "", "профессия не корректна");
+   client.assert(response.body[0]['profession'] === "null", "профессия не корректна");
    client.assert(response.body[0]['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body[0]['position'] === "Директор", "должность не корректна");
    client.assert(response.body[0]['room_number'] === "405", "номер кабинета не корректен");
@@ -76,7 +76,7 @@ GET http://localhost:8080/colleagues?department=Дирекция
    client.assert(response.body[0]['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body[0]['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body[0]['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body[0]['profession'] === "", "профессия не корректна");
+   client.assert(response.body[0]['profession'] === "null", "профессия не корректна");
    client.assert(response.body[0]['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body[0]['position'] === "Директор", "должность не корректна");
    client.assert(response.body[0]['room_number'] === "405", "номер кабинета не корректен");
@@ -93,7 +93,7 @@ GET http://localhost:8080/colleagues?position=Директор
    client.assert(response.body[0]['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body[0]['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body[0]['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body[0]['profession'] === "", "профессия не корректна");
+   client.assert(response.body[0]['profession'] === "null", "профессия не корректна");
    client.assert(response.body[0]['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body[0]['position'] === "Директор", "должность не корректна");
    client.assert(response.body[0]['room_number'] === "405", "номер кабинета не корректен");
@@ -110,7 +110,7 @@ GET http://localhost:8080/colleagues?room_number=405
    client.assert(response.body[0]['id_recipient'] === 10, "id получателя не корректен");
    client.assert(response.body[0]['full_name'] === "Шатов Александр Иванович", "полное имя не корректно");
    client.assert(response.body[0]['birthday'] === "02.12.1971", "день рождения не корректно");
-   client.assert(response.body[0]['profession'] === "", "профессия не корректна");
+   client.assert(response.body[0]['profession'] === "null", "профессия не корректна");
    client.assert(response.body[0]['department'] === "Дирекция", "отдел не корректен");
    client.assert(response.body[0]['position'] === "Директор", "должность не корректна");
    client.assert(response.body[0]['room_number'] === "405", "номер кабинета не корректен");

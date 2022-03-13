@@ -18,11 +18,11 @@ class Address
     private int $idAddress;
 
     /**
-     * ID контакта
+     * Массив контактов адреса
      *
-     * @var AbstractContact
+     * @var AbstractContact[]
      */
-    private AbstractContact $idRecipient;
+    private array $idRecipient;
 
     /**
      * Адрес контакта
@@ -39,12 +39,12 @@ class Address
     private string $status;
 
     /**
-     * @param int             $idAddress   -  ID адреса
-     * @param AbstractContact $idRecipient -  ID контакта
-     * @param string          $address     - Адрес контакта
-     * @param string          $status      - Статус адреса (работа/дом)
+     * @param int $idAddress     -  ID адреса
+     * @param array $idRecipient -  ID контакта
+     * @param string $address    - Адрес контакта
+     * @param string $status     - Статус адреса (работа/дом)
      */
-    public function __construct(int $idAddress, AbstractContact $idRecipient, string $address, string $status)
+    public function __construct(int $idAddress, array $idRecipient, string $address, string $status)
     {
         $this->idAddress = $idAddress;
         $this->idRecipient = $idRecipient;
@@ -61,9 +61,9 @@ class Address
     }
 
     /**
-     * @return AbstractContact
+     * @return AbstractContact[]
      */
-    public function getIdRecipient(): AbstractContact
+    public function getRecipient(): array
     {
         return $this->idRecipient;
     }
@@ -86,19 +86,31 @@ class Address
 
     public function jsonSerialize(): array
     {
-        $jsonData['id_address'] = $this->idAddress;
+        $jsonData['id'] = $this->idAddress;
         $jsonData['id_recipient'] = $this->idRecipient;
-        $jsonData['address'] = $this->address;
+        $jsonData['address_data'] = $this->address;
         $jsonData['status'] = $this->status;
         return $jsonData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleContacts(): string
+    {
+        $titleContactId = [];
+        foreach ($this->getRecipient() as $contact) {
+            $titleContactId[] = $contact->getIdRecipient();
+        }
+        return implode(', ', $titleContactId);
     }
 
     public static function createFromArray(array $data): Address
     {
         $requiredFields = [
-            'id_address',
+            'id',
             'id_recipient',
-            'address',
+            'address_data',
             'status'
         ];
 
@@ -110,9 +122,9 @@ class Address
         }
 
         return new Address(
-            $data['id_address'],
+            $data['id'],
             $data['id_recipient'],
-            $data['address'],
+            $data['address_data'],
             $data['status']
         );
     }

@@ -211,7 +211,7 @@ class AddressAdministrationController implements ControllerInterface
     private function createAddress(array $dataToCreate): void
     {
         $requestDto = new NewAddressDto(
-            (int)$dataToCreate['id_recipient'],
+            $dataToCreate['id_recipient'],
             $dataToCreate['address'],
             $dataToCreate['status'],
         );

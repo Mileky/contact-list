@@ -45,7 +45,7 @@ foreach ($contactsJsonData as $type => $contactsCollection) {
         $roomNumber = $contact['room_number'] ?? 'null';
 
         $sql = <<<EOF
-INSERT INTO contacts (id_recipient, full_name, birthday, profession, status, ringtone, hotkey, contract_number, average_transaction_amount, discount, time_to_call, department, position, room_number, type)
+INSERT INTO contacts (id, full_name, birthday, profession, status, ringtone, hotkey, contract_number, average_transaction_amount, discount, time_to_call, department, position, room_number, category)
 VALUES
 (
  {$contact['id_recipient']},
@@ -76,7 +76,7 @@ $dbConnection->query('DELETE FROM address');
 
 $addressJsonData = json_decode(file_get_contents(__DIR__ . '/../data/address.json'), true, 512, JSON_THROW_ON_ERROR);
 foreach ($addressJsonData as $addressItem) {
-    $sql = "INSERT INTO address(id, id_recipient, address, status) VALUES ({$addressItem['id_address']}, {$addressItem['id_recipient']}, '{$addressItem['address']}', '{$addressItem['status']}')";
+    $sql = "INSERT INTO address(id, id_recipient, address_data, status) VALUES ({$addressItem['id_address']}, {$addressItem['id_recipient']}, '{$addressItem['address']}', '{$addressItem['status']}')";
     $dbConnection->query($sql);
 }
 
@@ -85,7 +85,12 @@ foreach ($addressJsonData as $addressItem) {
  */
 $dbConnection->query('DELETE FROM contact_list');
 
-$contactListJsonData = json_decode(file_get_contents(__DIR__ . '/../data/contact_list.json'), true, 512, JSON_THROW_ON_ERROR);
+$contactListJsonData = json_decode(
+    file_get_contents(__DIR__ . '/../data/contact_list.json'),
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
 foreach ($contactListJsonData as $contactListItem) {
     $sql = "INSERT INTO contact_list(id, id_recipient, blacklist) VALUES ({$contactListItem['id_entry']}, {$contactListItem['id_recipient']}, '{$contactListItem['blacklist']}')";
     $dbConnection->query($sql);
@@ -96,8 +101,41 @@ foreach ($contactListJsonData as $contactListItem) {
  */
 $dbConnection->query('DELETE FROM phone_number');
 
-$phoneNumberJsonData = json_decode(file_get_contents(__DIR__ . '/../data/phone_number.json'), true, 512, JSON_THROW_ON_ERROR);
+$phoneNumberJsonData = json_decode(
+    file_get_contents(__DIR__ . '/../data/phone_number.json'),
+    true,
+    512,
+    JSON_THROW_ON_ERROR
+);
 foreach ($phoneNumberJsonData as $phoneNumberItem) {
-    $sql = "INSERT INTO phone_number(id_phone_number, id_recipient, phone_number, operator) VALUES ({$phoneNumberItem['id_phone_number']}, {$phoneNumberItem['id_recipient']}, '{$phoneNumberItem['phone_number']}', '{$phoneNumberItem['operator']}')";
+    $sql = "INSERT INTO phone_number(id, id_recipient, phone_number, operator) VALUES ({$phoneNumberItem['id_phone_number']}, {$phoneNumberItem['id_recipient']}, '{$phoneNumberItem['phone_number']}', '{$phoneNumberItem['operator']}')";
     $dbConnection->query($sql);
+}
+
+/**
+ * Импорт данных об объекте значение мессенджеры
+ */
+$contactsJsonData = [
+    'recipients' => json_decode(file_get_contents(__DIR__ . '/../data/recipient.json'), true, 512, JSON_THROW_ON_ERROR),
+    'kinsfolk' => json_decode(file_get_contents(__DIR__ . '/../data/kinsfolk.json'), true, 512, JSON_THROW_ON_ERROR),
+    'customers' => json_decode(file_get_contents(__DIR__ . '/../data/customers.json'), true, 512, JSON_THROW_ON_ERROR),
+    'colleagues' => json_decode(file_get_contents(__DIR__ . '/../data/colleagues.json'), true, 512, JSON_THROW_ON_ERROR)
+];
+
+foreach ($contactsJsonData as $type => $contactsCollection) {
+    foreach ($contactsCollection as $contact) {
+        foreach ($contact['messengers'] as $messenger) {
+            $sql = <<<EOF
+INSERT INTO messengers (type_messenger, username, id_recipient) 
+VALUES 
+(
+ '{$messenger['typeMessenger']}', 
+ '{$messenger['username']}', 
+ {$contact['id_recipient']}
+)
+EOF;
+
+            $dbConnection->query($sql);
+        }
+    }
 }

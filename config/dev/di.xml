@@ -50,13 +50,13 @@
         </service>
 
         <service id="DD\ContactList\Entity\AddressRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\AddressJsonFileRepository"/>
+                 class="DD\ContactList\Repository\AddressDbRepository"/>
 
         <service id="DD\ContactList\Entity\ContactRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\ContactJsonFileRepository"/>
+                 class="DD\ContactList\Repository\ContactDbRepository"/>
 
         <service id="DD\ContactList\Entity\ContactListRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\ContactListRepository"/>
+                 class="DD\ContactList\Repository\ContactListDbRepository"/>
 
         <service id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
                  class="DD\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>

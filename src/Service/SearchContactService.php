@@ -63,6 +63,7 @@ final class SearchContactService
         if (array_key_exists('category', $criteria) && 1 === count($criteria)) {
             $entitiesCollection = $this->contactRepository->findByCategory($criteria);
         } else {
+            unset($criteria['category']);
             $entitiesCollection = $this->contactRepository->findBy($criteria);
         }
 

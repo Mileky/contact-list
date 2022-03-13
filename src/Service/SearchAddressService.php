@@ -2,8 +2,10 @@
 
 namespace DD\ContactList\Service;
 
+use DD\ContactList\Entity\AbstractContact;
 use DD\ContactList\Entity\Address;
 use DD\ContactList\Entity\AddressRepositoryInterface;
+use DD\ContactList\Service\SearchContactService\ContactDto;
 use Psr\Log\LoggerInterface;
 use DD\ContactList\Service\SearchAddressService\AddressDto;
 use DD\ContactList\Service\SearchAddressService\SearchAddressCriteria;
@@ -84,9 +86,10 @@ class SearchAddressService
     {
         return new AddressDto(
             $address->getIdAddress(),
-            $address->getIdRecipient()->getIdRecipient(),
+            $address->getRecipient(),
             $address->getAddress(),
-            $address->getStatus()
+            $address->getStatus(),
+            $address->getTitleContacts()
         );
     }
 

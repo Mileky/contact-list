@@ -9,9 +9,9 @@ class NewAddressDto
     /**
      * Id контакта
      *
-     * @var int
+     * @var array
      */
-    private int $idContact;
+    private array $idContact;
 
     /**
      * Адрес контакта
@@ -28,11 +28,11 @@ class NewAddressDto
     private string $status;
 
     /**
-     * @param int    $idContact - Id контакта
+     * @param array    $idContact - Id контакта
      * @param string $address   - Адрес контакта
      * @param string $status    - Статус адреса (работа, дом)
      */
-    public function __construct(int $idContact, string $address, string $status)
+    public function __construct(array $idContact, string $address, string $status)
     {
         $this->idContact = $idContact;
         $this->address = $address;
@@ -40,9 +40,9 @@ class NewAddressDto
     }
 
     /**
-     * @return int
+     * @return int[]
      */
-    public function getIdContact(): int
+    public function getIdContacts(): array
     {
         return $this->idContact;
     }

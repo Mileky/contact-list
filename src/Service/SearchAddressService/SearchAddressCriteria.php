@@ -14,9 +14,9 @@ class SearchAddressCriteria
     /**
      * Id контакта
      *
-     * @var int
+     * @var array
      */
-    private ?int $id_recipient = null;
+    private array $id_recipient = [];
 
     /**
      * Адрес контакта
@@ -52,19 +52,19 @@ class SearchAddressCriteria
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getIdRecipient(): ?int
+    public function getIdRecipient(): array
     {
         return $this->id_recipient;
     }
 
     /**
-     * @param int $id_recipient
+     * @param array $id_recipient
      *
      * @return SearchAddressCriteria
      */
-    public function setIdRecipient(int $id_recipient): SearchAddressCriteria
+    public function setIdRecipient(array $id_recipient): SearchAddressCriteria
     {
         $this->id_recipient = $id_recipient;
         return $this;

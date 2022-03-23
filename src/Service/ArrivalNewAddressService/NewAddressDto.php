@@ -28,7 +28,7 @@ class NewAddressDto
     private string $status;
 
     /**
-     * @param array    $idContact - Id контакта
+     * @param int[]    $idContact - Id контакта
      * @param string $address   - Адрес контакта
      * @param string $status    - Статус адреса (работа, дом)
      */

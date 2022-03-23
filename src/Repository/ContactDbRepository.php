@@ -2,7 +2,7 @@
 
 namespace DD\ContactList\Repository;
 
-use DD\ContactList\Entity\AbstractContact;
+use DateTimeImmutable;
 use DD\ContactList\Entity\Colleague;
 use DD\ContactList\Entity\ContactRepositoryInterface;
 use DD\ContactList\Entity\Customer;
@@ -14,24 +14,26 @@ use DD\ContactList\ValueObject\Messenger;
 
 class ContactDbRepository implements ContactRepositoryInterface
 {
-
-    private const ALLOWED_CRITERIA = [
-        'id',
-        'full_name',
-        'birthday',
-        'profession',
-        'contract_number',
-        'average_transaction_amount',
-        'discount',
-        'time_to_call',
-        'status',
-        'ringtone',
-        'hotkey',
-        'department',
-        'position',
-        'room_number',
-        'category',
-        'list_id'
+    /**
+     * Критерии поиска
+     */
+    private const SEARCH_CRITERIA_TO_SQL_PARTS = [
+        'id' => 'c.id',
+        'full_name' => 'c.full_name',
+        'birthday' => 'c.birthday',
+        'profession' => 'c.profession',
+        'contract_number' => 'cc2.contract_number',
+        'average_transaction_amount' => 'cc2.average_transaction_amount',
+        'discount' => 'cc2.discount',
+        'time_to_call' => 'cc2.time_to_call',
+        'status' => 'ck.status',
+        'ringtone' => 'ck.ringtone',
+        'hotkey' => 'ck.hotkey',
+        'department' => 'cc.department',
+        'position' => 'cc.position',
+        'room_number' => 'cc.room_number',
+        'category' => 'c.category',
+        'list_id' => null
     ];
 
     /**
@@ -59,7 +61,6 @@ class ContactDbRepository implements ContactRepositoryInterface
             $criteria['id'] = $criteria['id_recipient'];
             unset($criteria['id_recipient']);
         }
-        $this->validateCriteria($criteria);
 
         $contactsData = $this->loadContactsData($criteria);
         $messengersData = $this->loadMessengersData($contactsData);
@@ -84,10 +85,10 @@ class ContactDbRepository implements ContactRepositoryInterface
      */
     private function validateCriteria(array $criteria): void
     {
-        $invalidCriteria = array_diff(array_keys($criteria), self::ALLOWED_CRITERIA);
+        $invalidCriteria = array_diff(array_keys($criteria), self::SEARCH_CRITERIA_TO_SQL_PARTS);
 
         if (count($invalidCriteria) > 0) {
-            $errMsg = 'Неподдерживаемые критерии поиска текстовых документов' . implode(', ', $invalidCriteria);
+            $errMsg = 'Неподдерживаемые критерии поиска контактов' . implode(', ', $invalidCriteria);
             throw new Exception\RuntimeException($errMsg);
         }
     }
@@ -102,27 +103,31 @@ class ContactDbRepository implements ContactRepositoryInterface
     private function loadContactsData(array $criteria): array
     {
         $sql = <<<EOF
-SELECT 
-id, 
-full_name, 
-birthday, 
-profession, 
-status, 
-ringtone, 
-hotkey, 
-contract_number, 
-average_transaction_amount, 
-discount, 
-time_to_call, 
-department, 
-position, 
-room_number, 
-category 
-FROM contacts
+SELECT
+    c.id AS id,
+    c.full_name AS full_name,
+    c.birthday AS birthday,
+    c.profession AS profession,
+    ck.status AS status,
+    ck.ringtone AS ringtone,
+    ck.hotkey AS hotkey,
+    cc2.contract_number AS contract_number,
+    cc2.average_transaction_amount AS average_transaction_amount,
+    cc2.discount AS discount,
+    cc2.time_to_call AS time_to_call,
+    cc.department AS department,
+    cc.position AS position,
+    cc.room_number AS room_number,
+    c.category
+FROM contacts AS c
+         LEFT JOIN contacts_colleagues cc ON c.id = cc.id
+         LEFT JOIN contacts_customers cc2 ON c.id = cc2.id
+         LEFT JOIN contacts_kinsfolk ck ON c.id = ck.id
 EOF;
 
         $whereParts = [];
         $whereParams = [];
+        $notSupportedSearchCriteria = [];
 
         foreach ($criteria as $criteriaName => $criteriaValue) {
             if ('list_id' === $criteriaName) {
@@ -135,11 +140,21 @@ EOF;
                     $whereParams[":id_$index"] = $idValue;
                 }
                 if (count($idParts) > 0) {
-                    $whereParts[] = 'id IN (' . implode(', ', $idParts) . ')';
+                    $whereParts[] = 'c.id IN (' . implode(', ', $idParts) . ')';
                 }
-            } else {
-                $whereParts[] = "$criteriaName=:$criteriaName";
+            } elseif (array_key_exists($criteriaName, self::SEARCH_CRITERIA_TO_SQL_PARTS)) {
+                $sqlParts = self::SEARCH_CRITERIA_TO_SQL_PARTS[$criteriaName];
+                $whereParts[] = "$sqlParts=:$criteriaName";
                 $whereParams[$criteriaName] = $criteriaValue;
+            } else {
+                $notSupportedSearchCriteria[] = $criteriaName;
+            }
+
+            if (count($notSupportedSearchCriteria) > 0) {
+                throw new Exception\RuntimeException(
+                    'Неподдерживаемые критерии поиска контактов: '
+                    . implode(', ', $notSupportedSearchCriteria)
+                );
             }
         }
 
@@ -169,7 +184,7 @@ EOF;
                 ? []
                 : $messengersData[$contactsItem['id']];
 
-            $birthday = \DateTimeImmutable::createFromFormat('Y-m-d', $contactsItem['birthday']);
+            $birthday = DateTimeImmutable::createFromFormat('Y-m-d', $contactsItem['birthday']);
             $contactsItem['birthday'] = $birthday->format('d.m.Y');
 
             if ('recipients' === $contactsItem['category']) {

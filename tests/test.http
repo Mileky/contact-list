@@ -1,5 +1,5 @@
 ### Сценарий 1. Возможность добавлять в черный список некоторые номера
-PUT http://localhost:8080/contactList/1
+PUT http://localhost:8080/contactList/2
 
 > {%
  client.test("Тестирование переноса контакта в черный лист", function () {
@@ -14,7 +14,7 @@ POST http://localhost:8080/address
 Content-Type: application/json
 
 {
-  "id_recipient": 9,
+  "id_recipient": [9],
   "address": "Плотникова, 3",
   "status": "home"
 }

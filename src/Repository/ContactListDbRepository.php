@@ -47,9 +47,9 @@ EOF;
 
         $stmt = $this->connection->prepare($sql);
         $stmt->execute(['id_recipient' => $contactId]);
-        $contactListData = $stmt->fetchAll();
-        $contactListData[0]['id_recipient'] = $contactsData[0];
-        $contactListItem[] = ContactList::createFromArray($contactListData[0]);
+        $contactListData = current($stmt->fetchAll());
+        $contactListData['id_recipient'] = current($contactsData);
+        $contactListItem[] = ContactList::createFromArray($contactListData);
         return $contactListItem;
     }
 

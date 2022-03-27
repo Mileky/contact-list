@@ -1,5 +1,5 @@
 ### Сценарий 1. Возможность добавлять в черный список некоторые номера
-PUT http://localhost:8080/contactList/2
+PUT http://localhost:8080/contactList/3
 
 > {%
  client.test("Тестирование переноса контакта в черный лист", function () {
@@ -23,8 +23,6 @@ Content-Type: application/json
  client.test("Регистрация нового адреса", function () {
      client.assert(response.status === 201, "Проверяем код ответа. Ожидаю код 200. Фактическое значение: " + response.status);
      client.assert(response.contentType.mimeType === "application/json", "Ожидаю application/type. Фактически: " + response.contentType.mimeType);
-     client.assert(response.body["id_address"] === 12, "id адреса некорректен");
-     client.assert(response.body["id_recipient"] === 9, "id контакта некорректен");
      client.assert(response.body["address"] === "Плотникова, 3", "адрес некорректен");
      client.assert(response.body["status"] === "home", "статус адреса некорректен");
  });

@@ -5,6 +5,7 @@ namespace DD\ContactList\Controller;
 use DD\ContactList\Exception\RuntimeException;
 use DD\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
+use DD\ContactList\Infrastructure\Db\ConnectionInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use Psr\Log\LoggerInterface;
 use DD\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
@@ -68,6 +69,13 @@ class AddressAdministrationController implements ControllerInterface
      */
     private ServerResponseFactory $serverResponseFactory;
 
+    /**
+     * Соединение с БД
+     *
+     * @var ConnectionInterface
+     */
+    private ConnectionInterface $connection;
+
 
     /**
      * @param LoggerInterface $logger                            - Логгер
@@ -77,6 +85,7 @@ class AddressAdministrationController implements ControllerInterface
      * @param SearchAddressService $addressService               - Сервис поиска адресов
      * @param HttpAuthProvider $httpAuthProvider                 - Поставщик услуг аутентификации
      * @param ServerResponseFactory $serverResponseFactory       - Фабрика создания серверного ответа
+     * @param ConnectionInterface $connection                    - Соединение с БД
      */
     public function __construct(
         LoggerInterface $logger,
@@ -85,7 +94,8 @@ class AddressAdministrationController implements ControllerInterface
         ViewTemplateInterface $viewTemplate,
         SearchAddressService $addressService,
         HttpAuthProvider $httpAuthProvider,
-        ServerResponseFactory $serverResponseFactory
+        ServerResponseFactory $serverResponseFactory,
+        ConnectionInterface $connection
     ) {
         $this->logger = $logger;
         $this->arrivalNewAddressService = $arrivalNewAddressService;
@@ -94,6 +104,7 @@ class AddressAdministrationController implements ControllerInterface
         $this->addressService = $addressService;
         $this->httpAuthProvider = $httpAuthProvider;
         $this->serverResponseFactory = $serverResponseFactory;
+        $this->connection = $connection;
     }
 
 
@@ -210,12 +221,26 @@ class AddressAdministrationController implements ControllerInterface
      */
     private function createAddress(array $dataToCreate): void
     {
-        $requestDto = new NewAddressDto(
-            $dataToCreate['id_recipient'],
-            $dataToCreate['address'],
-            $dataToCreate['status'],
-        );
+        try {
+            $this->connection->beginTransaction();
 
-        $this->arrivalNewAddressService->addAddress($requestDto);
+            $requestDto = new NewAddressDto(
+                $dataToCreate['id_recipient'],
+                $dataToCreate['address'],
+                $dataToCreate['status'],
+            );
+
+            $this->arrivalNewAddressService->addAddress($requestDto);
+
+            $this->connection->commit();
+        } catch (Throwable $e) {
+            $this->connection->rollback();
+
+            throw new RuntimeException(
+                'Ошибка при добавлении нового адреса: ' . $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 }

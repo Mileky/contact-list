@@ -4,6 +4,7 @@ namespace DD\ContactList\Controller;
 
 use DD\ContactList\Exception;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
+use DD\ContactList\Infrastructure\Db\ConnectionInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Service\AddBlacklistContactService;
 use Psr\Http\Message\ResponseInterface;
@@ -30,16 +31,26 @@ class UpdateContactListController implements ControllerInterface
     private ServerResponseFactory $serverResponseFactory;
 
     /**
+     * Соединение с БД
+     *
+     * @var ConnectionInterface
+     */
+    private ConnectionInterface $connection;
+
+
+    /**
      * @param AddBlacklistContactService $addBlacklistContactService - Сервис занесения контакта в ЧС
      * @param ServerResponseFactory $serverResponseFactory
+     * @param ConnectionInterface $connection
      */
     public function __construct(
         AddBlacklistContactService $addBlacklistContactService,
-        ServerResponseFactory $serverResponseFactory
-    )
-    {
+        ServerResponseFactory $serverResponseFactory,
+        ConnectionInterface $connection
+    ) {
         $this->addBlacklistContactService = $addBlacklistContactService;
         $this->serverResponseFactory = $serverResponseFactory;
+        $this->connection = $connection;
     }
 
 
@@ -49,6 +60,8 @@ class UpdateContactListController implements ControllerInterface
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         try {
+            $this->connection->beginTransaction();
+
             $attributes = $serverRequest->getAttributes();
             if (false === array_key_exists('id_recipient', $attributes)) {
                 throw new Exception\RuntimeException('Нет id контакта для занесения в ЧС');
@@ -58,16 +71,22 @@ class UpdateContactListController implements ControllerInterface
 
             $httpCode = 200;
             $jsonData = $this->buildJsonData($resultDto);
+
+            $this->connection->commit();
         } catch (AddBlacklistContactService\Exception\ContactNotFoundException $e) {
+            $this->connection->rollback();
+
             $httpCode = 404;
             $jsonData = [
-                'status'  => 'fail',
+                'status' => 'fail',
                 'message' => $e->getMessage()
             ];
         } catch (Throwable $e) {
+            $this->connection->rollback();
+
             $httpCode = 500;
             $jsonData = [
-                'status'  => 'fail',
+                'status' => 'fail',
                 'message' => $e->getMessage()
             ];
         }

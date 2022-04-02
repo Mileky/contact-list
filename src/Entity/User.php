@@ -2,13 +2,20 @@
 
 namespace DD\ContactList\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Пользователь системы
+ * @ORM\Entity
+ * @ORM\Table(name="users")
  */
 class User
 {
     /**
      * ID юзера
+     *
+     * @ORM\Id()
+     * @ORM\Column(name="id", type="integer", nullable=false)
      *
      * @var int
      */
@@ -17,12 +24,16 @@ class User
     /**
      * Логин юзера
      *
+     * @ORM\Column(name="login", type="string", length=50, nullable=false)
+     *
      * @var string
      */
     private string $login;
 
     /**
      * Пароль юзера
+     *
+     * @ORM\Column(name="password", type="string", length=60, nullable=false)
      *
      * @var string
      */

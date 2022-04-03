@@ -5,14 +5,6 @@
 
     <parameters>
         <parameter key="app.config" type="collection">
-            <parameter key="pathToLogFile">%kernel.project_dir%/var/log/app.log</parameter>
-            <parameter key="pathToKinsfolk">%kernel.project_dir%/data/kinsfolk.json</parameter>
-            <parameter key="pathToColleagues">%kernel.project_dir%/data/colleagues.json</parameter>
-            <parameter key="pathToCustomers">%kernel.project_dir%/data/customers.json</parameter>
-            <parameter key="pathToRecipients">%kernel.project_dir%/data/recipient.json</parameter>
-            <parameter key="pathToAddress">%kernel.project_dir%/data/address.json</parameter>
-            <parameter key="pathToContactList">%kernel.project_dir%/data/contact_list.json</parameter>
-            <parameter key="pathToUsers">%kernel.project_dir%/data/users.json</parameter>
             <parameter key="hideErrorMessage">false</parameter>
             <parameter key="loginUri">/login</parameter>
         </parameter>

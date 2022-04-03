@@ -57,8 +57,8 @@ class ArrivalNewAddressService
         $this->addressRepository->add($address);
 
         return new ResultRegisteringAddressDto(
-            $address->getIdAddress(),
-            $address->getRecipient(),
+            $address->getId(),
+            $address->getRecipients(),
             $address->getAddress(),
             $address->getStatus()
         );

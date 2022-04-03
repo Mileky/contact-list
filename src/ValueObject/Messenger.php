@@ -4,8 +4,14 @@ namespace DD\ContactList\ValueObject;
 
 use DD\ContactList\Exception;
 
-final class Messenger
+class Messenger
 {
+    private const NAME_MESSENGERS = [
+        'telegram',
+        'viber',
+        'whatsapp'
+    ];
+
     /**
      * Мессенджер
      *
@@ -26,9 +32,8 @@ final class Messenger
      */
     public function __construct(string $typeMessenger, string $username)
     {
-        if (!ctype_alpha($typeMessenger)) {
-            throw new Exception\DomainException('Некорректное название мессенджера');
-        }
+        $this->validateTypeMessenger($typeMessenger);
+        $this->validateUsername($username);
         $this->typeMessenger = $typeMessenger;
         $this->username = $username;
     }
@@ -47,5 +52,26 @@ final class Messenger
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    private function validateTypeMessenger($typeMessenger): void
+    {
+        if (!ctype_alpha($typeMessenger)) {
+            throw new Exception\DomainException('Некорректное название мессенджера');
+        }
+
+        if (false === in_array($typeMessenger, self::NAME_MESSENGERS, true)) {
+            throw new Exception\RuntimeException('Неверное имя мессенджера');
+        }
+    }
+
+    private function validateUsername(string $username): void
+    {
+        if (40 < strlen($username)) {
+            throw new Exception\RuntimeException('Некорректная длина имени пользователя');
+        }
+        if (1 !== preg_match('/^[a-zA-Z][a-zA-Z0-9-]+$/', $username)) {
+            throw new Exception\RuntimeException('Некорректное имя пользователя');
+        }
     }
 }

@@ -85,8 +85,8 @@ class SearchAddressService
     private function createDto(Address $address): AddressDto
     {
         return new AddressDto(
-            $address->getIdAddress(),
-            $address->getRecipient(),
+            $address->getId(),
+            $address->getRecipients(),
             $address->getAddress(),
             $address->getStatus(),
             $address->getTitleContacts()

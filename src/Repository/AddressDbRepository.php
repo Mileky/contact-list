@@ -45,31 +45,6 @@ EOF;
         $this->contactRepository = $contactRepository;
     }
 
-//    /**
-//     * @inheritDoc
-//     */
-//    public function findBy(array $criteria): array
-//    {
-//        $contactsData = $this->contactRepository->findBy();
-//
-//        $sql = <<<EOF
-//SELECT
-//id, id_recipient, address_data, status
-//FROM address
-//EOF;
-//
-//        $addressData = $this->connection->query($sql)->fetchAll();
-//
-//        $addressEntities = [];
-//        foreach ($addressData as $address) {
-//            $address['id_recipient'] = $contactsData[$address['id_recipient']];
-//
-//            $addressEntities[] = Address::createFromArray($address);
-//        }
-//
-//        return $addressEntities;
-//    }
-
     /**
      * @inheritDoc
      */
@@ -108,7 +83,7 @@ INSERT INTO address (id, address_data, status_id)
 EOF;
 
         $values = [
-            'id' => $address->getIdAddress(),
+            'id' => $address->getId(),
             'address_data' => $address->getAddress(),
             'status' => $address->getStatus()
         ];
@@ -158,13 +133,13 @@ EOF;
     {
         $this->connection
             ->prepare('DELETE FROM address_to_contact WHERE address_id = :addressId')
-            ->execute(['addressId' => $address->getIdAddress()]);
+            ->execute(['addressId' => $address->getId()]);
 
         $insertParts = [];
         $insertParams = [];
-        foreach ($address->getRecipient() as $index => $contact) {
+        foreach ($address->getRecipients() as $index => $contact) {
             $insertParts[] = "(:addressId_$index, :recipientId_$index)";
-            $insertParams["addressId_$index"] = $address->getIdAddress();
+            $insertParams["addressId_$index"] = $address->getId();
             $insertParams["recipientId_$index"] = $contact->getIdRecipient();
         }
 

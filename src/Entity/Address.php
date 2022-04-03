@@ -15,14 +15,14 @@ class Address
      *
      * @var int
      */
-    private int $idAddress;
+    private int $id;
 
     /**
      * Массив контактов адреса
      *
      * @var AbstractContact[]
      */
-    private array $idRecipient;
+    private array $recipients;
 
     /**
      * Адрес контакта
@@ -39,15 +39,15 @@ class Address
     private string $status;
 
     /**
-     * @param int $idAddress     -  ID адреса
-     * @param array $idRecipient -  ID контакта
-     * @param string $address    - Адрес контакта
-     * @param string $status     - Статус адреса (работа/дом)
+     * @param int $id           -  ID адреса
+     * @param array $recipients -  ID контакта
+     * @param string $address   - Адрес контакта
+     * @param string $status    - Статус адреса (работа/дом)
      */
-    public function __construct(int $idAddress, array $idRecipient, string $address, string $status)
+    public function __construct(int $id, array $recipients, string $address, string $status)
     {
-        $this->idAddress = $idAddress;
-        $this->idRecipient = $idRecipient;
+        $this->id = $id;
+        $this->recipients = $recipients;
         $this->address = $address;
         $this->status = $status;
     }
@@ -55,17 +55,17 @@ class Address
     /**
      * @return int
      */
-    public function getIdAddress(): int
+    public function getId(): int
     {
-        return $this->idAddress;
+        return $this->id;
     }
 
     /**
      * @return AbstractContact[]
      */
-    public function getRecipient(): array
+    public function getRecipients(): array
     {
-        return $this->idRecipient;
+        return $this->recipients;
     }
 
     /**
@@ -84,22 +84,13 @@ class Address
         return $this->status;
     }
 
-    public function jsonSerialize(): array
-    {
-        $jsonData['id'] = $this->idAddress;
-        $jsonData['id_recipient'] = $this->idRecipient;
-        $jsonData['address_data'] = $this->address;
-        $jsonData['status'] = $this->status;
-        return $jsonData;
-    }
-
     /**
      * @return string
      */
     public function getTitleContacts(): string
     {
         $titleContactId = [];
-        foreach ($this->getRecipient() as $contact) {
+        foreach ($this->getRecipients() as $contact) {
             $titleContactId[] = $contact->getIdRecipient();
         }
         return implode(', ', $titleContactId);

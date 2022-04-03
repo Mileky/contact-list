@@ -68,8 +68,8 @@ WHERE id_recipient = :id_recipient
 EOF;
 
         $values = [
-            'id' => $contactList->getIdEntry(),
-            'id_recipient' => $contactList->getIdRecipient()->getIdRecipient(),
+            'id' => $contactList->getId(),
+            'id_recipient' => $contactList->getRecipient()->getIdRecipient(),
             'blacklist' => $contactList->isBlacklist()
         ];
 

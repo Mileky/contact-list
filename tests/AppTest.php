@@ -119,7 +119,7 @@ class AppTest extends TestCase
                             'id_recipient' => 10,
                             'full_name' => 'Шатов Александр Иванович',
                             'birthday' => '02.12.1971',
-                            'profession' => '',
+                            'profession' => 'null',
                             'department' => 'Дирекция',
                             'position' => 'Директор',
                             'room_number' => '405'
@@ -198,28 +198,6 @@ class AppTest extends TestCase
                 ]
             ],
 
-            'Тестирование ситуации когда данные о получателях не корректны. Нет поля birthday' => [
-                'in' => [
-                    'uri' => '/contacts?full_name=Осипов Геннадий Иванович',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.config');
-                        $appConfigParams['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
-                        $c->setParameter('app.config', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(
-                        self::createDiContainer()
-                    )
-                ],
-                'out' => [
-                    'httpCode' => 503,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Отсутствуют обязательные элементы: birthday'
-                    ]
-                ]
-            ],
-
             'Тестирование ситуации с некорректными данными конфига приложения' => [
                 'in' => [
                     'uri' => '/contacts?id_recipient=1',
@@ -236,72 +214,6 @@ class AppTest extends TestCase
                     'result' => [
                         'status' => 'fail',
                         'message' => 'system error'
-                    ]
-                ]
-            ],
-
-            'Тестирование ситуации с некорректным путем до файла с получателями' => [
-                'in' => [
-                    'uri' => '/contacts?id_recipient=1',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.config');
-                        $appConfigParams['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
-                        $c->setParameter('app.config', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(
-                        self::createDiContainer()
-                    )
-                ],
-                'out' => [
-                    'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Некорректный путь до файла с данными'
-                    ]
-                ]
-            ],
-
-            'Тестирование ситуации с некорректным путем до файла с клиентами' => [
-                'in' => [
-                    'uri' => '/contacts?id_recipient=7',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.config');
-                        $appConfigParams['pathToCustomers'] = __DIR__ . '/data/unknown.customers.json';
-                        $c->setParameter('app.config', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(
-                        self::createDiContainer()
-                    )
-                ],
-                'out' => [
-                    'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Некорректный путь до файла с данными'
-                    ]
-                ]
-            ],
-
-            'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient' => [
-                'in' => [
-                    'uri' => '/contacts?full_name=Калинин Пётр Александрович',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.config');
-                        $appConfigParams['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
-                        $c->setParameter('app.config', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(
-                        self::createDiContainer()
-                    )
-                ],
-                'out' => [
-                    'httpCode' => 503,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Отсутствуют обязательные элементы: id_recipient'
                     ]
                 ]
             ],

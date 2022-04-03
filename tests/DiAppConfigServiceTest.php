@@ -19,38 +19,38 @@ class DiAppConfigServiceTest extends TestCase
     public static function appConfigDataProvider(): array
     {
         return [
-            'pathToLogFile' => [
-                'method' => 'getPathToLogFile',
-                'expectedValue' => __DIR__ . '/../var/log/app.log'
-            ],
-            'pathToKinsfolk' => [
-                'method' => 'getPathToKinsfolk',
-                'expectedValue' => __DIR__ . '/../data/kinsfolk.json'
-            ],
-            'pathToColleagues' => [
-                'method' => 'getPathToColleagues',
-                'expectedValue' => __DIR__ . '/../data/colleagues.json'
-            ],
-            'pathToCustomers' => [
-                'method' => 'getPathToCustomers',
-                'expectedValue' => __DIR__ . '/../data/customers.json'
-            ],
-            'pathToRecipients' => [
-                'method' => 'getPathToRecipients',
-                'expectedValue' => __DIR__ . '/../data/recipient.json'
-            ],
-            'pathToAddress' => [
-                'method' => 'getPathToAddress',
-                'expectedValue' => __DIR__ . '/../data/address.json'
-            ],
-            'pathToContactList' => [
-                'method' => 'getPathToContactList',
-                'expectedValue' => __DIR__ . '/../data/contact_list.json'
-            ],
-            'pathToUsers' => [
-                'method' => 'getPathToUsers',
-                'expectedValue' => __DIR__ . '/../data/users.json'
-            ],
+//            'pathToLogFile' => [
+//                'method' => 'getPathToLogFile',
+//                'expectedValue' => __DIR__ . '/../var/log/app.log'
+//            ],
+//            'pathToKinsfolk' => [
+//                'method' => 'getPathToKinsfolk',
+//                'expectedValue' => __DIR__ . '/../data/kinsfolk.json'
+//            ],
+//            'pathToColleagues' => [
+//                'method' => 'getPathToColleagues',
+//                'expectedValue' => __DIR__ . '/../data/colleagues.json'
+//            ],
+//            'pathToCustomers' => [
+//                'method' => 'getPathToCustomers',
+//                'expectedValue' => __DIR__ . '/../data/customers.json'
+//            ],
+//            'pathToRecipients' => [
+//                'method' => 'getPathToRecipients',
+//                'expectedValue' => __DIR__ . '/../data/recipient.json'
+//            ],
+//            'pathToAddress' => [
+//                'method' => 'getPathToAddress',
+//                'expectedValue' => __DIR__ . '/../data/address.json'
+//            ],
+//            'pathToContactList' => [
+//                'method' => 'getPathToContactList',
+//                'expectedValue' => __DIR__ . '/../data/contact_list.json'
+//            ],
+//            'pathToUsers' => [
+//                'method' => 'getPathToUsers',
+//                'expectedValue' => __DIR__ . '/../data/users.json'
+//            ],
             'hideErrorMessage' => [
                 'method' => 'isHideErrorMessage',
                 'expectedValue' => false,

@@ -3,59 +3,73 @@
 namespace DD\ContactList\Entity;
 
 use DD\ContactList\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Класс описывающий Список контактов
+ *
+ * @ORM\Entity()
+ * @ORM\Table(name="contact_list")
  */
 class ContactList
 {
     /**
      * ID записи
      *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="contact_list_id_seq")
+     *
      * @var int
      */
-    private int $idEntry;
+    private int $id;
 
     /**
      * ID контакта
      *
+     * @ORM\OneToOne(targetEntity=\DD\ContactList\Entity\AbstractContact::class)
+     * @ORM\JoinColumn(name="id_recipient", referencedColumnName="id")
+     *
      * @var AbstractContact
      */
-    private AbstractContact $idRecipient;
+    private AbstractContact $recipient;
 
     /**
      * Наличие в черном списке
+     *
+     * @ORM\Column(name="blacklist", type="boolean", nullable=false)
      *
      * @var bool
      */
     private bool $blacklist;
 
     /**
-     * @param int             $idEntry     - ID записи
-     * @param AbstractContact $idRecipient - ID контакта
-     * @param bool            $blacklist   - Наличие в черном списке
+     * @param int $id                    - ID записи
+     * @param AbstractContact $recipient - ID контакта
+     * @param bool $blacklist            - Наличие в черном списке
      */
-    public function __construct(int $idEntry, AbstractContact $idRecipient, bool $blacklist)
+    public function __construct(int $id, AbstractContact $recipient, bool $blacklist)
     {
-        $this->idEntry = $idEntry;
-        $this->idRecipient = $idRecipient;
+        $this->id = $id;
+        $this->recipient = $recipient;
         $this->blacklist = $blacklist;
     }
 
     /**
      * @return int
      */
-    public function getIdEntry(): int
+    public function getId(): int
     {
-        return $this->idEntry;
+        return $this->id;
     }
 
     /**
      * @return AbstractContact
      */
-    public function getIdRecipient(): AbstractContact
+    public function getRecipient(): AbstractContact
     {
-        return $this->idRecipient;
+        return $this->recipient;
     }
 
     /**
@@ -66,25 +80,11 @@ class ContactList
         return $this->blacklist;
     }
 
-    /**
-     * Сериализация данных в массив для json
-     *
-     * @return array
-     */
-    public function jsonSerialize(): array
-    {
-        $jsonData['id_entry'] = $this->idEntry;
-        $jsonData['id_recipient'] = $this->idRecipient;
-        $jsonData['blacklist'] = $this->blacklist;
-
-        return $jsonData;
-    }
-
     public function moveToBlacklist(): self
     {
         if (true === $this->blacklist) {
             throw new Exception\RuntimeException(
-                "Контакт с id {$this->getIdRecipient()->getIdRecipient()} уже находится в ЧС"
+                "Контакт с id {$this->getRecipient()->getIdRecipient()} уже находится в ЧС"
             );
         }
 

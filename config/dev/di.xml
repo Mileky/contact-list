@@ -58,6 +58,12 @@
         <service id="DD\ContactList\Entity\ContactListRepositoryInterface" public="false"
                  class="DD\ContactList\Repository\ContactListDbRepository"/>
 
+        <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface">
+            <factory service="Doctrine\ORM\EntityManagerInterface"
+                 method="getRepository"/>
+            <argument key="$className">DD\ContactList\Repository\UserRepository\UserDataProvider</argument>
+        </service>
+
         <service id="DD\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
                  class="DD\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
 
@@ -71,8 +77,7 @@
             </argument>
         </service>
 
-        <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface"
-                 class="DD\ContactList\Repository\UserDbRepository"/>
+
 
         <service id="DD\ContactList\Infrastructure\Session\SessionInterface" public="false">
             <factory class="DD\ContactList\Infrastructure\Session\SessionNative" method="create"/>
@@ -91,10 +96,6 @@
         <service id="Psr\Http\Message\ResponseFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
 
         <service id="Psr\Http\Message\StreamFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
-
-<!--        <service id="Psr\Log\NullLogger"/>-->
-
-<!--        <service id="Psr\Log\LoggerInterface" alias="Psr\Log\NullLogger" public="true"/>-->
 
 
     </services>

@@ -6,8 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Пользователь системы
- * @ORM\Entity
- * @ORM\Table(name="users")
+ * @ORM\MappedSuperclass()
  */
 class User
 {

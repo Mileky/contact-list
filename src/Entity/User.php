@@ -14,6 +14,8 @@ class User
      * ID юзера
      *
      * @ORM\Id()
+     * @ORM\SequenceGenerator(sequenceName="user_id_seq")
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
      * @ORM\Column(name="id", type="integer", nullable=false)
      *
      * @var int

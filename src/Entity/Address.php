@@ -2,16 +2,33 @@
 
 namespace DD\ContactList\Entity;
 
+use DD\ContactList\Entity\Address\Status;
 use DD\ContactList\Exception\InvalidDataStructureException;
-use DD\ContactList\Exception\RuntimeException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Класс, описывающий сущность Адрес
+ *
+ * @ORM\Entity(repositoryClass=\DD\ContactList\Repository\AddressDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="address",
+ *     indexes={
+ *          @ORM\Index(name="address_address_data_idx", columns={"address_data"}),
+ *          @ORM\Index(name="address_status_id_idx", columns={"status_id"})
+ *     }
+ * )
  */
 class Address
 {
     /**
      * ID адреса
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="address_id_seq")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      *
      * @var int
      */
@@ -20,12 +37,21 @@ class Address
     /**
      * Массив контактов адреса
      *
-     * @var AbstractContact[]
+     * @ORM\ManyToMany(targetEntity=\DD\ContactList\Entity\AbstractContact::class)
+     * @ORM\JoinTable(
+     *     name="address_to_contact",
+     *     joinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="recipient_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     *
+     * @var AbstractContact[]|Collection
      */
-    private array $recipients;
+    private Collection $recipients;
 
     /**
      * Адрес контакта
+     *
+     * @ORM\Column (name="address_data", type="string", length=255, nullable=false)
      *
      * @var string
      */
@@ -34,20 +60,23 @@ class Address
     /**
      * Статус адреса (работа/дом)
      *
-     * @var string
+     * @ORM\ManyToOne(targetEntity=\DD\ContactList\Entity\Address\Status::class, cascade={"persist"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     *
+     * @var Status
      */
-    private string $status;
+    private Status $status;
 
     /**
      * @param int $id           -  ID адреса
      * @param array $recipients -  ID контакта
      * @param string $address   - Адрес контакта
-     * @param string $status    - Статус адреса (работа/дом)
+     * @param Status $status    - Статус адреса (работа/дом)
      */
-    public function __construct(int $id, array $recipients, string $address, string $status)
+    public function __construct(int $id, array $recipients, string $address, Status $status)
     {
         $this->id = $id;
-        $this->recipients = $recipients;
+        $this->recipients = new ArrayCollection($recipients);
         $this->address = $address;
         $this->status = $status;
     }
@@ -65,7 +94,7 @@ class Address
      */
     public function getRecipients(): array
     {
-        return $this->recipients;
+        return $this->recipients->toArray();
     }
 
     /**
@@ -77,9 +106,9 @@ class Address
     }
 
     /**
-     * @return string
+     * @return Status
      */
-    public function getStatus(): string
+    public function getStatus(): Status
     {
         return $this->status;
     }
@@ -91,7 +120,7 @@ class Address
     {
         $titleContactId = [];
         foreach ($this->getRecipients() as $contact) {
-            $titleContactId[] = $contact->getIdRecipient();
+            $titleContactId[] = $contact->getId();
         }
         return implode(', ', $titleContactId);
     }

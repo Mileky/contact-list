@@ -3,6 +3,7 @@
 namespace DD\ContactList\Repository;
 
 use DD\ContactList\Entity\Address;
+use DD\ContactList\Entity\Address\Status;
 use DD\ContactList\Entity\AddressRepositoryInterface;
 use DD\ContactList\Entity\ContactRepositoryInterface;
 use DD\ContactList\Infrastructure\Db\ConnectionInterface;
@@ -85,7 +86,7 @@ EOF;
         $values = [
             'id' => $address->getId(),
             'address_data' => $address->getAddress(),
-            'status' => $address->getStatus()
+            'status' => $address->getStatus()->getName()
         ];
 
         $this->connection->prepare($sql)->execute($values);
@@ -112,7 +113,7 @@ EOF;
                     'id' => $row['id'],
                     'id_recipient' => [],
                     'address_data' => $row['address_data'],
-                    'status' => $row['status'],
+                    'status' => new Status($row['status']),
                 ];
             }
 
@@ -140,7 +141,7 @@ EOF;
         foreach ($address->getRecipients() as $index => $contact) {
             $insertParts[] = "(:addressId_$index, :recipientId_$index)";
             $insertParams["addressId_$index"] = $address->getId();
-            $insertParams["recipientId_$index"] = $contact->getIdRecipient();
+            $insertParams["recipientId_$index"] = $contact->getId();
         }
 
         if (count($insertParts) > 0) {

@@ -2,8 +2,19 @@
 
 namespace DD\ContactList\ValueObject;
 
+use DD\ContactList\Entity\AbstractContact;
 use DD\ContactList\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Объект-значение Мессенджер
+ *
+ * @ORM\Entity
+ * @ORM\Table(
+ *     name="messengers",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="messengers_username_unq", columns={"id_recipient"})}
+ * )
+ */
 class Messenger
 {
     private const NAME_MESSENGERS = [
@@ -13,7 +24,20 @@ class Messenger
     ];
 
     /**
+     * Теневой id
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="messengers_id_seq")
+     *
+     */
+    private ?int $id = null;
+
+    /**
      * Мессенджер
+     *
+     * @ORM\Column(name="type_messenger", type="string", length=50, nullable=false)
      *
      * @var string
      */
@@ -22,9 +46,24 @@ class Messenger
     /**
      * Имя пользователя в мессенджере
      *
+     * @ORM\Column(name="username", type="string", length=50, nullable=false)
+     *
      * @var string
      */
     private string $username;
+
+    /**
+     * Ассоциация с контактом
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity=\DD\ContactList\Entity\AbstractContact::class, inversedBy="messengers",
+     *     fetch="EAGER"
+     * )
+     * @ORM\JoinColumn(name="id_recipient", referencedColumnName="id")
+     *
+     * @var AbstractContact|null
+     */
+    private ?AbstractContact $abstractContact = null;
 
     /**
      * @param string $typeMessenger - Название мессенджера

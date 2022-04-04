@@ -185,7 +185,7 @@ EOF;
                 : $messengersData[$contactsItem['id']];
 
             $birthday = DateTimeImmutable::createFromFormat('Y-m-d', $contactsItem['birthday']);
-            $contactsItem['birthday'] = $birthday->format('d.m.Y');
+            $contactsItem['birthday'] = $birthday;
 
             if ('recipients' === $contactsItem['category']) {
                 $contactsEntities[$contactsItem['id']] = Recipient::createFromArray($contactsItem);

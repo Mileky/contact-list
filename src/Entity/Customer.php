@@ -2,52 +2,78 @@
 
 namespace DD\ContactList\Entity;
 
+use DateTimeImmutable;
 use DD\ContactList\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Клиент
+ *
+ * @ORM\Entity
+ * @ORM\Table(
+ *     name="contacts_customers",
+ *     indexes={
+ *          @ORM\Index(name="contacts_customers_average_transaction_amount_idx", columns={"average_transaction_amount"}),
+ *          @ORM\Index(name="contacts_customers_discount_idx", columns={"discount"}),
+ *          @ORM\Index(name="contacts_customers_time_to_call_idx", columns={"time_to_call"})
+ *     },
+ *     uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="contacts_customers_contract_number_unq", columns={"contract_number"})
+ *     }
+ * )
  */
-final class Customer extends AbstractContact
+class Customer extends AbstractContact
 {
     /**
      * Контактный телефон клиента
      *
+     * @ORM\Column(name="contract_number", type="integer", nullable=false)
+     *
      * @var string
      */
     private string $contractNumber;
+
     /**
      * Средняя сумма по транзакциям клиента
+     *
+     * @ORM\Column(name="average_transaction_amount", type="integer", nullable=false)
      *
      * @var int
      */
     private int $averageTransactionAmount;
+
     /**
      * Скидка клиента
+     *
+     * @ORM\Column(name="discount", type="string", length=5, nullable=false)
      *
      * @var string
      */
     private string $discount;
+
     /**
      * Время в которое можно беспокоить клиента
+     *
+     * @ORM\Column(name="time_to_call", type="string", length=35, nullable=false)
      *
      * @var string
      */
     private string $timeToCall;
 
     /**
-     * @param int    $id_recipient             - id Получателя
-     * @param string $full_name                - Полное имя получателя
-     * @param string $birthday                 - Дата рождения получателя
-     * @param string $profession               - Профессия получателя
-     * @param string $contractNumber           - Контактный телефон клиента
-     * @param int    $averageTransactionAmount - Средняя сумма по транзакциям клиента
-     * @param string $discount                 - Скидка клиента
-     * @param string $timeToCall               - Время в которое можно беспокоить клиента
+     * @param int $id_recipient             - id Получателя
+     * @param string $full_name             - Полное имя получателя
+     * @param DateTimeImmutable $birthday   - Дата рождения получателя
+     * @param string $profession            - Профессия получателя
+     * @param string $contractNumber        - Контактный телефон клиента
+     * @param int $averageTransactionAmount - Средняя сумма по транзакциям клиента
+     * @param string $discount              - Скидка клиента
+     * @param string $timeToCall            - Время в которое можно беспокоить клиента
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         array $messengers,
         string $contractNumber,
@@ -153,16 +179,6 @@ final class Customer extends AbstractContact
     {
         $this->timeToCall = $time_to_call;
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        $jsonData = parent::jsonSerialize();
-        $jsonData['contract_number'] = $this->contractNumber;
-        $jsonData['average_transaction_amount'] = $this->averageTransactionAmount;
-        $jsonData['discount'] = $this->discount;
-        $jsonData['time_to_call'] = $this->timeToCall;
-        return $jsonData;
     }
 
     /**

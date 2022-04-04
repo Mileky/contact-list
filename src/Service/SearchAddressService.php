@@ -88,7 +88,7 @@ class SearchAddressService
             $address->getId(),
             $address->getRecipients(),
             $address->getAddress(),
-            $address->getStatus(),
+            $address->getStatus()->getName(),
             $address->getTitleContacts()
         );
     }

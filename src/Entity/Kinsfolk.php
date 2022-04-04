@@ -2,15 +2,29 @@
 
 namespace DD\ContactList\Entity;
 
+use DateTimeImmutable;
 use DD\ContactList\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Родственник
+ *
+ * @ORM\Entity
+ * @ORM\Table(
+ *     name="contacts_kinsfolk",
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="contacts_kinsfolk_hotkey_unq", columns={"hotkey"})},
+ *     indexes={
+ *          @ORM\Index(name="contacts_kinsfolk_ringtone_idx", columns={"ringtone"}),
+ *          @ORM\Index(name="contacts_kinsfolk_status_idx", columns={"status"})
+ *     }
+ * )
  */
-final class Kinsfolk extends AbstractContact
+class Kinsfolk extends AbstractContact
 {
     /**
      * Статус родственника
+     *
+     * @ORM\Column(name="status", type="string", length=30, nullable=false)
      *
      * @var string
      */
@@ -19,6 +33,8 @@ final class Kinsfolk extends AbstractContact
     /**
      * Рингтон стоящий на родственнике
      *
+     * @ORM\Column(name="ringtone", type="string", length=30, nullable=true)
+     *
      * @var string
      */
     private string $ringtone;
@@ -26,23 +42,25 @@ final class Kinsfolk extends AbstractContact
     /**
      * Горячая клавиша для звонка родственнику
      *
+     * @ORM\Column(name="hotkey", type="integer", nullable=true)
+     *
      * @var string
      */
     private string $hotkey;
 
     /**
-     * @param int    $id_recipient - id Получателя
-     * @param string $full_name    - Полное имя получателя
-     * @param string $birthday     - Дата рождения получателя
-     * @param string $profession   - Профессия получателя
-     * @param string $status       - Статус родственника
-     * @param string $ringtone     - Рингтон стоящий на родственнике
-     * @param string $hotkey       - Горячая клавиша для звонка родственнику
+     * @param int $id_recipient           - id Получателя
+     * @param string $full_name           - Полное имя получателя
+     * @param DateTimeImmutable $birthday - Дата рождения получателя
+     * @param string $profession          - Профессия получателя
+     * @param string $status              - Статус родственника
+     * @param string $ringtone            - Рингтон стоящий на родственнике
+     * @param string $hotkey              - Горячая клавиша для звонка родственнику
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         array $messengers,
         string $status,
@@ -123,15 +141,6 @@ final class Kinsfolk extends AbstractContact
     {
         $this->hotkey = $hotkey;
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        $jsonData = parent::jsonSerialize();
-        $jsonData['status'] = $this->status;
-        $jsonData['ringtone'] = $this->ringtone;
-        $jsonData['hotkey'] = $this->hotkey;
-        return $jsonData;
     }
 
     /**

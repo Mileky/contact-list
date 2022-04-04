@@ -69,7 +69,7 @@ EOF;
 
         $values = [
             'id' => $contactList->getId(),
-            'id_recipient' => $contactList->getRecipient()->getIdRecipient(),
+            'id_recipient' => $contactList->getRecipient()->getId(),
             'blacklist' => $contactList->isBlacklist()
         ];
 

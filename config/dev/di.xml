@@ -49,14 +49,23 @@
             <argument key="$config">%app.config%</argument>
         </service>
 
-        <service id="DD\ContactList\Entity\AddressRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\AddressDbRepository"/>
+        <service id="DD\ContactList\Entity\AddressRepositoryInterface" public="false">
+            <factory service="Doctrine\ORM\EntityManagerInterface"
+                     method="getRepository"/>
+            <argument key="$className">\DD\ContactList\Entity\Address</argument>
+        </service>
 
-        <service id="DD\ContactList\Entity\ContactRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\ContactDbRepository"/>
+        <service id="DD\ContactList\Entity\ContactRepositoryInterface" public="false">
+            <factory service="Doctrine\ORM\EntityManagerInterface"
+                     method="getRepository"/>
+            <argument key="$className">DD\ContactList\Entity\AbstractContact</argument>
+        </service>
 
-        <service id="DD\ContactList\Entity\ContactListRepositoryInterface" public="false"
-                 class="DD\ContactList\Repository\ContactListDbRepository"/>
+        <service id="DD\ContactList\Entity\ContactListRepositoryInterface" public="false">
+            <factory service="Doctrine\ORM\EntityManagerInterface"
+                     method="getRepository"/>
+            <argument key="$className">DD\ContactList\Entity\ContactList</argument>
+        </service>
 
         <service id="DD\ContactList\Infrastructure\Auth\UserDataStorageInterface">
             <factory service="Doctrine\ORM\EntityManagerInterface"

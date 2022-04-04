@@ -2,24 +2,28 @@
 
 namespace DD\ContactList\Entity;
 
+use DateTimeImmutable;
 use DD\ContactList\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Получатель
+ * Знакомый
+ *
+ * @ORM\Entity
  */
-final class Recipient extends AbstractContact
+class Recipient extends AbstractContact
 {
     /**
-     * @param int    $id_recipient - id Получателя
-     * @param string $full_name    - Полное имя получателя
-     * @param string $birthday     - Дата рождения получателя
-     * @param string $profession   - Профессия получателя
-     * @param array  $messengers   - Данные о мессенджере, в котором есть пользователь
+     * @param int $id_recipient           - id Получателя
+     * @param string $full_name           - Полное имя получателя
+     * @param DateTimeImmutable $birthday - Дата рождения получателя
+     * @param string $profession          - Профессия получателя
+     * @param array $messengers           - Данные о мессенджере, в котором есть пользователь
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         array $messengers
     ) {

@@ -2,15 +2,29 @@
 
 namespace DD\ContactList\Entity;
 
+use DateTimeImmutable;
 use DD\ContactList\Exception;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Коллега
+ *
+ * @ORM\Entity
+ * @ORM\Table(
+ *     name="contacts_colleagues",
+ *     indexes={
+ *          @ORM\Index(name="contacts_colleagues_department_idx", columns={"department"}),
+ *          @ORM\Index(name="contacts_colleagues_position_idx", columns={"position"}),
+ *          @ORM\Index(name="contacts_colleagues_room_number_idx", columns={"room_number"})
+ *     }
+ * )
  */
-final class Colleague extends AbstractContact
+class Colleague extends AbstractContact
 {
     /**
      * Отдел коллеги
+     *
+     * @ORM\Column(name="department", type="string", length=40, nullable=false)
      *
      * @var string
      */
@@ -19,6 +33,8 @@ final class Colleague extends AbstractContact
     /**
      * Должность коллеги
      *
+     * @ORM\Column(name="position", type="string", length=40, nullable=false)
+     *
      * @var string
      */
     private string $position;
@@ -26,24 +42,26 @@ final class Colleague extends AbstractContact
     /**
      * Номер кабинета
      *
+     * @ORM\Column(name="room_number", type="integer", nullable=false)
+     *
      * @var string
      */
     private string $roomNumber;
 
     /**
-     * @param int    $id_recipient - id Получателя
-     * @param string $full_name    - Полное имя получателя
-     * @param string $birthday     - Дата рождения получателя
-     * @param string $profession   - Профессия получателя
-     * @param array  $messengers   - Данные о мессенджере, в котором есть пользователь
-     * @param string $department   - Отдел коллеги
-     * @param string $position     - Должность коллеги
-     * @param string $roomNumber   - Номер кабинета
+     * @param int $id_recipient           - id Получателя
+     * @param string $full_name           - Полное имя получателя
+     * @param DateTimeImmutable $birthday - Дата рождения получателя
+     * @param string $profession          - Профессия получателя
+     * @param array $messengers           - Данные о мессенджере, в котором есть пользователь
+     * @param string $department          - Отдел коллеги
+     * @param string $position            - Должность коллеги
+     * @param string $roomNumber          - Номер кабинета
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         array $messengers,
         string $department,
@@ -124,15 +142,6 @@ final class Colleague extends AbstractContact
     {
         $this->roomNumber = $roomNumber;
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        $jsonData = parent::jsonSerialize();
-        $jsonData['department'] = $this->department;
-        $jsonData['position'] = $this->position;
-        $jsonData['room_number'] = $this->roomNumber;
-        return $jsonData;
     }
 
     /**

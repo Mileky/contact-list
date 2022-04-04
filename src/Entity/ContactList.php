@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Класс описывающий Список контактов
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass=\DD\ContactList\Repository\ContactListDoctrineRepository::class)
  * @ORM\Table(name="contact_list")
  */
 class ContactList
@@ -84,7 +84,7 @@ class ContactList
     {
         if (true === $this->blacklist) {
             throw new Exception\RuntimeException(
-                "Контакт с id {$this->getRecipient()->getIdRecipient()} уже находится в ЧС"
+                "Контакт с id {$this->getRecipient()->getId()} уже находится в ЧС"
             );
         }
 

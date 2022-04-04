@@ -2,21 +2,53 @@
 
 namespace DD\ContactList\Entity;
 
+use DateTimeImmutable;
 use DD\ContactList\ValueObject\Messenger;
-use JsonSerializable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use DD\ContactList\Exception;
 
-class AbstractContact implements JsonSerializable
+/**
+ * Контакт
+ *
+ * @ORM\Entity(repositoryClass=\DD\ContactList\Repository\ContactDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="contacts",
+ *     indexes={
+ *          @ORM\Index(name="contacts_birthday_idx", columns={"birthday"}),
+ *          @ORM\Index(name="contacts_category_idx", columns={"category"}),
+ *          @ORM\Index(name="contacts_full_name_idx", columns={"full_name"}),
+ *          @ORM\Index(name="contacts_profession_idx", columns={"profession"})
+ *     }
+ * )
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="category", type="string")
+ * @ORM\DiscriminatorMap({
+ *          "recipients" = \DD\ContactList\Entity\Recipient::class,
+ *          "kinsfolk" = \DD\ContactList\Entity\Kinsfolk::class,
+ *          "customers" = \DD\ContactList\Entity\Customer::class,
+ *          "colleagues" = \DD\ContactList\Entity\Colleague::class
+ *     })
+ */
+abstract class AbstractContact
 {
     /**
      * id Получателя
      *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="contacts_id_seq")
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     *
      * @var int
      */
-    private int $idRecipient;
+    private int $id;
 
     /**
      * Полное имя получателя
+     *
+     * @ORM\Column(type="string", name="full_name", nullable=false, length=255)
      *
      * @var string
      */
@@ -25,12 +57,16 @@ class AbstractContact implements JsonSerializable
     /**
      * Дата рождения получателя
      *
-     * @var string
+     * @ORM\Column(type="date_immutable", name="birthday", nullable=false)
+     *
+     * @var DateTimeImmutable
      */
-    private string $birthday;
+    private DateTimeImmutable $birthday;
 
     /**
      * Профессия получателя
+     *
+     * @ORM\Column(type="string", name="profession", nullable=false, length=100)
      *
      * @var string
      */
@@ -39,25 +75,27 @@ class AbstractContact implements JsonSerializable
     /**
      * Данные о мессенджере, в котором есть пользователь
      *
-     * @var Messenger[]
+     * @ORM\OneToMany(targetEntity=\DD\ContactList\ValueObject\Messenger::class, mappedBy="abstractContact")
+     *
+     * @var Messenger[]|Collection
      */
-    protected array $messengers;
+    protected Collection $messengers;
 
     /**
-     * @param int         $id_recipient
-     * @param string      $full_name
-     * @param string      $birthday
-     * @param string      $profession
+     * @param int $id_recipient
+     * @param string $full_name
+     * @param DateTimeImmutable $birthday
+     * @param string $profession
      * @param Messenger[] $messengers - Данные о мессенджере, в котором есть пользователь
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         array $messengers
     ) {
-        $this->idRecipient = $id_recipient;
+        $this->id = $id_recipient;
         $this->fullName = $full_name;
         $this->birthday = $birthday;
         $this->profession = $profession;
@@ -68,15 +106,15 @@ class AbstractContact implements JsonSerializable
             }
         }
 
-        $this->messengers = $messengers;
+        $this->messengers = new ArrayCollection($messengers);
     }
 
     /**
      * @return int
      */
-    public function getIdRecipient(): int
+    public function getId(): int
     {
-        return $this->idRecipient;
+        return $this->id;
     }
 
     /**
@@ -88,9 +126,9 @@ class AbstractContact implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getBirthday(): string
+    public function getBirthday(): DateTimeImmutable
     {
         return $this->birthday;
     }
@@ -108,20 +146,6 @@ class AbstractContact implements JsonSerializable
      */
     public function getMessengers(): array
     {
-        return $this->messengers;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public function jsonSerialize()
-    {
-        return [
-            'id_recipient' => $this->idRecipient,
-            'full_name'    => $this->fullName,
-            'birthday'     => $this->birthday,
-            'profession'   => $this->profession
-        ];
+        return $this->messengers->toArray();
     }
 }

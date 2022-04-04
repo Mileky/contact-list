@@ -51,7 +51,7 @@ class ArrivalNewAddressService
             $this->addressRepository->nextId(),
             $contactData,
             $addressDto->getAddress(),
-            $addressDto->getStatus()
+            new Address\Status($addressDto->getStatus())
         );
 
         $this->addressRepository->add($address);
@@ -60,7 +60,7 @@ class ArrivalNewAddressService
             $address->getId(),
             $address->getRecipients(),
             $address->getAddress(),
-            $address->getStatus()
+            $address->getStatus()->getName()
         );
     }
 

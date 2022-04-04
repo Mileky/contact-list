@@ -72,7 +72,7 @@ final class SearchContactService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->log('found text document: ' . count($entitiesCollection));
+        $this->log('found contacts: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 
@@ -113,9 +113,9 @@ final class SearchContactService
 
         return new ContactDto(
             $this->getContactType($contact),
-            $contact->getIdRecipient(),
+            $contact->getId(),
             $contact->getFullName(),
-            $contact->getBirthday(),
+            $contact->getBirthday()->format('d.m.Y'),
             $contact->getProfession(),
             $kinsfolkDto,
             $customerDto,

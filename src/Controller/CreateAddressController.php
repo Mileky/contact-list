@@ -3,10 +3,10 @@
 namespace DD\ContactList\Controller;
 
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
-use DD\ContactList\Infrastructure\Db\ConnectionInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Service\ArrivalNewAddressService;
 use DD\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -28,26 +28,26 @@ class CreateAddressController implements ControllerInterface
     private ServerResponseFactory $serverResponseFactory;
 
     /**
-     * Соединение с БД
+     * Менеджер сущностей
      *
-     * @var ConnectionInterface
+     * @var EntityManagerInterface
      */
-    private ConnectionInterface $connection;
+    private EntityManagerInterface $em;
 
 
     /**
      * @param ArrivalNewAddressService $arrivalNewAddressService - Сервис создания нового адреса
      * @param ServerResponseFactory $serverResponseFactory       - Фабрика для http ответа
-     * @param ConnectionInterface $connection                    - Соединение с БД
+     * @param EntityManagerInterface $em                    - Соединение с БД
      */
     public function __construct(
         ArrivalNewAddressService $arrivalNewAddressService,
         ServerResponseFactory $serverResponseFactory,
-        ConnectionInterface $connection
+        EntityManagerInterface $em
     ) {
         $this->arrivalNewAddressService = $arrivalNewAddressService;
         $this->serverResponseFactory = $serverResponseFactory;
-        $this->connection = $connection;
+        $this->em = $em;
     }
 
 
@@ -57,7 +57,7 @@ class CreateAddressController implements ControllerInterface
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         try {
-            $this->connection->beginTransaction();
+            $this->em->beginTransaction();
 
             $requestData = json_decode($serverRequest->getBody(), 10, JSON_THROW_ON_ERROR, JSON_THROW_ON_ERROR);
 
@@ -66,9 +66,10 @@ class CreateAddressController implements ControllerInterface
             $httpCode = 201;
             $jsonData = $this->buildJsonData($responseDto);
 
-            $this->connection->commit();
+            $this->em->flush();
+            $this->em->commit();
         } catch (Throwable $e) {
-            $this->connection->rollback();
+            $this->em->rollback();
 
             $httpCode = 500;
             $jsonData = [

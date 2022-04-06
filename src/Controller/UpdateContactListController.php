@@ -4,9 +4,9 @@ namespace DD\ContactList\Controller;
 
 use DD\ContactList\Exception;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
-use DD\ContactList\Infrastructure\Db\ConnectionInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Service\AddBlacklistContactService;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -31,26 +31,26 @@ class UpdateContactListController implements ControllerInterface
     private ServerResponseFactory $serverResponseFactory;
 
     /**
-     * Соединение с БД
+     * Менеджер сущностей
      *
-     * @var ConnectionInterface
+     * @var EntityManagerInterface
      */
-    private ConnectionInterface $connection;
+    private EntityManagerInterface $em;
 
 
     /**
      * @param AddBlacklistContactService $addBlacklistContactService - Сервис занесения контакта в ЧС
      * @param ServerResponseFactory $serverResponseFactory
-     * @param ConnectionInterface $connection
+     * @param EntityManagerInterface $em
      */
     public function __construct(
         AddBlacklistContactService $addBlacklistContactService,
         ServerResponseFactory $serverResponseFactory,
-        ConnectionInterface $connection
+        EntityManagerInterface $em
     ) {
         $this->addBlacklistContactService = $addBlacklistContactService;
         $this->serverResponseFactory = $serverResponseFactory;
-        $this->connection = $connection;
+        $this->em = $em;
     }
 
 
@@ -60,7 +60,7 @@ class UpdateContactListController implements ControllerInterface
     public function __invoke(ServerRequestInterface $serverRequest): ResponseInterface
     {
         try {
-            $this->connection->beginTransaction();
+            $this->em->beginTransaction();
 
             $attributes = $serverRequest->getAttributes();
             if (false === array_key_exists('id_recipient', $attributes)) {
@@ -72,9 +72,10 @@ class UpdateContactListController implements ControllerInterface
             $httpCode = 200;
             $jsonData = $this->buildJsonData($resultDto);
 
-            $this->connection->commit();
+            $this->em->flush();
+            $this->em->commit();
         } catch (AddBlacklistContactService\Exception\ContactNotFoundException $e) {
-            $this->connection->rollback();
+            $this->em->rollback();
 
             $httpCode = 404;
             $jsonData = [
@@ -82,7 +83,7 @@ class UpdateContactListController implements ControllerInterface
                 'message' => $e->getMessage()
             ];
         } catch (Throwable $e) {
-            $this->connection->rollback();
+            $this->em->rollback();
 
             $httpCode = 500;
             $jsonData = [

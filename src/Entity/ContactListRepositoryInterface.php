@@ -12,13 +12,4 @@ interface ContactListRepositoryInterface
      * @return ContactList[]
      */
     public function findById(int $contactId): array;
-
-    /**
-     * Сохранение
-     *
-     * @param ContactList $contactList
-     *
-     * @return ContactList
-     */
-    public function save(ContactList $contactList): ContactList;
 }

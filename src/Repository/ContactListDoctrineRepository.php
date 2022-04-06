@@ -18,7 +18,7 @@ class ContactListDoctrineRepository extends EntityRepository implements
      *
      * @return array|object[]
      */
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null): array
     {
         return parent::findBy($criteria, $orderBy, $limit, $offset);
     }
@@ -29,14 +29,6 @@ class ContactListDoctrineRepository extends EntityRepository implements
      */
     public function findById(int $contactId): array
     {
-        throw new Exception\RuntimeException('не реализовано');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function save(ContactList $contactList): ContactList
-    {
-        throw new Exception\RuntimeException('не реализовано');
+        return $this->findBy(['recipient' => $contactId]);
     }
 }

@@ -38,8 +38,6 @@ class AddBlacklistContactService
 
         $contactListEntity->moveToBlacklist();
 
-        $this->contactListRepository->save($contactListEntity);
-
         return new ResultAddBlacklistDto($contactListEntity->isBlacklist());
     }
 }

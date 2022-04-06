@@ -5,7 +5,6 @@ namespace DD\ContactList\Repository;
 use DD\ContactList\Entity\Address;
 use DD\ContactList\Entity\AddressRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
-use DD\ContactList\Exception;
 
 class AddressDoctrineRepository extends EntityRepository implements
     AddressRepositoryInterface
@@ -29,7 +28,7 @@ class AddressDoctrineRepository extends EntityRepository implements
      */
     public function nextId(): int
     {
-        throw new Exception\RuntimeException('не реализовано');
+        return $this->getClassMetadata()->idGenerator->generateId($this->getEntityManager(), null);
     }
 
     /**
@@ -37,6 +36,7 @@ class AddressDoctrineRepository extends EntityRepository implements
      */
     public function add(Address $address): Address
     {
-        throw new Exception\RuntimeException('не реализовано');
+        $this->getEntityManager()->persist($address);
+        return $address;
     }
 }

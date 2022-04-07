@@ -29,7 +29,7 @@ class AddBlacklistContactService
     {
         $contactList = $this->contactListRepository->findById($contactId);
 
-        if (1 !== count($contactList) && count($contactList) !== 2) {
+        if (1 !== count($contactList)) {
             throw new ContactNotFoundException("Не удалось найти контакт с id = '$contactId' для занесения в ЧС");
         }
 

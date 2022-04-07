@@ -37,8 +37,8 @@ class GetContactsCollectionController implements ControllerInterface
     private ServerResponseFactory $serverResponseFactory;
 
     /**
-     * @param LoggerInterface $logger                      - логгер
-     * @param SearchContactService $searchContactService   - сервис поиска контактов
+     * @param LoggerInterface       $logger                - логгер
+     * @param SearchContactService  $searchContactService  - сервис поиска контактов
      * @param ServerResponseFactory $serverResponseFactory - Фабрика создания серверного ответа
      */
     public function __construct(
@@ -61,20 +61,20 @@ class GetContactsCollectionController implements ControllerInterface
     private function validateQueryParams(ServerRequestInterface $serverRequest): ?string
     {
         $paramValidations = [
-            'id_recipient' => 'incorrect id_recipient',
-            'full_name' => 'incorrect full_name',
-            'birthday' => 'incorrect birthday',
-            'profession' => 'incorrect profession',
-            'contract_number' => 'incorrect contract_number',
+            'id_recipient'               => 'incorrect id_recipient',
+            'full_name'                  => 'incorrect full_name',
+            'birthday'                   => 'incorrect birthday',
+            'profession'                 => 'incorrect profession',
+            'contract_number'            => 'incorrect contract_number',
             'average_transaction_amount' => 'incorrect average_transaction_amount',
-            'discount' => 'incorrect discount',
-            'time_to_call' => 'incorrect time_to_call',
-            'status' => 'incorrect status',
-            'ringtone' => 'incorrect ringtone',
-            'hotkey' => 'incorrect hotkey',
-            'department' => 'incorrect department',
-            'position' => 'incorrect position',
-            'room_number' => 'incorrect room_number',
+            'discount'                   => 'incorrect discount',
+            'time_to_call'               => 'incorrect time_to_call',
+            'status'                     => 'incorrect status',
+            'ringtone'                   => 'incorrect ringtone',
+            'hotkey'                     => 'incorrect hotkey',
+            'department'                 => 'incorrect department',
+            'position'                   => 'incorrect position',
+            'room_number'                => 'incorrect room_number',
 
         ];
 
@@ -126,7 +126,15 @@ class GetContactsCollectionController implements ControllerInterface
 
         if (null === $resultOfParamValidation) {
             $params = array_merge($serverRequest->getQueryParams(), $serverRequest->getAttributes());
-            $params['category'] = substr($serverRequest->getRequestTarget(), 1);
+
+            $srt = $serverRequest->getRequestTarget();
+
+            /** Получение типа контакта, если передается ссылка с параметрами */
+            $endSub = false === strpos($srt, "?") ? null : strpos($srt, "?") - 1;
+            $typeContact = substr($srt, 1, $endSub);
+            if (false === isset($params['category']) && "" !== $typeContact) {
+                $params['category'] = $typeContact;
+            }
 
             $foundContactsDto = $this->searchContactService->search(
                 (new SearchContactService\SearchContactServiceCriteria())
@@ -152,7 +160,7 @@ class GetContactsCollectionController implements ControllerInterface
         } else {
             $httpCode = 500;
             $result = [
-                'status' => 'fail',
+                'status'  => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
@@ -170,9 +178,9 @@ class GetContactsCollectionController implements ControllerInterface
     {
         $jsonData = [
             'id_recipient' => $contactDto->getId(),
-            'full_name' => $contactDto->getFullName(),
-            'birthday' => $contactDto->getBirthday(),
-            'profession' => $contactDto->getProfession(),
+            'full_name'    => $contactDto->getFullName(),
+            'birthday'     => $contactDto->getBirthday(),
+            'profession'   => $contactDto->getProfession(),
         ];
 
         if ($contactDto->getType() === SearchContactService\ContactDto::TYPE_COLLEAGUE) {

@@ -73,6 +73,6 @@ class ArrivalNewAddressService
      */
     private function loadContactEntities(array $contactId): array
     {
-        return $this->contactRepository->findBy(['list_id' => $contactId]);
+        return $this->contactRepository->findBy(['id' => $contactId]);
     }
 }

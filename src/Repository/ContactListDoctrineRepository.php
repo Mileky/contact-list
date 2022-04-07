@@ -11,10 +11,10 @@ class ContactListDoctrineRepository extends EntityRepository implements
     ContactListRepositoryInterface
 {
     /**
-     * @param array $criteria
+     * @param array      $criteria
      * @param array|null $orderBy
-     * @param $limit
-     * @param $offset
+     * @param            $limit
+     * @param            $offset
      *
      * @return array|object[]
      */
@@ -22,7 +22,6 @@ class ContactListDoctrineRepository extends EntityRepository implements
     {
         return parent::findBy($criteria, $orderBy, $limit, $offset);
     }
-
 
     /**
      * @inheritDoc

@@ -22,7 +22,7 @@
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
     "ext-pdo": "*",
-    "dd/framework-for-contact-list": "dev-home_work_23-03-2022",
+    "dd/framework-for-contact-list": "dev-home_work_28-03-2022",
     "psr/http-message": "^1.0",
     "nyholm/psr7-server": "^1.0",
     "psr/log": "^1.1",

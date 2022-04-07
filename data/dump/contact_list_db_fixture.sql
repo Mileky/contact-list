@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.2
--- Dumped by pg_dump version 14.2
+-- Dumped from database version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,32 +28,41 @@ INSERT INTO public.address_status (id, name) VALUES (2, 'job');
 -- Data for Name: address; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.address (id, address_data, status_id) VALUES (19, 'Test, 133', 2);
-INSERT INTO public.address (id, address_data, status_id) VALUES (20, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (21, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (22, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (23, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (24, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (25, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (26, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (27, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (28, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (29, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (30, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (31, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (32, 'Плотникова, 3', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (1, 'null', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (2, 'null', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (4, 'null', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (5, 'null', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (6, 'null', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (7, 'Бусыгина, 9', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (8, 'Пушкина, 23', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (3, 'null', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (10, 'Test, 16', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (11, 'Test, 16', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (12, 'Test, 1', 1);
-INSERT INTO public.address (id, address_data, status_id) VALUES (13, 'Test, 20', 2);
+INSERT INTO public.address (id, status_id, address_data) VALUES (19, 2, 'Test, 133');
+INSERT INTO public.address (id, status_id, address_data) VALUES (20, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (21, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (22, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (23, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (24, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (25, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (26, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (27, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (28, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (29, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (30, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (31, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (32, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (1, 1, 'null');
+INSERT INTO public.address (id, status_id, address_data) VALUES (2, 1, 'null');
+INSERT INTO public.address (id, status_id, address_data) VALUES (4, 1, 'null');
+INSERT INTO public.address (id, status_id, address_data) VALUES (5, 1, 'null');
+INSERT INTO public.address (id, status_id, address_data) VALUES (6, 1, 'null');
+INSERT INTO public.address (id, status_id, address_data) VALUES (7, 1, 'Бусыгина, 9');
+INSERT INTO public.address (id, status_id, address_data) VALUES (8, 1, 'Пушкина, 23');
+INSERT INTO public.address (id, status_id, address_data) VALUES (3, 1, 'null');
+INSERT INTO public.address (id, status_id, address_data) VALUES (10, 1, 'Test, 16');
+INSERT INTO public.address (id, status_id, address_data) VALUES (11, 1, 'Test, 16');
+INSERT INTO public.address (id, status_id, address_data) VALUES (12, 1, 'Test, 1');
+INSERT INTO public.address (id, status_id, address_data) VALUES (13, 2, 'Test, 20');
+INSERT INTO public.address (id, status_id, address_data) VALUES (44, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (46, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (48, 1, 'test, 5');
+INSERT INTO public.address (id, status_id, address_data) VALUES (50, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (52, 2, 'testtttt, 23');
+INSERT INTO public.address (id, status_id, address_data) VALUES (54, 1, 'еуы, 2');
+INSERT INTO public.address (id, status_id, address_data) VALUES (56, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (58, 1, 'Плотникова, 3');
+INSERT INTO public.address (id, status_id, address_data) VALUES (60, 1, 'Плотникова, 3');
 
 
 --
@@ -108,16 +117,25 @@ INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (29, 9);
 INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (30, 9);
 INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (31, 9);
 INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (32, 9);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (44, 9);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (46, 9);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (48, 1);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (48, 2);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (50, 9);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (52, 2);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (52, 11);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (52, 10);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (54, 6);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (54, 11);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (56, 9);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (58, 9);
+INSERT INTO public.address_to_contact (address_id, recipient_id) VALUES (60, 9);
 
 
 --
 -- Data for Name: contact_list; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (2, 2, true);
-INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (3, 3, true);
-INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (5, 5, true);
-INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (1, 1, true);
 INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (4, 4, false);
 INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (6, 6, false);
 INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (7, 7, false);
@@ -125,6 +143,10 @@ INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (8, 8, fals
 INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (9, 9, false);
 INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (10, 10, false);
 INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (11, 11, false);
+INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (1, 1, false);
+INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (5, 5, false);
+INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (3, 3, false);
+INSERT INTO public.contact_list (id, id_recipient, blacklist) VALUES (2, 2, true);
 
 
 --
@@ -152,10 +174,29 @@ INSERT INTO public.contacts_kinsfolk (id, status, ringtone, hotkey) VALUES (6, '
 
 
 --
+-- Data for Name: contacts_recipients; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.contacts_recipients (id, nickname) VALUES (1, NULL);
+INSERT INTO public.contacts_recipients (id, nickname) VALUES (2, NULL);
+INSERT INTO public.contacts_recipients (id, nickname) VALUES (3, NULL);
+INSERT INTO public.contacts_recipients (id, nickname) VALUES (4, NULL);
+INSERT INTO public.contacts_recipients (id, nickname) VALUES (5, NULL);
+
+
+--
+-- Data for Name: doctrine_migration_versions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('DD\ContactList\Migrations\Version20220406073038', '2022-04-06 10:30:46', 225);
+INSERT INTO public.doctrine_migration_versions (version, executed_at, execution_time) VALUES ('DD\ContactList\Migrations\Version20220406073413', '2022-04-06 10:40:55', 26);
+
+
+--
 -- Data for Name: messengers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.messengers (type_messenger, username, id_recipient, id) VALUES ('telegram', 'osipov', 1, 1);
+INSERT INTO public.messengers (id, id_recipient, type_messenger, username) VALUES (1, 1, 'telegram', 'osipov');
 
 
 --
@@ -181,14 +222,14 @@ INSERT INTO public.users (id, login, password) VALUES (1, 'admin', '$2y$10$0MCiH
 -- Name: address_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_id_seq', 32, true);
+SELECT pg_catalog.setval('public.address_id_seq', 60, true);
 
 
 --
 -- Name: address_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_status_id_seq', 2, true);
+SELECT pg_catalog.setval('public.address_status_id_seq', 16, true);
 
 
 --

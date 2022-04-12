@@ -180,44 +180,4 @@ class Customer extends AbstractContact
         $this->timeToCall = $time_to_call;
         return $this;
     }
-
-    /**
-     * Создание сущности "Клиент" из массива
-     *
-     * @param array $data
-     *
-     * @return Customer
-     */
-    public static function createFromArray(array $data): Customer
-    {
-        $requiredFields = [
-            'id',
-            'full_name',
-            'birthday',
-            'profession',
-            'messengers',
-            'contract_number',
-            'average_transaction_amount',
-            'discount',
-            'time_to_call'
-        ];
-
-        $missingFields = array_diff($requiredFields, array_keys($data));
-
-        if (count($missingFields) > 0) {
-            $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new Exception\InvalidDataStructureException($errMsg);
-        }
-        return new Customer(
-            $data['id'],
-            $data['full_name'],
-            $data['birthday'],
-            $data['profession'],
-            $data['messengers'],
-            $data['contract_number'],
-            $data['average_transaction_amount'],
-            $data['discount'],
-            $data['time_to_call']
-        );
-    }
 }

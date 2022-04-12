@@ -142,42 +142,4 @@ class Kinsfolk extends AbstractContact
         $this->hotkey = $hotkey;
         return $this;
     }
-
-    /**
-     * Создание сущности "Родственник" из массива
-     *
-     * @param array $data
-     *
-     * @return Kinsfolk
-     */
-    public static function createFromArray(array $data): Kinsfolk
-    {
-        $requiredFields = [
-            'id',
-            'full_name',
-            'birthday',
-            'profession',
-            'messengers',
-            'status',
-            'ringtone',
-            'hotkey'
-        ];
-
-        $missingFields = array_diff($requiredFields, array_keys($data));
-
-        if (count($missingFields) > 0) {
-            $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new Exception\InvalidDataStructureException($errMsg);
-        }
-        return new Kinsfolk(
-            $data['id'],
-            $data['full_name'],
-            $data['birthday'],
-            $data['profession'],
-            $data['messengers'],
-            $data['status'],
-            $data['ringtone'],
-            $data['hotkey']
-        );
-    }
 }

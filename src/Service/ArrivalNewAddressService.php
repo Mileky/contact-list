@@ -2,9 +2,11 @@
 
 namespace DD\ContactList\Service;
 
+use DD\ContactList\Entity\AbstractContact;
 use DD\ContactList\Entity\Address;
 use DD\ContactList\Entity\AddressRepositoryInterface;
 use DD\ContactList\Entity\ContactRepositoryInterface;
+use DD\ContactList\Service\ArrivalNewAddressService\ContactDto;
 use DD\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use DD\ContactList\Service\ArrivalNewAddressService\ResultRegisteringAddressDto;
 
@@ -48,7 +50,7 @@ class ArrivalNewAddressService
         $contactData = $this->loadContactEntities($addressDto->getIdContacts());
 
         $address = new Address(
-            $this->addressRepository->nextId(),
+            0,
             $contactData,
             $addressDto->getAddress(),
             new Address\Status($addressDto->getStatus())
@@ -56,9 +58,11 @@ class ArrivalNewAddressService
 
         $this->addressRepository->add($address);
 
+        $contactDto = $this->createContactDto($address->getRecipients());
+
         return new ResultRegisteringAddressDto(
             $address->getId(),
-            $address->getRecipients(),
+            $contactDto,
             $address->getAddress(),
             $address->getStatus()->getName()
         );
@@ -74,5 +78,24 @@ class ArrivalNewAddressService
     private function loadContactEntities(array $contactId): array
     {
         return $this->contactRepository->findBy(['id' => $contactId]);
+    }
+
+    /**
+     * Создание ДТО контакта
+     *
+     * @param array $recipients
+     *
+     * @return array
+     */
+    private function createContactDto(array $recipients): array
+    {
+        return array_map(static function (AbstractContact $contact) {
+            return new ContactDto(
+                $contact->getId(),
+                $contact->getFullName(),
+                $contact->getBirthday()->format('d.m.Y'),
+                $contact->getProfession()
+            );
+        }, $recipients);
     }
 }

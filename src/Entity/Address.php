@@ -124,28 +124,4 @@ class Address
         }
         return implode(', ', $titleContactId);
     }
-
-    public static function createFromArray(array $data): Address
-    {
-        $requiredFields = [
-            'id',
-            'id_recipient',
-            'address_data',
-            'status'
-        ];
-
-        $missingFields = array_diff($requiredFields, array_keys($data));
-
-        if (count($missingFields) > 0) {
-            $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new InvalidDataStructureException($errMsg);
-        }
-
-        return new Address(
-            $data['id'],
-            $data['id_recipient'],
-            $data['address_data'],
-            $data['status']
-        );
-    }
 }

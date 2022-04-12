@@ -143,42 +143,4 @@ class Colleague extends AbstractContact
         $this->roomNumber = $roomNumber;
         return $this;
     }
-
-    /**
-     * Создание сущности "Коллега" из массива
-     *
-     * @param array $data
-     *
-     * @return Colleague
-     */
-    public static function createFromArray(array $data): Colleague
-    {
-        $requiredFields = [
-            'id',
-            'full_name',
-            'birthday',
-            'profession',
-            'messengers',
-            'department',
-            'position',
-            'room_number'
-        ];
-
-        $missingFields = array_diff($requiredFields, array_keys($data));
-
-        if (count($missingFields) > 0) {
-            $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new Exception\InvalidDataStructureException($errMsg);
-        }
-        return new Colleague(
-            $data['id'],
-            $data['full_name'],
-            $data['birthday'],
-            $data['profession'],
-            $data['messengers'],
-            $data['department'],
-            $data['position'],
-            $data['room_number']
-        );
-    }
 }

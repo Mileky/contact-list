@@ -52,37 +52,4 @@ class Recipient extends AbstractContact
     {
         return $this->nickname;
     }
-
-    /**
-     * Создание сущности "Получатель" из массива
-     *
-     * @param array $data
-     *
-     * @return Recipient
-     */
-    public static function createFromArray(array $data): Recipient
-    {
-        $requiredFields = [
-            'id',
-            'full_name',
-            'birthday',
-            'profession',
-            'messengers'
-        ];
-
-        $missingFields = array_diff($requiredFields, array_keys($data));
-
-        if (count($missingFields) > 0) {
-            $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new Exception\InvalidDataStructureException($errMsg);
-        }
-
-        return new Recipient(
-            $data['id'],
-            $data['full_name'],
-            $data['birthday'],
-            $data['profession'],
-            $data['messengers']
-        );
-    }
 }

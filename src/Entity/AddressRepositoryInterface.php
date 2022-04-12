@@ -17,13 +17,6 @@ interface AddressRepositoryInterface
     public function findBy(array $criteria): array;
 
     /**
-     * Получение id для создания новго адреса
-     *
-     * @return int
-     */
-    public function nextId(): int;
-
-    /**
      * Добавление нового адреса
      *
      * @param Address $address

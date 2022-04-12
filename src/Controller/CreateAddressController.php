@@ -94,11 +94,19 @@ class CreateAddressController implements ControllerInterface
 
     private function buildJsonData(ArrivalNewAddressService\ResultRegisteringAddressDto $responseDto): array
     {
-        return [
+        $jsonData = [
             'id_address' => $responseDto->getIdAddress(),
-            'id_recipient' => $responseDto->getContacts(),
             'address' => $responseDto->getAddress(),
             'status' => $responseDto->getStatus()
         ];
+
+        $jsonData['recipient'] = array_map(static function (ArrivalNewAddressService\ContactDto $contactDto) {
+            return [
+                'id' => $contactDto->getId(),
+                'full_name' => $contactDto->getFullName()
+            ];
+        }, $responseDto->getContacts());
+
+        return $jsonData;
     }
 }

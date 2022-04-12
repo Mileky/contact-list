@@ -5,7 +5,6 @@ namespace DD\ContactList\Service;
 use DD\ContactList\Entity\AbstractContact;
 use DD\ContactList\Entity\Address;
 use DD\ContactList\Entity\AddressRepositoryInterface;
-use DD\ContactList\Service\SearchContactService\ContactDto;
 use Psr\Log\LoggerInterface;
 use DD\ContactList\Service\SearchAddressService\AddressDto;
 use DD\ContactList\Service\SearchAddressService\SearchAddressCriteria;
@@ -84,9 +83,11 @@ class SearchAddressService
      */
     private function createDto(Address $address): AddressDto
     {
+        $contactDto = $this->createContactDto($address->getRecipients());
+
         return new AddressDto(
             $address->getId(),
-            $address->getRecipients(),
+            $contactDto,
             $address->getAddress(),
             $address->getStatus()->getName(),
             $address->getTitleContacts()
@@ -103,5 +104,17 @@ class SearchAddressService
     private function log(string $msg): void
     {
         $this->logger->debug($msg);
+    }
+
+    private function createContactDto(array $recipients): array
+    {
+        return array_map(static function (AbstractContact $contact) {
+            return new SearchAddressService\ContactDto(
+                $contact->getId(),
+                $contact->getFullName(),
+                $contact->getBirthday(),
+                $contact->getProfession()
+            );
+        }, $recipients);
     }
 }

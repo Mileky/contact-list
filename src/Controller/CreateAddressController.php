@@ -2,6 +2,7 @@
 
 namespace DD\ContactList\Controller;
 
+use DD\ContactList\Exception\RuntimeException;
 use DD\ContactList\Infrastructure\Controller\ControllerInterface;
 use DD\ContactList\Infrastructure\Http\ServerResponseFactory;
 use DD\ContactList\Service\ArrivalNewAddressService;
@@ -61,11 +62,19 @@ class CreateAddressController implements ControllerInterface
 
             $requestData = json_decode($serverRequest->getBody(), 10, JSON_THROW_ON_ERROR, JSON_THROW_ON_ERROR);
 
-            $responseDto = $this->runService($requestData);
+            $validationResult = $this->validateAddressData($requestData);
+            if (0 === count($validationResult)) {
+                $responseDto = $this->runService($requestData);
 
-            $httpCode = 201;
-            $jsonData = $this->buildJsonData($responseDto);
-
+                $httpCode = 201;
+                $jsonData = $this->buildJsonData($responseDto);
+            } else {
+                $httpCode = 400;
+                $jsonData = [
+                    'status' => 'fail',
+                    'message' => implode('. ', $validationResult)
+                ];
+            }
             $this->em->flush();
             $this->em->commit();
         } catch (Throwable $e) {
@@ -108,5 +117,45 @@ class CreateAddressController implements ControllerInterface
         }, $responseDto->getContacts());
 
         return $jsonData;
+    }
+
+    private function validateAddressData($requestData): array
+    {
+        $errs = [];
+
+        if (false === array_key_exists('address', $requestData)) {
+            throw new RuntimeException('Нет данных о адресе');
+        }
+
+        if (false === is_string($requestData['address'])) {
+            throw new RuntimeException('Данные о адресе должны быть строкой');
+        }
+
+        $addressLength = strlen(trim($requestData['address']));
+
+        if ($addressLength > 250) {
+            $errs[] = 'Адрес не может быть длиннее 250 символов';
+        } elseif ($addressLength === 0) {
+            $errs[] = 'Адрес не может быть пустым';
+        } elseif (1 !== preg_match('/[^А-Яа-я]*, [1-9]+\/?([0-9]*)?/', $requestData['address'])) {
+            $errs[] = 'Адрес имеет неверный формат';
+        }
+
+        if (false === array_key_exists('id_recipient', $requestData)) {
+            $errs[] = 'Нет данных о контактах';
+        } elseif (false === is_array($requestData['id_recipient'])) {
+            $errs[] = 'Данные о контакте должны быть массивом';
+        } elseif (0 === count($requestData['id_recipient'])) {
+            $errs[] = 'У адреса должен быть хотя бы один контакт';
+        } else {
+            foreach ($requestData['id_recipient'] as $contactId) {
+                if (false === is_int($contactId)) {
+                    $errs[] = 'список id контактов имеет некорректные значения';
+                    break;
+                }
+            }
+        }
+
+        return $errs;
     }
 }
